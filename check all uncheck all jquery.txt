@@ -1,0 +1,25 @@
+ <button type="button" class="btn btn-success" id="check_all" style="background:#0086B5;color:#fff">Select all</button>
+
+
+
+<label class="container" style="display: inline">
+    <input type="checkbox" id="several_sms" class="several_sms" name="several_sms[]" value="<?=$customer_id?>" checked="checked">
+    <span class="checkmark"></span>
+</label>
+
+
+ $(document).on('click', '#check_all', function () {
+       var checked = $(".several_sms").is(':checked');
+       $(".several_sms").prop("checked", !checked);
+
+   });
+
+
+
+@ntracner@ gcuma array-i mej 
+
+   var chkArray = [];
+        $("#several_sms:checked").each(function() {
+            chkArray.push($(this).val());
+        });
+

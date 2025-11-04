@@ -1,0 +1,43 @@
+                          ***CREATE TABLE SQL***                                              
+
+CREATE TABLE customers (
+    id int NOT NULL AUTO_INCREMENT,
+    lastName varchar(255) NOT NULL,
+    firstName varchar(255),
+    Age int,
+    PRIMARY KEY (id)
+);
+
+---------------------------------------------------------------------------
+                           ***INSERT SQL*** 
+
+INSERT INTO customers (lastName,firstName,Age) VALUES('dav','mar','25');
+---------------------------------------------------------------------------
+                             ***UPDATE SQL*** 
+   
+UPDATE customers SET Age=30 WHERE id=1;
+---------------------------------------------------------------------------
+                            ***delete SQL*** 
+   
+DELETE customers WHERE id=1;
+---------------------------------------------------------------------------
+                            *** avelacnel nor column ADD SQL*** 
+   
+ALTER TABLE customers ADD newCOl VARCHAR(255); karas ases voric heto AFTER myOtherColumn
+ALTER TABLE customer ADD reasons_changes VARCHAR(255) AFTER `taxpayer_id`;
+---------------------------------------------------------------------------
+                            ***ete uzum enq mer avelacrac column-i type poxenq orinak sarqenq int***
+
+ALTER TABLE customers MODIFY COLUMN newCOl int(11) 
+------------------------------------------------------------------------------------------------------
+                          ***ete uzum enq mer avelacrac column-@ jnjenq***
+ALTER TABLE customers DROP COLUMN newCOl;
+-----------------------------------------------------------------------------------------------
+
+                                         SELECt
+
+1.SELECT * FROM `customers` LIMIT 1 (mihat toxna berum)
+
+2.SELECT * FROM `customers` ORDER BY lastName DESC (sa cuyca tali lastName aybubeni hakarak sharelov);
+
+3. SELECT concat(substr(name,1,2),'--',age) as name from workers (sa cuyc kta name-i araji 3 tar@ -- u tariq@)

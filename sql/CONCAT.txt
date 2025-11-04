@@ -1,0 +1,13 @@
+--------------------------------------selecta anum workers tablei salaryneri gumar@ ev maximum tariq@ u res um   //12100--305 
+
+$query= "SELECT  CONCAT(SUM(salary),'--',max(age)) as res from workers";
+    $run_query = mysqli_query($con, $query) or die(mysqli_error($con));
+   
+    if (mysqli_num_rows($run_query) > 0) {
+        while ($row = mysqli_fetch_assoc($run_query)) {
+            $name = $row['res'];         
+            echo $name."<br>";
+                   
+        }
+      
+    }

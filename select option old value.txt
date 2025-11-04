@@ -1,0 +1,88 @@
+create i jamanak
+
+  <div class="form-group">
+          <label for="category">Category Name</label>
+            <select class="form-control" name="category">
+        <option value="" selected disabled hidden>Select category</option>
+  @foreach($categories as $category)
+<option value="{{$category->id}}" {{(old('category')==$category->id)? 'selected':''}}>{{$category->name}}</option>
+    @endforeach
+      </select>
+            @if ($errors->has('category'))
+             <span class="help-block">
+            <strong style="color: red">{{ $errors->first('category') }}</strong>
+        </span>
+    @endif
+ </div>
+--------------------------------------
+editi jamanak
+
+ <div class="form-group">
+      <label for="category">Category Name</label>
+       <select class="form-control" name="category">
+            @foreach ($categories as $category)
+             <option value="{{ $category->id }}"
+           @if ($product->category_id == $category->id)
+          selected
+           @endif
+        >{{ $category->name }}</option>
+         @endforeach
+        </select>
+ </div>
+-----------------------------------
+multiple selecti jamanak
+create
+  <select class="select2 select2-multiple" multiple="multiple" name="tags[]" multiple data-placeholder="select tags">
+
+                                    @foreach($tags as $tag)
+                                        <option value="{{$tag->id }}" @if (old("tags")){{ (in_array($tag->id, old("tags")) ? "selected":"") }}@endif>{{$tag->name}}</option>
+                                    @endforeach
+                                </select>
+----------------------------
+editi jamanak
+<select class="form-control select2 select2-hidden-accessible" multiple="" data-placeholder="Select a State" style="width: 100%;" tabindex="-1" aria-hidden="true" name="tags[]">
+            @foreach ($tags as $tag)
+                <option value="{{ $tag->id }}"
+                        @foreach ($post->tags as $postTag)
+                        @if ($postTag->id == $tag->id)
+                        selected
+                        @endif
+                        @endforeach
+                >{{ $tag->name }}</option>
+            @endforeach
+select>
+----------------
+
+erkrord tarberak 
+	<select class="select2" multiple="multiple" name="products[]" style="width: 100%;">
+	<?php
+	$selectedProductsIds = [];
+	if (!empty($promotion->products())) {
+	    $selectedProductsIds = $promotion->products()->get()->pluck('id')->toArray();
+	}
+	?>
+	@foreach($products as $product)
+	    @if(in_array($product->id, $selectedProductsIds))
+		<option value="{{ $product->id }}" selected >{{ $product->name_en }} ({{$product->country->name_en}})</option>
+	    @else
+		<option value="{{ $product->id }}">{{ $product->name_en}} ({{$product->country->name_en}})</option>
+	    @endif
+	@endforeach
+</select>
+---------------------------------------------------------------
+edit select2 js ov
+ <div class="form-group">
+      <select name="tags[]" class="form-control tags" multiple="multiple">
+       @foreach($tags as $tag)
+        <option value="{{$tag->id}}">{{$tag->name}}</option>
+       @endforeach
+     </select>
+</div>
+
+<script>
+        $(document).ready(function() {
+
+            $(".tags").select2().val({!! json_encode($forum->tags()->allRelatedIds()) !!}).trigger('change');
+        });
+
+</script>

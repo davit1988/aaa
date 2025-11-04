@@ -1,0 +1,55 @@
+bladeum
+<form method="GET" action="{{route("index")}}">
+            <div class="filters row">
+                <div class="col-sm-6 col-md-3">
+                    <label for="price_from">price
+                        <input type="text" name="price_from" id="price_from" size="6" value="{{ request()->price_from}}">
+                    </label>
+                    <label for="price_to">to
+                        <input type="text" name="price_to" id="price_to" size="6"  value="{{ request()->price_to }}">
+                    </label>
+                </div>
+                <div class="col-sm-2 col-md-2">
+                    <label for="hit">
+                        <input type="checkbox" name="hit" id="hit" @if(request()->has('hit')) checked @endif> Хит
+                    </label>
+                </div>
+                <div class="col-sm-2 col-md-2">
+                    <label for="new">
+                        <input type="checkbox" name="new" id="new" @if(request()->has('new')) checked @endif> Новинка
+                    </label>
+                </div>
+                <div class="col-sm-2 col-md-2">
+                    <label for="recommend">
+                        <input type="checkbox" name="recommend" id="recommend" @if(request()->has('recommend')) checked @endif> Рекомендуемые
+                    </label>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                    <a href="{{ route("index") }}" class="btn btn-warning">reset</a>
+                </div>
+            </div>
+        </form>
+----------------------------------------------
+controller
+
+  $productQuery = Product::query(); kam  $productQuery = Product::with('category');
+
+        if ($request->filled('price_from')) {
+            $productQuery->where('price', '>=', $request->price_from);
+        }
+
+        if ($request->filled('price_to')) {
+            $productQuery->where('price', '<=', $request->price_to);
+        }
+
+        foreach (['hit', 'new', 'recommend'] as $field) {
+            if ($request->has($field)) {
+//                $productQuery->whereHas('product', function ($query) use ($field) {
+//                    $query->$field();
+//                });
+                $productQuery->where($field,1);
+            }
+        }
+
+          $products = $productQuery->paginate(1)->withPath("?".$request->getQueryString());

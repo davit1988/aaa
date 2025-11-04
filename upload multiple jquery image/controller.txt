@@ -1,0 +1,137 @@
+<?php
+
+
+namespace App\Http\Controllers;
+
+use App\Food;
+use App\FoodPicture;
+use Illuminate\Http\Request;
+use Validator;
+
+class FoodController extends Controller
+{
+    public function store(Request $request)
+    {
+
+        if($request->file == null){
+            $validator = Validator::make($request->all(),[
+                'namefood' => 'required',
+                'aboutfood' => 'required',
+                'pricefood' => 'required|numeric',
+                'files1' => 'required'
+            ]);
+
+        }
+        else{
+            $validator = Validator::make($request->all(),[
+                'namefood' => 'required',
+                'aboutfood' => 'required',
+                'pricefood' => 'required|numeric',
+            ]);
+        }
+
+        if ($validator->passes()) {
+
+            $food = new Food();
+            $food->name = $request->namefood;
+            $food->desc = $request->aboutfood;
+            $food->price = $request->pricefood;
+            $food->save();
+
+            $files1 = $request->file > 1 ? $request->file : $request->file;
+
+            foreach ($files1 as $k => $image) {
+                $imageName = 'pictures/' . md5(time()) . $k . '.jpg';
+                $this->base64_to_jpeg($image, $imageName);
+                $food_pictures = new FoodPicture();
+                $food_pictures->image = $imageName;
+                $food_pictures->food_id = $food->id;
+                $food_pictures->save();
+
+            }
+            return response()->json(['success' => '1']);
+        }
+            return response()->json(['errors' => $validator->errors()]);
+
+
+    }
+
+    function base64_to_jpeg($base64_string, $output_file)
+    {
+
+        $ifp = fopen($output_file, 'wb');
+
+        $data = explode(',', $base64_string);
+        if (!empty($data[1]))
+            fwrite($ifp, base64_decode($data[1]));
+        fclose($ifp);
+
+    }
+
+
+
+    public function edit($id)
+    {
+        $food = Food::where('id',$id)->first();
+        $food_pictures = FoodPicture::where('food_id',$id)->get();
+        return response()->json(['food' => $food,'food_pictures'=> $food_pictures]);
+    }
+
+    public function update(Request $request,$id)
+    {
+
+            $validator = Validator::make($request->all(),[
+                'namefood' => 'required',
+                'aboutfood' => 'required',
+                'pricefood' => 'required|numeric',
+            ]);
+
+
+        if ($validator->passes()) {
+            $food = Food::find($id);
+            $food->name = $request->namefood;
+            $food->desc = $request->aboutfood;
+            $food->price = $request->pricefood;
+            $food->save();
+
+            $files1 = $request->file > 1 ? $request->file : $request->file;
+            if(isset($files1)){
+                foreach ($files1 as $k => $image) {
+                    $imageName = 'pictures/' . md5(time()) . $k . '.jpg';
+                    $this->base64_to_jpeg($image, $imageName);
+                    $food_pictures = new FoodPicture();
+                    $food_pictures->image = $imageName;
+                    $food_pictures->food_id = $food->id;
+                    $food_pictures->save();
+                }
+            }
+
+            return response()->json(['success' => '1']);
+        }
+        return response()->json(['errors' => $validator->errors()]);
+
+    }
+
+    public function delete($id)
+    {
+        FoodPicture::where('food_id',$id)->delete();
+        Food::where('id',$id)->delete();
+        $food = Food::count();
+        return response()->json($food);
+    }
+
+    public function destroyImageFood($id,$foodId=null)
+    {
+        $foodPicture =  FoodPicture::where('id',$id)->delete();
+        if(!empty($foodId)){
+            $foodIdPicture = FoodPicture::where('food_id',$foodId)->first();
+            if(!$foodIdPicture){
+                Food::where('id',$foodId)->delete();
+                return response()->json('onlydelete');
+            }
+
+        }
+
+        return response()->json('success');
+    }
+}

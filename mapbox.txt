@@ -1,0 +1,107 @@
+https://account.mapbox.com/auth/signin/?route-to=%22/%22
+Marutyan
+davit6262
+---------------------
+ <link href='https://api.mapbox.com/mapbox-gl-js/v0.34.0/mapbox-gl.css' rel='stylesheet'/>
+    <script src='https://api.mapbox.com/mapbox-gl-js/v0.34.0/mapbox-gl.js'></script>
+----------
+  <style>
+        #map {
+            position: abosolute;
+            top: 0;
+            bottom: 0;
+            height: 900px;
+            width: 100%;
+        }
+
+        .marker {
+            background-size: cover;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+    </style>
+---------------------------------
+
+<div id="map" class="ymap" data-auto-height=".c-body" style="height: 300px;"></div>
+                        <script>
+                            mapboxgl.accessToken = 'pk.eyJ1IjoiYnBhY2h1Y2EiLCJhIjoiY2lxbGNwaXdmMDAweGZxbmg5OGx2YWo5aSJ9.zda7KLJF3TH84UU6OhW16w';
+                            var map = new mapboxgl.Map({
+                                container: 'map',
+                                style: 'mapbox://styles/mapbox/streets-v9',
+                                center: [{{$contact->lat}},{{$contact->long}}],
+                                zoom: 15
+                            });
+                            var geojson = {
+                                "type": "FeatureCollection",
+                                "features": [
+                                    {
+                                        "type": "Feature",
+                                        "properties": {
+                                            "message": "Foo",
+                                            "iconSize": [30, 30]
+                                        },
+                                        "geometry": {
+                                            "type": "Point",
+                                            "coordinates": [{{$contact->lat}},{{$contact->long}}]
+                                        }
+                                    }
+                                ]
+                            };
+                            geojson.features.forEach(function(marker) {
+                                var el = document.createElement('div');
+                                el.className = 'marker';
+                                el.style.backgroundImage = 'url(https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png)';
+                                el.style.backgroundSize = 'cover';
+                                el.style.width = marker.properties.iconSize[0] + 'px';
+                                el.style.height = marker.properties.iconSize[1] + 'px';
+                                el.style.left = (Number(el.style.left) - marker.properties.iconSize[0] / 2)+ 'px';
+                                el.style.top = (Number(el.style.top) - marker.properties.iconSize[1])+ 'px';
+                                new mapboxgl.Marker(el)
+                                    .setLngLat(marker.geometry.coordinates)
+                                    .addTo(map);
+                            });
+                        </script>
+
+
+------------------------------------------------------
+multiple marker map box
+back
+  $geojson = [];
+            foreach ($coordinates as $key => $coordinate)
+            {
+                $geojson['type'] = 'FeatureCollection';
+                $geojson['features'][$key]['type'] = 'Feature';
+                $geojson['features'][$key]['properties']['message'] = 'foo';
+                $geojson['features'][$key]['properties']['iconSize'] = [30, 30];
+                $geojson['features'][$key]['geometry']['type'] = 'Point';
+                $geojson['features'][$key]['geometry']['coordinates'] = [$coordinate->long, $coordinate->lat];
+
+            }
+            $geoJson = json_encode($geojson,true);
+ <link href='https://api.mapbox.com/mapbox-gl-js/v0.34.0/mapbox-gl.css' rel='stylesheet'/>
+    <script src='https://api.mapbox.com/mapbox-gl-js/v0.34.0/mapbox-gl.js'></script>
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1IjoiYnBhY2h1Y2EiLCJhIjoiY2lxbGNwaXdmMDAweGZxbmg5OGx2YWo5aSJ9.zda7KLJF3TH84UU6OhW16w';
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v9',
+            center: [50, 50],
+            zoom: 2
+        });
+        var geojson = {!! $geoJson !!};
+            geojson.features.forEach(function(marker) {
+                var el = document.createElement('div');
+                el.className = 'marker';
+                el.style.backgroundImage = 'url(https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png)';
+                el.style.width = marker.properties.iconSize[0] + 'px';
+                el.style.height = marker.properties.iconSize[1] + 'px';
+                el.style.left = (Number(el.style.left) - marker.properties.iconSize[0] / 2)+ 'px';
+                el.style.top = (Number(el.style.top) - marker.properties.iconSize[1])+ 'px';
+                new mapboxgl.Marker(el)
+                    .setLngLat(marker.geometry.coordinates)
+                    .addTo(map);
+            });
+
+    </script>

@@ -1,0 +1,43 @@
+vorpesi amen angam chstugenq if else status@ 
+
+modelum 
+ public function isNew()
+    {
+        return $this->new === 1;
+
+    }
+
+bladeum
+
+  @if($product->isNew())
+     <span class="badge badge-success">Новинка</span>
+   @endif
+
+---------------------------------
+aysinq check exacner@ controllerum request i mej on ov en gali
+product modeli mej
+
+public function setNewAttribute($value)
+    {
+        $this->attributes['new'] = $value === 'on' ? 1 : 0;
+    }
+public function setHitAttribute($value)
+    {
+        $this->attributes['hit'] = $value === 'on' ? 1 : 0;
+    }
+public function setRecommendAttribute($value)
+    {
+        $this->attributes['recommend'] = $value === 'on' ? 1 : 0;
+    }
+------------
+view 
+<input type="checkbox" name="checitem">
+------------------
+controolerum update i vaxt miayn
+$params = $request->all();
+foreach (['new', 'hit', 'recommend'] as $fieldName) {
+            if (!isset($params[$fieldName])) {
+                $params[$fieldName] = 1;
+            }
+ $product->update($params);
+        }

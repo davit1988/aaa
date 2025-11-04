@@ -1,0 +1,14 @@
+
+import large data mysql
+
+local
+C:/xampp/mysql/bin/mysql -u root  hdm < C:\Users\davo\Desktop\hdm_orders.sql
+
+
+server
+ssh admin@192.168.17.4
+pass ASDasd11!
+
+mysql -u root -p HDM < /var/www/pos_terminals_crm/9.sql
+
+hdm tablei anuna root username

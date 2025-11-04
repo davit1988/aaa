@@ -1,0 +1,11 @@
+https://www.postgresqltutorial.com/install-postgresql/ //install
+https://www.postgresqltutorial.com/connect-to-postgresql-database/ //run
+
+C:/xampp/mysql/bin/mysql -u root  cannas_dev < C:\Users\Dav\Desktop\1.sql
+
+import
+psql -h localhost -p 5432 -U postgres -d dav -f C:\Users\Dav\Desktop\ff.sql  ******
+psql -h localhost -p 5432 -U postgres -d tt -f C:\Users\Dav\Desktop\dd.pgsql linuma
+=======
+export
+pg_dump -U postgres dav> dd.pgsql  *****

@@ -1,0 +1,22 @@
+sarqum enq init.php file configi mej
+
+if (!defined('ROOT')) {
+    define('ROOT',dirname(__DIR__));
+}
+------
+public/index.php
+require __DIR__.'/../config/init.php';
+---------
+conposer.json i mej
+
+"autoload": {
+        "files": [
+            "config/init.php"
+        ],
+  
+    },
+
+
+composer install
+
+cankacac tex {{ROOT}} //C:\xampp\htdocs\magazin

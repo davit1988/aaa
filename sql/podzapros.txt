@@ -1,0 +1,11 @@
+SELECT name FROM workers WHERE price = (SELECT MIN(price) FROM workers)// aysinqn kta en anun@ vori price@ amenapoqrna workers tableum
+SELECT MAX(price) AS max FROM workers // isk es miangamic amenapoqr price @ kta el petq chi podzopros
+----------------------------------------------------
+
+//$sql = "SELECT * FROM (SELECT DISTINCT * FROM `homepage_stories`  ORDER BY series_order ASC) as list where list.visible = 1 GROUP BY list.stories_order";
+        $sql = "SELECT *, SUM(page_views) as sum_page_views FROM (SELECT DISTINCT * FROM `homepage_stories`  ORDER BY series_order ASC) as list where list.visible = 1 GROUP BY list.stories_order order BY sum_page_views DESC";
+        $query = $this->db->query($sql);
+        $result = $query->result();
+        return $result;
+
+vercnuma amenshat page_views unecoxner@ 

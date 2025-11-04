@@ -1,0 +1,402 @@
+@extends('front.layouts.app')
+@section('link')
+    @php($lang = Session::get('lang'))
+
+
+
+    <script type="text/javascript" src="https://vk.com/js/api/share.js?95" charset="windows-1251"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+    <script src="//assets.pinterest.com/js/pinit.js"
+            type="text/javascript" async defer
+            data-pin-hover="true"></script>
+    <style>
+        div#___plus_0{
+            z-index: 9999!important;
+            position:absolute!important;
+            height: 32px!important;
+            width: 32px!important;
+            opacity: 0.01!important;
+        }
+    </style>
+
+
+
+
+@endsection
+
+@section('content')
+    @php($lang = Session::get('lang'))
+
+    <div class="row">
+        <div class="tour-body">
+            <div class="tour-content-body">
+                <div class="tour-content-body-header">
+
+                    <h1>{{$tours[0]->title->$lang}}</h1>
+
+                    <!-- Place this tag in your head or just before your close body tag. -->
+                    <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+                    <!-- Place this tag where you want the share button to render. -->
+                </div>
+                <div class="tour-d-c-s-icons clearfix">
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-5 padding-0">
+                        <div class="tour-days">
+                            <i class="material-icons">&#xe190;</i>
+                            <span>{{$tours[0]->days}} {{$trans[0]->days->$lang}} - {{($tours[0]->days)-1}} {{$trans[0]->nights->$lang}}</span>
+                        </div>
+                    </div>
+                    <div class="col-xs-4 col-lg-4 padding-0">
+                        <div class="tour-category">
+                            <div><i class="material-icons">&#xe54e;</i></div>
+                            <div>
+                                <h1>{{$trans[0]->category->$lang}}:</h1>
+                                <a href="javascript:;">{{$tour_catgeories[0]->title->$lang}}</a>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-4 col-lg-3 padding-0">
+                        <div class="social-icons">
+
+                            <div class="img-circle facebook-background">
+                            <!--<a href="javascript:;" id="shareBtn">
+                                    <img src="{{asset('front/img/facebook-icon.png')}}" class="facebook2" alt="">
+                                </a>-->
+                                <a href="javascript:;" id ="shareBtn"
+                                   data-image="{{asset('pictures/'.$share_iamge->name)}}"
+                                   data-title="{{$tours[0]->title->$lang}}"
+                                   data-desc=" {!! $tours[0]->desc_long->$lang !!}"
+                                   data-redirect="http://arkoudatravel.com/tour_info/{{$tours[0]->id}}"
+                                   data-mobile-iframe="true">
+                                    <img src="{{asset('front/img/facebook-icon.png')}}" class="facebook2" alt="facebook">
+                                </a>
+
+                            </div>
+                            <div class="img-circle twitter-background icon-twitter">
+                            <!--  <a href="javascript:;">
+                                    <img src="{{asset('front/img/Twitter-icon.png')}}" class="twitter" alt="">
+                                </a>-->
+                                <a href="javascript:;" id ="vkontakte"
+                                   data-img="{{asset('pictures/'.$share_iamge->name)}}"
+                                   data-ttl="{{$tours[0]->title->$lang}}"
+                                   data-dsc=" {!! $tours[0]->desc_long->$lang !!}"
+                                   data-red="http://arkoudatravel.com/tour_info/{{$tours[0]->id}}"
+                                   data-mobile-iframe="true">
+                                    <img src="{{asset('front/img/vk.png')}}" class="twitter " style="padding: 3px; top: 7px; width: 100%" alt="vk" >
+                                </a>
+                            </div>
+                            <div class="img-circle pinterest-background">
+                                <a href="" id="sharePinteres"
+                                   data-image="{{asset('pictures/'.$share_iamge->name)}}"
+                                   data-title="{!! $tours[0]->title->$lang !!}"
+                                   data-desc=" {!! $tours[0]->desc_long->$lang !!}"
+                                   data-redirect="http://arkoudatravel.com/tour_info/{{$tours[0]->id}}"
+                                   data-mobile-iframe="true">
+                                    <img src="{{asset('front/img/Pinterest.png')}}" class="pinterest" alt="pinterest">
+                                </a>
+                            </div>
+                            <div class="img-circle google-plus-background">
+                            <!-- <a href="javascript:;">
+                                    <img src="{{asset('front/img/Google-plus.png')}}" class="google-plus" alt="">
+                                </a>-->
+                                <!-- Place this tag in your head or just before your close body tag. -->
+
+                                <!-- Place this tag where you want the share button to render. -->
+                                <div class="g-plus" data-action="share"  data-href="http://arkoudatravel.com/tour_info/{!! $tours[0]->id !!}/{!! $tours[0]->title->$lang !!}" data-width="500"
+                                     style="position: absolute; opacity: 0.01; height:32px"></div>
+                                <img src="{{asset('front/img/Google-plus.png')}}" class="google-plus" alt="google plus">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slick-slider-1">
+                    <div class="slider-for">
+                        @foreach($tours_images[0] as $tours_image)
+                            <div class="slick-slider-1-background"
+                                 style="background-image: url({{asset('pictures/'.$tours_image->name)}})" alt="{{$tours[0]->title->$lang}}">
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="slick-slider-2">
+                    <div class="slider-nav">
+
+                        @foreach($tours_images[0] as $tours_image)
+                            <div class="slick-slider-2-background"
+                                 style="background-image: url({{asset('pictures/'.$tours_image->name)}})" alt="{{$tours[0]->title->$lang}}">
+                            </div>
+                        @endforeach
+
+
+
+                    </div>
+                    <div class="prev-slide">
+                    </div>
+                    <div class="next-slide">
+                    </div>
+                </div>
+                <div class="tour-buttons-row">
+                    <ul>
+
+                        <li><a href="javascript:;" class="active" data-for="tour-description-cube">{{$trans[0]->description->$lang}}</a></li>
+                        <li><a href="javascript:;" data-for="tour-itinerary-cube">{{$trans[0]->itinerary->$lang}}</a></li>
+                        <li><a href="javascript:;" data-for="tour-location-cube">{!! $trans[0]->location->$lang !!}</a></li>
+                    </ul>
+                </div>
+                <div class="tour-information-cubes">
+                    <div class="tour-description-cube tour-info-cube">
+                        {!! $tours[0]->desc_long->$lang !!}
+                    </div>
+                    <div class="tour-itinerary-cube tour-info-cube">
+                        <ul class="tour-itinerary-row">
+                            @foreach($tours_days as $tour_day)
+                                <li>
+                                    <div class="square-icon">
+                                        <div class="horizontal"></div>
+                                        <div class="vertically"></div>
+                                    </div>
+                                    <span>day {!! $tour_day->day !!} -</span>
+
+                                    <p class="taza">{!! $tour_day->desc->$lang !!}</p>
+
+                                    <div class="hide-show">
+                                        <h2>{!! $tour_day->desc->$lang !!}</h2>
+                                    </div>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    <div class="tour-location-cube tour-info-cube">
+                        <div>{!! $tours[0]->location !!}}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="tour-price-body">
+                <div class="tour-price">
+                    <span>Price:</span>
+                    <span>${{$tours[0]->discount_price!=0?$tours[0]->discount_price:$tours[0]->price}}</span>
+
+                </div>
+                <div class="tour-container">
+                    <div class="tour-container-header">
+                        <h1>{{$trans[0]->book_the_tour->$lang}}</h1>
+                    </div>
+
+
+                    <form action="{{route('front.bookNow')}}" method="post">
+                        {{csrf_field()}}
+
+                        <div class="form-group">
+                            <input type="text" style="background-color: {{ $errors->has('firstname') ? ' #ff9090' : '' }}" class="form-control" id="firstname" name="firstname"
+                                   placeholder="{{$trans[0]->first_name->$lang}}" value="{{ old('firstname') }}">
+
+                        </div>
+                        <div class="form-group">
+                            <input type="text" style="background-color: {{ $errors->has('lastname') ? ' #ff9090' : '' }}" class="form-control" id="lastname" name="lastname"
+                                   placeholder="{{$trans[0]->last_name->$lang}}" value="{{ old('lastname') }}">
+                        </div>
+                        <div class="form-group">
+                            <input type="email" style="background-color: {{ $errors->has('email') ? ' #ff9090' : '' }}" class="form-control" id="email" name="email"
+                                   placeholder="{{$trans[0]->email->$lang}}" value="{{ old('email') }}">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" style="background-color: {{ $errors->has('phone') ? ' #ff9090' : '' }}" class="form-control" id="phone" name="phone"
+                                   placeholder="{{$trans[0]->phone->$lang}}" value="{{ old('phone') }}">
+                        </div>
+                        <div class="form-group">
+                            <input type="date" style="background-color: {{ $errors->has('date_book') ? ' #ff9090' : '' }}" class="form-control" id="date_book" name="date_book"
+                                   placeholder="{{$trans[0]->date_book->$lang}}" value="{{old('date_book')}}">
+                        </div>
+
+
+                        <div class="tour-count-adult">
+                            <span>{{$trans[0]->adults->$lang}}</span>
+                            <div class="form-group">
+                                <input type="number" class="form-control" id="adults" name="adults" value="1" min="1" onkeydown="return false">
+                            </div>
+                            <span>× ${{$tours[0]->discount_price!=0?$tours[0]->discount_price:$tours[0]->price}} = </span>
+                            <span>$<span id="total_adults">{{$tours[0]->discount_price!=0?$tours[0]->discount_price:$tours[0]->price}}</span></span>
+                        </div>
+                        <div class="tour-count-children">
+                            <span>{{$trans[0]->children->$lang}}</span>
+                            <div class="form-group">
+                                <input type="number" class="form-control" id="children" name="children" value="0" min="0" onkeydown="return false">
+                            </div>
+                            <span>× ${{$tours[0]->discount_child_price!=0?$tours[0]->discount_child_price:$tours[0]->child_price}} = </span>
+                            <span>$<span id="total_children">0</span></span>
+                        </div>
+                        <div class="total-price">
+                            <span>{{$trans[0]->total->$lang}} = $<span id="total">{{$tours[0]->discount_price!=0?$tours[0]->discount_price:$tours[0]->price}}</span></span>
+                        </div>
+
+                        <input type="hidden" id="price" name="price" value="{{$tours[0]->discount_price!=0?$tours[0]->discount_price:$tours[0]->price}}">
+                        <input type="hidden" id="childprice" name="childprice" value="{{$tours[0]->discount_child_price!=0?$tours[0]->discount_child_price:$tours[0]->child_price}}">
+
+                        <button type="submit" class="btn">{{$trans[0]->booking_now->$lang}}</button>
+                    </form>
+
+
+
+                    <div class="text">
+                        <h1>{{$trans[0]->or->$lang}}</h1>
+                    </div>
+                    <div class="fill-up-text">
+                        <form action="{{route('front.sendEmail')}}" method="post">
+                            {{csrf_field()}}
+                            <div class="form-group">
+                                <input type="text" style="background-color: {{ $errors->has('name') ? ' #ff9090' : '' }}" class="form-control" name="name" id="name" placeholder="{{$trans[0]->your_name->$lang}}*" value="{{old('name')}}">
+                            </div>
+                            <div class="form-group">
+                                <input type="email" style="background-color: {{ $errors->has('send_email') ? ' #ff9090' : '' }}" class="form-control" name="send_email" id="send_email" placeholder="{{$trans[0]->email->$lang}}*" value="{{old('send_email')}}">
+                            </div>
+                            <div class="form-group">
+                            <textarea class="form-control noresize"  rows="5" cols="5" id="text_email" name="text_email"
+                                      placeholder="{{$trans[0]->message->$lang}}">{{ old('text_email') }}</textarea>
+                            </div>
+                            <button type="submit" class="btn">{{$trans[0]->send->$lang}}</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId            : '572865349832296',
+                autoLogAppEvents : true,
+                xfbml            : true,
+                version          : 'v2.12'
+            });
+        };
+
+        (function(d, s, id){
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {return;}
+            js = d.createElement(s); js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+
+
+
+        $(document).on('click', '#shareBtn', function () {
+
+            var url =$(this).data('redirect');
+            var title =$(this).data('title');
+            var description = $(this).data('desc');
+            var image =$(this).data('image');
+
+            var html = "<p>Some HTML</p>";
+            var div = document.createElement("div");
+            div.innerHTML = description;
+            var titleText = div.textContent || div.innerText || "";
+
+            FB.ui({
+                method: 'share_open_graph',
+                action_type: 'og.shares',
+                action_properties: JSON.stringify({
+                    object: {
+                        'og:url': url,
+                        'og:title': title,
+                        'og:description': titleText,
+                        'og:image:width': '200',
+                        'og:image:height': '400',
+                        'og:image': image
+                    }
+                })
+            }, function(response){});
+
+
+        });
+
+
+        $(document).on('click', '#vkontakte', function () {
+
+            var url =$(this).data('red');
+            var title =$(this).data('ttl');
+            var description = $(this).data('dsc');
+            var image =$(this).data('img');
+
+            var html = "<p>Some HTML</p>";
+            var div = document.createElement("div");
+            div.innerHTML = description;
+            var titleText = div.textContent || div.innerText || "";
+
+            //  console.log(url,title,titleText,image);
+            var w=480;var h=380;
+            var x=Number((window.screen.width-w)/2);
+            var y=Number((window.screen.height-h)/2);
+
+            var url = 'http://vk.com/share.php?url='+url+'&title='+title+'&description='+titleText+'&image='+image+'&noparse=true';
+
+            //window.location.href=url;
+            window.open(url, '_blank','width='+w+',height='+h+',left='+x+',top='+y+',scrollbars=no');
+
+
+        });
+
+
+
+        $(document).on('click', '#sharePinteres', function () {
+
+            var url =$(this).data('redirect');
+            var title =$(this).data('title');
+            var description = $(this).data('desc');
+            var image =$(this).data('image');
+
+            var w=480;var h=380;
+            var x=Number((window.screen.width-w)/2);
+            var y=Number((window.screen.height-h)/2);
+
+
+            var html = "<p>Some HTML</p>";
+            var div = document.createElement("div");
+            div.innerHTML = description;
+            var titleText = div.textContent || div.innerText || "";
+
+
+            window.open("//www.pinterest.com/pin/create/button/"+"?url="+url+ "&media="+image+"&description="+titleText,"","width="+w+",height="+h+",left="+x+",top="+y+",scrollbars=no");
+
+        });
+
+
+        //google+
+        $(document).on('click', '#shareGoogle', function () {
+            var url =$(this).data('redirect');
+            var title =$(this).data('title');
+            var description = $(this).data('desc');
+            var image =$(this).data('image');
+
+            // var w=480;var h=380;
+            var w=600;var h=600;
+            var x=Number((window.screen.width-w)/2);
+            var y=Number((window.screen.height-h)/2);
+
+
+            var html = "<p>Some HTML</p>";
+            var div = document.createElement("div");
+            div.innerHTML = description;
+            var titleText = div.textContent || div.innerText || "";
+
+
+            /*window.open('https://plus.google.com/share?url='+url+'&title='+title,'','width='+w+',height='+h+',left='+x+',top='+y+',scrollbars=no');*/
+
+            window.open('https://plus.google.com/share?url='+url,'','width='+w+',height='+h+',left='+x+',top='+y+',scrollbars=no');
+
+
+        });
+        //end G+
+
+
+
+
+    </script>
+
+@endsection

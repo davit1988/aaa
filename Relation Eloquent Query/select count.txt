@@ -1,0 +1,20 @@
+asenq unes posts u comments table-ner
+posts id ,  name
+comments id , text , post_id
+select ara en poster@ voronq maximal shat commentner unen bayc voronq gone 2 comment unen u @ndhamen@ 5 post select ara @st commentneri qanaki sortavorac
+
+ public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+ public function posts()
+    {
+        return $this->belongsTo(Post::class);
+    }
+
+ $posts = Post::withCount('comments')
+            ->orderBy('comments_count', 'desc')
+            ->having('comments_count', '>=', 2)
+            ->take(5)
+            ->get();

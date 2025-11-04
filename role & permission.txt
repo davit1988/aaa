@@ -1,0 +1,287 @@
+https://www.codechief.org/article/user-roles-and-permissions-tutorial-in-laravel-without-packages  //shat heshta u custom
+php artisan make:model Permission -m
+php artisan make:model Role -m
+
+class CreatePermissionsTable extends Migration
+{
+    
+    public function up()
+    {
+        Schema::create('permissions', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name'); // edit posts
+            $table->string('slug'); //edit-posts
+            $table->timestamps();
+        });
+    }
+
+    public function down()
+    {
+        Schema::dropIfExists('permissions');
+    }
+}
+class CreateRolesTable extends Migration
+{
+    public function up()
+    {
+        Schema::create('roles', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name'); // edit posts
+            $table->string('slug'); //edit-posts
+            $table->timestamps();
+        });
+    }
+
+    public function down()
+    {
+        Schema::dropIfExists('roles');
+    }
+}
+php artisan make:migration create_users_permissions_table --create=users_permissions
+   public function up()
+    {
+        Schema::create('users_permissions', function (Blueprint $table) {
+            $table->unsignedInteger('user_id');
+            $table->unsignedInteger('permission_id');
+
+            //FOREIGN KEY CONSTRAINTS
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('permission_id')->references('id')->on('permissions')->onDelete('cascade');
+ 
+            //SETTING THE PRIMARY KEYS
+            $table->primary(['user_id','permission_id']);
+        });
+    }
+
+    public function down()
+    {
+        Schema::dropIfExists('users_permissions');
+    }
+php artisan make:migration create_users_roles_table --create=users_roles
+
+class CreateUsersRolesTable extends Migration
+{
+    public function up()
+    {
+        Schema::create('users_roles', function (Blueprint $table) {
+            $table->unsignedInteger('user_id');
+            $table->unsignedInteger('role_id');
+
+         //FOREIGN KEY CONSTRAINTS
+           $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+           $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
+
+         //SETTING THE PRIMARY KEYS
+           $table->primary(['user_id','role_id']);
+        });
+    }
+
+    public function down()
+    {
+        Schema::dropIfExists('users_roles');
+    }
+}
+php artisan make:migration create_roles_permissions_table --create=roles_permissions
+class CreateRolesPermissionsTable extends Migration
+{
+    public function up()
+    {
+        Schema::create('roles_permissions', function (Blueprint $table) {
+             $table->unsignedInteger('role_id');
+             $table->unsignedInteger('permission_id');
+
+             //FOREIGN KEY CONSTRAINTS
+             $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
+             $table->foreign('permission_id')->references('id')->on('permissions')->onDelete('cascade');
+
+             //SETTING THE PRIMARY KEYS
+             $table->primary(['role_id','permission_id']);
+        });
+    }
+
+    public function down()
+    {
+        Schema::dropIfExists('roles_permissions');
+    }
+}
+php artisan migrate
+
+App/Role.php
+public function permissions() {
+
+   return $this->belongsToMany(Permission::class,'roles_permissions');
+       
+}
+
+public function users() {
+
+   return $this->belongsToMany(User::class,'users_roles');
+       
+}
+App/Permission.php
+public function roles() {
+
+   return $this->belongsToMany(Role::class,'roles_permissions');
+       
+}
+
+public function users() {
+
+   return $this->belongsToMany(User::class,'users_permissions');
+       
+}
+app/User.php
+namespace App;
+
+use App\Permissions\HasPermissionsTrait;
+
+class User extends Authenticatable
+{
+    use HasPermissionsTrait; //Import The Trait
+}
+App/Permissions/HasPermissionsTrait.php
+namespace App\Permissions;
+
+use App\Permission;
+use App\Role;
+
+trait HasPermissionsTrait {
+
+   public function givePermissionsTo(... $permissions) {
+
+    $permissions = $this->getAllPermissions($permissions);
+    dd($permissions);
+    if($permissions === null) {
+      return $this;
+    }
+    $this->permissions()->saveMany($permissions);
+    return $this;
+  }
+
+  public function withdrawPermissionsTo( ... $permissions ) {
+
+    $permissions = $this->getAllPermissions($permissions);
+    $this->permissions()->detach($permissions);
+    return $this;
+
+  }
+
+  public function refreshPermissions( ... $permissions ) {
+
+    $this->permissions()->detach();
+    return $this->givePermissionsTo($permissions);
+  }
+
+  public function hasPermissionTo($permission) {
+
+    return $this->hasPermissionThroughRole($permission) || $this->hasPermission($permission);
+  }
+
+  public function hasPermissionThroughRole($permission) {
+
+    foreach ($permission->roles as $role){
+      if($this->roles->contains($role)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public function hasRole( ... $roles ) {
+
+    foreach ($roles as $role) {
+      if ($this->roles->contains('slug', $role)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public function roles() {
+
+    return $this->belongsToMany(Role::class,'users_roles');
+
+  }
+  public function permissions() {
+
+    return $this->belongsToMany(Permission::class,'users_permissions');
+
+  }
+  protected function hasPermission($permission) {
+
+    return (bool) $this->permissions->where('slug', $permission->slug)->count();
+  }
+
+  protected function getAllPermissions(array $permissions) {
+
+    return Permission::whereIn('slug',$permissions)->get();
+    
+  }
+
+}
+php artisan make:provider PermissionsServiceProvider
+namespace App\Providers;
+
+use App\Permission;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\ServiceProvider;
+
+class PermissionsServiceProvider extends ServiceProvider
+{
+   
+    public function register()
+    {
+        //
+    }
+
+    public function boot()
+    {
+        try {
+            Permission::get()->map(function ($permission) {
+                Gate::define($permission->slug, function ($user) use ($permission) {
+                    return $user->hasPermissionTo($permission);
+                });
+            });
+        } catch (\Exception $e) {
+            report($e);
+            return false;
+        }
+
+vor role es dnum chi chanchum anun@
+
+       Blade::directive('rol', function ($role) {
+            return "<?php if(auth()->check() && auth()->user()->hasRole({$role})) : ?>"; //return this if statement inside php tag
+        });
+
+        Blade::directive('endrol', function ($role) {
+            return "<?php  endif; ?>"; //return this endif statement inside php tag
+        });
+
+    }
+}
+config\app.php
+ 'providers' => [
+
+        App\Providers\PermissionsServiceProvider::class,
+    
+ ],
+$user = $request->user();
+dd($user->hasRole('developer')); //will return true, if user has role
+dd($user->givePermissionsTo('create-tasks'));// will return permission, if not null
+dd($user->can('create-tasks')); // will return true, if user has permission
+PHP
+ 
+
+Inside of our view files, we can use it like:
+
+@role('developer')
+
+ Hello developer
+
+@endrole
+kam
+ @if(Auth::user()->hasRole('admin') || Auth::user()->hasRole('user'))
+    <a href="{{route('product.create')}}" class="btn btn-success">Create</a>
+ @endif
+     

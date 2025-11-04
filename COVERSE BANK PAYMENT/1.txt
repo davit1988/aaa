@@ -1,0 +1,93 @@
+ public function CreateOrder() {
+
+
+            $payAmount = _VARDEC($this->order->getProp('amount'));
+            $payComment = $this->order->getProp('descr');
+            $payThumbprint = md5($this->order->getProp('thumbprint'));
+            
+            if ($payAmount <= 0)
+                throw new EPageError(EPageError::CUSTOM_ERROR, 'ERR_WRONGAMOUNT');
+            
+            $orderProps = extractXml($this->order->getProp('info'));
+
+            
+            $logInfo = array(
+                'request'=>'',
+                'response'=>'',
+                'itemprops'=>array(
+                    'action'=>'create',
+                    'reqinfo'=>$orderProps['reqinfo'],
+                    'member_id'=>$orderProps['member_id'],
+                    'reciept'=>'',
+                    'order_id'=>$this->order->ID
+                )
+            );
+            
+            try {
+                $params = array(
+                    'userName'=>$this->userName,
+                    'password'=>$this->userPass,
+                    'orderNumber'=> $this->order->ID,
+                    'amount'=>($payAmount * 100), // 100 -> lumanerov 
+                    'currency'=>'051',
+                    'returnUrl'=>  HttpContext::current()->request()->baseAddress . HttpContext::current()->culture()->Language() . '/' . $this->url_back.'?o='.$this->order->ID.'&p='.$payThumbprint, //.'?opaque='.$payThumbprint.'&orderid='.$this->order->ID),
+                    'description'=>$payComment,
+                    'language'=>  strtoupper(HttpContext::current()->culture()->Language()),
+                    'pageView'=> 'DESKTOP'
+                );
+                $logInfo['request'] = print_r($params,true);
+
+                if ($this->debugMode===false) {
+
+                    $client = new HTTPClient();
+
+
+                    $response = $client->createRequest($this->url_order,$params);
+
+
+                    $logInfo['response'] = print_r($response,true);
+                    
+                    $response['content'] = trim($response['content']);
+                    if (!empty($response['error'])) 
+                        throw new EPageError(EPageError::CUSTOM_ERROR,'ERR_PAYMENT : '.htmlspecialchars ($response['error']));
+                    
+                    $responseObject = DeserilizeJson($response['content']);
+                    if (!array_isset($responseObject)) {
+                        throw new EPageError(EPageError::CUSTOM_ERROR,'ERR_PAYMENT : unknown response from ARCA');
+                    }
+                    if (intval($responseObject['errorCode'])>0) {
+                        throw new EPageError(EPageError::CUSTOM_ERROR,'ERR_PAYMENT : ARCA ERROR ['.intval($responseObject['errorCode']).'],'.$responseObject['errorMessage']);
+                    }
+                    if (empty($responseObject['orderId']) || empty($responseObject['orderId'])) {
+                        throw new EPageError(EPageError::CUSTOM_ERROR,'ERR_PAYMENT : empty response from ARCA');
+                    }
+                    $this->paymentID = $responseObject['orderId'];
+                    $this->url_pay = $responseObject['formUrl'];
+                    
+                } else {
+                    $this->paymentID = $this->order->ID;
+                    $this->DumpToFile($this->order->ID, array(
+                        'orderDetails'=>$this->order->toArray(),
+                        'params'=>$params['paymentfields']
+                    ),'MakeOrder');
+                    $logInfo['response'] = 'DEBUG';
+                }
+                $this->order->PendingOrder(array(
+                    'p_paymentid'=>$this->paymentID
+                ));
+
+                
+                Order::log($logInfo['request'],$logInfo['response'],$logInfo['itemprops'],Order::PAYMENTS_CARD,$_SERVER['REMOTE_ADDR']);
+
+
+        
+            } catch (Exception $ex) {
+
+                Order::log($logInfo['request'],$logInfo['response'],$logInfo['itemprops'],Order::PAYMENTS_CARD,$_SERVER['REMOTE_ADDR']);
+                if ($this->order !== null && !empty($this->order->ID)) {
+                    $this->order->ErrorOrder(htmlspecialchars($ex->getMessage()), 'xx');
+                }
+                Logger::log('ORDER create error'. $ex->getMessage(), Logger::LOGTYPES_ERROR);
+                throw $ex;
+            }
+        }

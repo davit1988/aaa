@@ -1,0 +1,7 @@
+       // Migrate current score values into the new percentile field
+        DB::table('developer_tests')
+            ->where(function ($query) {
+                $query->where('test_type', '=', 'Hackerank')
+                      ->orWhere('test_type', '=', 'Codility');
+            })
+            ->update(['percentile' => DB::raw('score')]);

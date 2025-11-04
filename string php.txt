@@ -1,0 +1,28 @@
+toxic vercnel miayn tiv
+$str = 'In My Cart : 11 items';
+$int = (int) filter_var($str, FILTER_SANITIZE_NUMBER_INT); // 11
+kam
+preg_replace('/[^0-9.]+/', '', $str)
+----------------
+stringi mej ka bar?
+$a = 'How are you?';
+
+1.if (strpos($a, 'are') !== false) {
+    echo 'true';
+}
+2.$a = 'How are you?';
+$pattern = 'are';
+
+ if (preg_match('/\b'.$a.'\b/', $pattern)) {
+            return true;
+        } else {
+            return false;
+        }
+
+------------------------
+       {!!  str_limit(strip_tags($homeTour->desc->$lang), $limit = 200, $end = '...') !!}
+----------------------------------------
+  $text = "hello wolrd .....";
+        $params = array("wolrd", "aaaaaaaaaaa",$text);
+        $output_array = call_user_func_array('str_replace', $params);
+        echo $output_array; // hello aaaaaaaaaa....

@@ -1,0 +1,2 @@
+¬ыберите из таблицы workers все записи так, чтобы туда попали только записи с разной зарплатой (без дублей es DISTINCT na)
+$query= "SELECT DISTINCT salary as diffsal FROM workers";

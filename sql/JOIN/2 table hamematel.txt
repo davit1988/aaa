@@ -1,0 +1,49 @@
+<?php
+
+Даны две таблицы: таблица category с полями id и name и таблица page с полями id, name и category_id
+SELECT * FROM page LEFT JOIN category ON  page.catogory_id = category.id 
+--------------------------------------------------------------------------
+select *,products.name as dav from products LEFT JOIN category ON gproducts.category_id=category.id
+-----------------------------------------------------------------------------
+if($_SESSION['user_id']==55)
+{
+    $result = $mysqli->query( "SELECT `cards_orinak`.`number` as orinak_number,`cards`.number, `cards`.ip_address FROM `cards`
+		                            JOIN `cards_orinak` ON `cards_orinak`.`ip_address` = `cards`.`ip_address`
+		                            WHERE `cards`.number != `cards_orinak`.number							          
+					     ");
+
+    if ($result->num_rows > 0) {
+echo "<table>";
+        echo "<tr>
+            <th>IP</th>
+            <th>Number</th>
+            <th>New number</th>
+            </tr>";
+        while(($row = $result->fetch_assoc()) != false) {
+            $number = $row['number'];
+            $ip = $row['ip_address'];
+            $orinak_number = $row['orinak_number'];
+
+            echo "<tr>
+            <td>".$ip."</td>
+            <td>".$number."</td>
+            <td>".$orinak_number."</td>
+            </tr>";
+        }
+
+        echo "</table>";
+
+    }
+}
+
+--------------------------------------------------------------------
+php selecta anum orders table - mejic customer_id vortex orderstabli date_added mec e 2018-08-01 ev customer_hdm table-i mej used_days!=0
+
+ $result = $mysqli->query( "SELECT `orders`.`customer_id`  FROM `orders`
+		                           RIGHT JOIN `customer_hdm` ON `customer_hdm`.`customer_id` = `orders`.`customer_id`
+		                            WHERE `orders`.`date_added` >= '2018-08-01 00:00:00' AND `customer_hdm`.`used_days`!=0
+		                            AND `orders`.`id` IS NULL 
+		                            						          
+				     ");
+
+?>

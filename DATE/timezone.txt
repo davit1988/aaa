@@ -1,0 +1,22 @@
+ function vendor_timezone()
+    {
+        $ci =& get_instance();
+        $ip = $ci->input->ip_address();
+//        $ip = '45.133.104.162';
+        $url = "http://ipinfo.io/" . $ip;
+        $ip_info = json_decode(file_get_contents($url));
+        if (!empty($ip_info->timezone)) {
+            return $ip_info->timezone;
+        }
+        return 'Europe/Stockholm';
+    }
+
+    function current_timezone_date($timezone)
+    {
+        if (!empty($timezone)) {
+            $date = new DateTime("now", new DateTimeZone($timezone));
+            return $date->format('Y-m-d H:i:s');
+        }
+        return date('Y-m-d H:i:s');
+
+    }

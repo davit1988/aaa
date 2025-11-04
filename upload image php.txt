@@ -1,0 +1,4 @@
+    $target_dir = ROOTDIR . 'page_files/images/contract/';
+        $img = rand() . basename($_FILES["contract_file"]["name"]);
+        $target_file = $target_dir . $img;
+        move_uploaded_file($_FILES["contract_file"]["tmp_name"], $target_file);

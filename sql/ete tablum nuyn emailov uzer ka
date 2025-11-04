@@ -1,0 +1,1 @@
+select developers.* from developers INNER JOIN developers as devs2 on developers.email = devs2.email AND developers.id != devs2.id where devs2.id is not null

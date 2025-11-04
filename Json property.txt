@@ -1,0 +1,119 @@
+Schema::create('products', function (Blueprint $table) {
+    $table->increments('id');
+    $table->string('name');
+    $table->decimal('price', 15, 2);
+    $table->json('properties');
+    $table->timestamps();
+    $table->softDeletes();
+});
+--------------------
+modeli mej
+class Product extends Model
+{
+    protected $casts = [
+        'properties' => 'array'
+    ];
+ public function setPropertiesAttribute($value)
+ {
+    $properties = [];
+
+    foreach ($value as $array_item) {
+        if (!is_null($array_item['key'])) {
+            $properties[] = $array_item;
+        }
+    }
+
+    $this->attributes['properties'] = json_encode($properties);
+ }
+}
+------------------
+bladum
+<form action="{{ route("admin.products.store") }}" method="POST">
+    @csrf
+    <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" name="name" class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="price">Price*</label>
+        <input type="number" name="price" class="form-control" step="0.01">
+    </div>
+    <div class="form-group">
+        <label for="properties">Properties</label>
+        <div class="row">
+            <div class="col-md-2">
+                Key:
+            </div>
+            <div class="col-md-4">
+                Value:
+            </div>
+        </div>
+        @for ($i=0; $i <= 4; $i++)
+        <div class="row">
+            <div class="col-md-2">
+                <input type="text" name="properties[{{ $i }}][key]" class="form-control" value="{{ old('properties['.$i.'][key]') }}">
+            </div>
+            <div class="col-md-4">
+                <input type="text" name="properties[{{ $i }}][value]" class="form-control" value="{{ old('properties['.$i.'][value]') }}">
+            </div>
+        </div>
+        @endfor
+    </div>
+    <div>
+        <input class=" btn btn-danger" type="submit">
+    </div>
+</form>
+-----------------------------------
+public function store(StoreProductRequest $request)
+{
+    $product = Product::create($request->all());
+    return redirect()->route('admin.products.index');
+}
+--------------------
+resources/views/products/index.blade.php
+
+@foreach($products as $product)
+    <tr>
+        <td>
+            {{ $product->name ?? '' }}
+        </td>
+        <td>
+            {{ $product->price ?? '' }}
+        </td>
+        <td>
+            @foreach ($product->properties as $property)
+                <b>{{ $property['key'] }}</b>: {{ $property['value'] }}<br />
+            @endforeach
+        </td>
+--------------------------
+resources/views/products/edit.blade.php:
+<div class="form-group">
+    <label for="properties">Properties</label>
+    <div class="row">
+        <div class="col-md-2">
+            Key:
+        </div>
+        <div class="col-md-4">
+            Value:
+        </div>
+    </div>
+    @for ($i=0; $i <= 4; $i++)
+        <div class="row">
+            <div class="col-md-2">
+                <input type="text" name="properties[{{ $i }}][key]" class="form-control" 
+                  value="{{ $product->properties[$i]['key'] ?? '' }}">
+            </div>
+            <div class="col-md-4">
+                <input type="text" name="properties[{{ $i }}][value]" class="form-control" 
+                  value="{{ $product->properties[$i]['value'] ?? '' }}">
+            </div>
+        </div>
+    @endfor
+</div>
+
+-------------------
+public function update(UpdateProductRequest $request, Product $product)
+{
+    $product->update($request->all());
+    return redirect()->route('admin.products.index');
+}

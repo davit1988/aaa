@@ -1,0 +1,280 @@
+https://www.youtube.com/watch?v=Xd9ZB3eaUMI&list=PL5RABzpdpqAlSRJS1KExmJsaPFQc161Dy&index=28
+* sarqum enq migration
+  Schema::create('currencies', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('code');
+            $table->string('symbol');
+            $table->tinyInteger('is_main')->default(0);
+            $table->double('rate')->default(0);
+            $table->timestamps();
+        });
+---------------------
+sarqum en CurrencySeeder
+ DB::table('currencies')->insert([
+            [
+                'code' => 'RUB',
+                'symbol' => '₽',
+                'is_main' => 1,
+                'rate' => 1,
+                'updated_at' => Carbon::now(),
+                'created_at' => Carbon::now(),
+            ],
+            [
+                'code' => 'USD',
+                'symbol' => '$',
+                'is_main' => 0,
+                'rate' => 0,
+                'updated_at' => Carbon::now(),
+                'created_at' => Carbon::now(),
+            ],
+            [
+                'code' => 'EUR',
+                'symbol' => '€',
+                'is_main' => 0,
+                'rate' => 0,
+                'updated_at' => Carbon::now(),
+                'created_at' => Carbon::now(),
+            ],
+        ]);
+--------------------------------
+* app/Currency.php modeli mej
+ protected $fillable = ['rate'];
+
+    public function scopeByCode($query, $code)
+    {
+        return $query->where('code', $code);
+    }
+
+    public function isMain()
+    {
+        return $this->is_main === 1;
+    }
+-------------------------
+* route
+Route::get('/currency/{currencyCode}','MainController@changeCurrency')->name('currency');
+----------------------------
+* controlelrum
+  public function changeCurrency($currencyCode)
+    {
+        $currency = Currency::byCode($currencyCode)->firstOrFail();
+        session(['currency' => $currency->code]);
+        return redirect()->back();
+    }
+--------------------
+* bladum
+<li class="dropdown">
+   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+       aria-expanded="false">{{\App\Currency::byCode(session('currency','RUB'))->firstOrFail()->symbol  }}<span class="caret"></span></a>
+    <ul class="dropdown-menu">
+         @foreach(\App\Currency::get() as $currency)
+            <li><a href="{{route('currency',$currency->code)}}">{{$currency->symbol}}</a></li>
+         @endforeach
+    </ul>
+</li>
+----------------------
+* heto sarqum enq service
+app/Services/CurrencyConversion.php
+
+<?php
+
+namespace App\Services;
+
+use App\Currency;
+use Carbon\Carbon;
+
+class CurrencyConversion
+{
+    public const DEFAULT_CURRENCY_CODE = 'RUB';
+
+    protected static $container;
+
+    public static function loadContainer()
+    {
+        if (is_null(self::$container)) {
+            $currencies = Currency::get();
+            foreach ($currencies as $currency) {
+                self::$container[$currency->code] = $currency;
+            }
+        }
+    }
+
+    public static function getCurrencies()
+    {
+        self::loadContainer();
+
+        return self::$container;
+    }
+
+    public static function getCurrencyFromSession()
+    {
+        return session('currency', self::DEFAULT_CURRENCY_CODE);
+    }
+
+    public static function getCurrentCurrencyFromSession()
+    {
+        self::loadContainer();
+        $currencyCode = self::getCurrencyFromSession();
+
+        foreach (self::$container as $currency) {
+            if ($currency->code === $currencyCode) {
+                return $currency;
+            }
+        }
+    }
+
+    public static function convert($sum, $originCurrencyCode = self::DEFAULT_CURRENCY_CODE, $targetCurrencyCode = null)
+    {
+        self::loadContainer();
+
+        $originCurrency = self::$container[$originCurrencyCode];
+
+        if ($originCurrency->code != self::DEFAULT_CURRENCY_CODE) {
+            if ($originCurrency->rate != 0 || $originCurrency->updated_at->startOfDay() != Carbon::now()->startOfDay()) {
+                CurrencyRates::getRates();
+                self::loadContainer();
+                $originCurrency = self::$container[$originCurrencyCode];
+            }
+        }
+
+        if (is_null($targetCurrencyCode)) {
+            $targetCurrencyCode = self::getCurrencyFromSession();
+        }
+
+        $targetCurrency = self::$container[$targetCurrencyCode];
+        if ($originCurrency->code != self::DEFAULT_CURRENCY_CODE) {
+            if ($targetCurrency->rate == 0 || $targetCurrency->updated_at->startOfDay() != Carbon::now()->startOfDay()) {
+                CurrencyRates::getRates();
+                self::loadContainer();
+                $targetCurrency = self::$container[$targetCurrencyCode];
+            }
+        }
+
+        return $sum / $originCurrency->rate * $targetCurrency->rate;
+    }
+
+    public static function getCurrencySymbol()
+    {
+        self::loadContainer();
+
+        $currencyFromSession = self::getCurrencyFromSession();
+
+        $currency = self::$container[$currencyFromSession];
+        return $currency->symbol;
+    }
+
+    public static function getBaseCurrency()
+    {
+        self::loadContainer();
+
+        foreach (self::$container as $code => $currency) {
+            if ($currency->isMain()) {
+                return $currency;
+            }
+        }
+    }
+
+}
+----------------------------------
+* u orinak producti modeli mej  votex product table uni price column
+app/Product.php
+ public function getPriceAttribute($value)
+    {
+        return round(CurrencyConversion::convert($value), 2);
+    }
+
+-------------------------------------
+ev view i mej 
+
+   <p>{{$product->price}} {{\App\Services\CurrencyConversion::getCurrencySymbol()}} </p>
+==================================================================================================================================
+yerb uzum enq mer kurs@ an@ndhat update anenq 
+https://www.youtube.com/watch?v=w1byaX46eQY&list=PL5RABzpdpqAlSRJS1KExmJsaPFQc161Dy&index=29
+--------
+* install enq anum guzzle http://docs.guzzlephp.org/en/stable/overview.html es saytic
+composer require guzzlehttp/guzzle
+----------------------------------
+config i mej sarqum enq currency_rates.php
+return [
+    'api_url' => 'https://api.exchangeratesapi.io/latest',
+];
+---------------------------------------
+* sarqum enq service app\Services\CurrencyRates.php
+use GuzzleHttp\Client;
+  public static function getRates()
+    {
+        $baseCurrency = CurrencyConversion::getBaseCurrency();
+        $url = config('currency_rates.api_url') . '?base=' . $baseCurrency->code;
+        $client = new Client();
+
+        $response = $client->request('GET', $url);
+
+        if ($response->getStatusCode() !== 200) {
+            throw new Exception('There is a problem with currency rate service');
+        }
+
+        $rates = json_decode($response->getBody()->getContents(), true)['rates'];
+
+        foreach (CurrencyConversion::getCurrencies() as $currency) {
+            if (!$currency->isMain()) {
+                if (!isset($rates[$currency->code])) {
+                    throw new Exception('There is a problem with currency ' . $currency->code);
+                } else {
+                    $currency->update(['rate' => $rates[$currency->code]]);
+                    $currency->touch();
+                }
+            }
+        }
+    }
+----------------------------------------
+----------------------------------------
+----------------------------------------
+shat karch tarberak ete menak bazayica poxvelu valyutan
+
+1. Route::get('/currency/{currencyCode}','MainController@changeCurrency')->name('currency');
+2. <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ \App\Models\Currency::byCode(session('currency','RUB'))->firstOrFail()->symbol }}<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        @foreach(\App\Models\Currency::get() as $currency)
+                        <li><a href="{{route('currency',$currency->code)}}">{{$currency->symbol}}</a></li>
+                        @endforeach
+                    </ul>
+                </li>
+3 Currency modelum
+  public function scopeByCode($query,$code)
+    {
+        return $query->where('code',$code);
+    }
+4. product modelum
+ public function getPriceAttribute($value)
+    {
+        return round(CurrencyConversion::convert($value), 2);
+    }
+5. app/Http/Controllers/MainController.php
+ public function changeCurrency($currencyCode)
+    {
+        $currency = Currency::byCode($currencyCode)->firstOrFail();
+        session(['currency' => $currency->code]);
+        return redirect()->back();
+    }
+
+6.app/services/CurrencyConversion.php servicum
+
+  public static function convert($sum, $originCurrencyCode = 'RUB', $targetCurrencyCode = null)
+    {
+        $originCurrency = Currency::byCode($originCurrencyCode)->first();
+        if(is_null($targetCurrencyCode)) {
+            $targetCurrencyCode = session('currency','RUB');
+        }
+        $targetCurrency = Currency::byCode($targetCurrencyCode)->first();
+        return $sum * $originCurrency->rate / $targetCurrency->rate;
+
+    }
+
+    public static function getCurrencySymbol()
+    {
+        $currency = Currency::byCode(session('currency', 'RUB'))->first();
+        return $currency->symbol;
+    }
+7. bladum
+ <p>{{$product->price}}  {{\App\Services\CurrencyConversion::getCurrencySymbol()}}</p>
+

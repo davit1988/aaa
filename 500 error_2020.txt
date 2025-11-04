@@ -1,0 +1,11 @@
+yerb error unenq u uzum enq cuyc chta error@
+.env um
+APP_NAME=Laravel
+APP_ENV=production +++
+APP_KEY=base64:0tacDfs2kvzRykUt6IPIlt6xzPDqGSN6yykWl/8Uygg=
+APP_DEBUG=false ++++++
+APP_URL=http://localhost
+-------------------------
+blade um sarqum enq 
+errors.500.blade
+u mej@ inch uzum grum enq

@@ -1,0 +1,60 @@
+parts         tools       toolparts
+id,name       id,name    part_id,tool_id
+
+Part model
+public function tools()
+    {
+        return $this->belongsToMany(Tool::class, 'toolparts','part_id','tool_id')->withTimestamps();
+    }
+Tool
+public function parts()
+    {
+        return $this->belongsToMany(Part::class, 'toolparts','tool_id','part_id')->withTimestamps(); //->withTimestamps() vor uzum enq pivot table um created_at u updated_at cuyc ta
+    }
+ete part_tool chi pivot tablei anun@ apa partadir nshum en toolparts tabli anun@ modelum 
+ete pivot table@ uni created_at u updated_at u uzum enq lracnenq ogtagorcum enq >withTimestamps() modelum
+--------------------------
+
+$part = Part::find(2);
+$tool = Tool::find(3);
+
+$part->tools()->attach($tool); es avelacnuma nor tox pivot tablum part_id->2, tool_id->3
+$part->tools()->attach(4); es avelacnuma nor tox pivot tablum part_id->2, tool_id->4
+$part->tools()->sync($tool); es sarquma part_id->2 u tool_id->3 ete ka nuyna toxum (ev ete ka urish part_id->2 ov column jnjuma orinak part_id->2 tool_id->4)
+-------
+ete uzum enq pivot tabli created_at @ stananq
+$parts = Part::with('tools')->get();
+
+        foreach ($parts as $part)
+        {
+           foreach ($part->tools as $tool)
+           {
+               echo $tool->pivot->created_at;
+           }
+        }
+--------------
+ete pivot table uni urish column orinak status
+ relationneri mej withpivot
+  public function tools()
+    {
+        return $this->belongsToMany(Tool::class, 'toolparts','part_id','tool_id')->withPivot('status')->withTimestamps();
+    }
+  public function parts()
+    {
+        return $this->belongsToMany(Part::class, 'toolparts','tool_id','part_id')->withPivot('status')->withTimestamps();
+    }
+
+  $part->tools()->attach([
+            2=>[
+                'status' => 3
+            ]
+        ]);
+
+ $parts = Part::with('tools')->get();
+ @foreach($parts as $part)
+                     {{$part->name}}<br>
+                    @foreach($part->tools as $tool)
+                        {{$tool->pivot->status}}<br>
+                    @endforeach
+                @endforeach
+----------

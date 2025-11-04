@@ -1,0 +1,49 @@
+projects   users       project_user              tasks
+title      name,..    project_id,user_id        title, user_id
+-------------------------------------------------------
+app/Project.php
+ public function users()
+    {
+        return $this->belongsToMany(User::class);
+    }
+
+    public function tasks()
+    {
+        return $this->hasManyThrough(
+            Task::class,
+            ProjectUser::class,
+            'project_id',
+            'user_id',
+            'id',
+            'user_id');
+    }
+----
+app\ProjectUser.php
+use Illuminate\Database\Eloquent\Relations\Pivot;
+
+class ProjectUser extends Pivot   // poxum enq pivot tablei
+{
+    protected $table = 'project_user';
+
+}
+--------
+app/User.php
+   public function projects()
+    {
+        return $this->belongsToMany(Project::class);
+    }
+
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
+----
+app/Task.php
+   public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+-----------------------------------
+ $project = Project::find(1);
+
+$all = $project->tasks;

@@ -1,0 +1,2 @@
+https://stackoverflow.com/questions/37205438/image-upload-with-preview-and-delete-option-javascript-jquery
+http://jsfiddle.net/89k4kuvd/1/

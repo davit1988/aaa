@@ -1,0 +1,40 @@
+﻿  <li class="menu-items">
+                                <div class="drop-menu">
+                                    <div class="select">
+                                   <span>
+                                       @if(Session::get('lang') == 'en')
+                                           Eng
+                                       @elseif(Session::get('lang') == 'ru')
+                                           Рус
+                                       @else
+                                           Հայ
+                                       @endif
+                                  </span>
+                                        <i class="fa fa-chevron-down"></i>
+                                    </div>
+                                    <input type="hidden" name="language">
+                                    <ul class="dropeddown">
+                                        @if(Session::get('lang') != 'en')
+                                            <li id="eng">
+                                                <a href="{{route('lang','en')}}">
+                                                    Eng
+                                                </a>
+                                            </li>
+                                        @endif
+                                        @if(Session::get('lang') != 'arm')
+                                            <li id="arm">
+                                                <a href="{{route('lang','arm')}}">
+                                                    Հայ
+                                                </a>
+                                            </li>
+                                        @endif
+                                        @if(Session::get('lang') != 'ru')
+                                            <li id="rus">
+                                                <a href="{{route('lang','ru')}}">
+                                                    Рус
+                                                </a>
+                                            </li>
+                                        @endif
+                                    </ul>
+                                </div>
+                            </li>

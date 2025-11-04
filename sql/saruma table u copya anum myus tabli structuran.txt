@@ -1,0 +1,2 @@
+copy anel urish table nuyn columner@
+CREATE TABLE new_tbl LIKE orig_tbl;

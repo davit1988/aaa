@@ -1,0 +1,38 @@
+ete uzum enq mer popoxakan@ bolor bladnerum hasaneli lini
+1.php artisan make:provider ViewServiceProvider
+-------------------
+config/app.php mek providersum avelacnum enq
+  App\Providers\ViewServiceProvider::class
+------------------------------------
+2.app i mej sarqum enq ViewComposers papka mej@ classner orinak ete uzum enq categories @ lini hasanali
+app\ViewComposers\CategoriesComposer.php
+
+namespace App\ViewComposers;
+
+use App\Models\Category;
+use Illuminate\View\View;
+
+class CategoriesComposer
+{
+    public function compose(View $view)
+    {
+        $categories = Category::get();
+        $view->with('categories', $categories);
+    }
+}
+----------------------------
+app/Providers/ViewServiceProvider.php
+
+use Illuminate\Support\Facades\View;
+ public function boot()
+    {
+        View::composer(['layouts.master', 'categories'], 'App\ViewComposers\CategoriesComposer'); karas * es dnes sax texer@ hasaneli lini
+        View::composer('*', function ($view) {
+            $currencySymbol = CurrencyConversion::getCurrencySymbol();
+            $view->with('currencySymbol', $currencySymbol);
+        });
+kam hasarak
+ View::share('app_locale', app()->getLocale()); 
+
+     }
+    

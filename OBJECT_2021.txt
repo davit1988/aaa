@@ -1,0 +1,31 @@
+es nayuma object array2 uni product_id vor@ havasare 88  
+      if(array_search('88', array_column($cart_items, 'product_id')) !== false) {
+            echo 'value is in multidim array';
+        }
+        else {
+            echo 'value is not in multidim array';
+        }
+        die();
+
+
+// Multidimensional array
+$gfg_array = array(
+    array(
+        'score'   => '100',
+        'name'    => 'Sam',
+        'subject' => 'Data Structures'
+    ),
+    array(
+        'score'   => '50',
+        'name'    => 'Tanya',
+        'subject' => 'Advanced Algorithms'
+    ),
+    array(
+        'score'   => '75',
+        'name'    => 'Jack',
+        'subject' => 'Distributed Computing'
+    )
+);
+  
+$id = array_search('50', array_column($gfg_array, 'score'));
+echo $id;

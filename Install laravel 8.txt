@@ -1,0 +1,27 @@
+composer require laravel/ui
+php artisan ui vue --auth
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+---------------------
+https://laraveldaily.com/laravel-8-vue-3-crud-composition-api/ hesht dzeva
+-----------------
+
+vuejs install
+1. composer require laravel/ui
+2. php artisan ui vue --auth
+3. npm install 
+4. npm run dev
+5. npm run watch
+//ete errora berum npm run dev jamanak
+1. Delete node_modules folder and package-lock.json
+2. reinstall package using npm install
+3. Try run npm run dev again
+
+
+
+install vujs laravel 9 run watch problem
+
+https://stackoverflow.com/questions/73142864/npm-run-watch-not-working-and-returning-errors-saying-missing-watch
+
+bladum      @vite('resources/js/app.js')

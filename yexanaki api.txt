@@ -1,0 +1,21 @@
+1 https://www.apixu.com/
+login    davit.marutyan2@gmail.com
+password davit6262
+
+2. $key = "c7e7a5ebf3954c08851171200180108";
+        $city = 'Yerevan';
+        $url = "http://api.apixu.com/v1/current.json?key=$key&q=Yerevan&=" ;
+
+        $ch = curl_init();
+        curl_setopt($ch,CURLOPT_URL,$url);
+        curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+
+        $json_output=curl_exec($ch);
+        $weather = json_decode($json_output);
+        $result = $weather->current->temp_c;
+
+view mejel 
+
+Yerevan
+<img src="//cdn.apixu.com/weather/64x64/night/389.png"/>
+{{$result}}

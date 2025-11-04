@@ -1,0 +1,59 @@
+routes/web.php
+Route::get('/locale/{locale}','MainController@changeLocale')->name('locale');  cankalia amenaverum grel
+--------------------------------------------
+app/Http/Controllers/MainController.php
+
+ public function changeLocale($locale)
+    {
+        $availableLocale = ['ru','en'];
+        if(!in_array($locale,$availableLocale)) {
+            $locale = config('app.locale');
+        }
+        session(['locale' => $locale]);
+        App::setLocale($locale);
+        return redirect()->back();
+    }
+----------------------------------------------
+php artisan make:middleware SetLocale
+app/Http/Middleware/SetLocale.php
+    public function changeLocale($locale)
+    {
+        $availableLocale = ['ru', 'eng','arm'];
+        if (!in_array($locale, $availableLocale)) {
+            $locale = config('app.locale');
+        }
+        session(['locale' => $locale]);
+        App::setLocale($locale);
+        return redirect()->back();
+    }
+-------------------------------------------------
+app/Http/Kernel.php
+  protected $routeMiddleware = [
+        'set_locale' => \App\Http\Middleware\SetLocale::class
+    ];
+----------------------------------------------
+web um 
+Route::group(['middleware' => 'set_locale'],function (){
+    ....
+});
+--------------------------------
+view i mej
+
+1.resources\lang\en\main.php i mej
+ return [
+'set_lang' => 'ru'
+]
+2.1.resources\lang\ru\main.php i mej
+ return [
+'set_lang' => 'en'
+]
+<li><a href="{{route('locale',__('main.set_lang'))}}">{{__('main.set_lang')}}</a></li> // 2 language i hamar harmara
+------------------------------------------------------------------
+bladum karanq ogtagorceq
+@lang('main.word')
+
+kam
+{{__('main.word')}}
+
+isk controllerum
+     return redirect()->route('basket')->withSuccess(__('main.my_orders'));

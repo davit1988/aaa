@@ -1,0 +1,19 @@
+php artisan make:model Product -a
+
+1. database/factories/ProductFactory.php
+$factory->define(Product::class, function (Faker $faker) {
+    return [
+        'name' => $faker->sentence(2),
+        'description' => $faker->sentence(20),
+        'price' => $faker->numberBetween(100,5000),
+        'email' => $faker->unique()->safeEmail,
+    ];
+});
+----------------------------
+2.database/seeds/ProductSeeder.php
+
+factory(\App\Product::class,50)->create();
+----------------
+3. database/seeds/DatabaseSeeder.php
+
+$this->call(ProductSeeder::class);

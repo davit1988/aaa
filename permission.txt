@@ -1,0 +1,124 @@
+links https://github.com/spatie/laravel-permission      github packages
+      https://www.youtube.com/watch?v=zIgYJlu03bI&list=PLe30vg_FG4OQKaLJodH9E8htPvfj7jamt youtube
+----------------------------------------------------------------------------------------------------
+1.composer require spatie/laravel-permission
+2.php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider" --tag="migrations" (avelacnuma migration databesum)
+3.php artisan migrate
+4.php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider" --tag="config" (config.php um avelanuma permission)
+5. User model um 
+ use Spatie\Permission\Traits\HasRoles;
+ avelacnum enq use HasRoles
+ -----------------------------------------------------------------------------
+6.mer uzac controllerum orinak HomeControllerum avelacnum enq role
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+ public function index()
+    {
+       1) Role::create(['name' => 'write']);          avelacnuma roles tableum 
+       2) Permission::create(['name' => 'post write']); avelacnuma permissions tableum
+        return view('home');
+    }
+
+---------------------------------------------------------------------------------------------------------------------
+7.          **ete uzum enq role_has_permission tableum avelacnenq permision_id u role_id   (attacha anum ira dzevov)**
+
+public function index()
+    {        
+        $role = Role::findById(1);
+        $permission = Permission::findById(1);
+        $role->givePermissionTo($permission);
+        return view('home');
+    }
+	
+-------------------------------------------------------------------------	
+	                 ***ete uzum enq taza permisssions avelacnenq u miajamanak role_has_permission um avelacni***
+	 public function index()
+    {
+        $role = Role::findById(1);
+        $permission = Permission::create(['name' => 'edit post']);        
+        $role->givePermissionTo($permission);
+        return view('home');
+    }
+---------------------------------------------------------------------------------
+                  **ete uzum enq jnjenq role_has_permissions tablum ic mer uzac@ @st id permission neri**
+	 public function index()
+    {  
+        $role = Role::findById(1);
+        $permission = Permission::findById(2);
+        $permission->removeRole($role);
+         return view('home');
+    }
+	
+----------------------------------------------------------------------------------------------------
+                     **ete uzum enq model_has_permmisions table um avelacnenq @st permision i**
+					 
+use Illuminate\Support\Facades\Auth;					 
+		 public function index()
+        {  
+         \auth()->user()->givePermissionTo('edit post'); (edit post @ mer permissions table i name na)
+         return view('home');
+        }	
+		is ete uzum enq stananq @st login exac useri permissioni anun@
+		return \auth()->user()->permissions;
+-----------------------------------------------------------------------------------------------
+                  **ete uzum enq model_has_roles tableum avelacnenq @st roles i**
+ public function index()
+    {      
+      \auth()->user()->assignRole('role1'); (role1 @ roles tablei name na)
+        return view('home');
+    }				  
+		ete uzum enq stananq @st login exac uzeri permisioni anun@ 
+ return \auth()->user()->roles;	
+--------------------------------------------------------------------
+ete uzum enq stananq bolor permissioner@ 
+ return \auth()->user()->getAllPermissions(); 
+ --------------------------------------------------
+ ete uzum enq stananq login exac useri tvyalner@ @st role i
+ 1)return User::role('role1')->get();
+ @st permisionireturn 
+ 2)User::permission('permis2')->get();
+ --------------------------------------------------------------
+ 
+                          **ete uzum enq jnjenq model_has_permmisions table um @st permmisioni**
+ return \auth()->user()->revokePermissionTo('edit post'); (edit post @ permissions table um name na)
+ --------------------------------------------------------------------------------------------------
+                          **ete uzum enq jnjenq model_has_roles table um @st roles ic
+ \auth()->user()->removeRole('role2');	(role2 @ mer roles table um name na)	
+--------------------------------------------------------------------------------
+                 **verj bazan sarqelu bolor dzever**
+======================================================================================================
+======================================================================================================				  
+ 
+ view i mej ete uzum enq asenq orinaki hamar kara inchvor ban gci john user@ 
+ @role('writer')
+               <a href="{{route('post.create')}}" style="float: right;">Add</a>
+ @endrole
+is ete admin ham kara gci ham edit ani
+ @role('writer|edit')
+               <a href="{{route('post.create')}}" style="float: right;">Add</a>
+ @endrole
+--------------------------
+karanq naev @st permisioni asenq ov kara edit ani 
+
+  @can('edit post')
+     <a href="{{route('post.edit',$post->id)}}"style="float: right;">Edit</a>
+ @endcan
+--------------------------------
+ete orinak add kara ani menak john@ u bayc logina exel hovon url um dzerov gri create kberi formen dra hamar route nerum middlware enq dnum
+app/http/kernel  protected $routeMiddleware - mej avelacnum enq
+
+'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
+'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
+'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
+
+Route::get('post/create','PostController@create')->name('post.create')->middlware('role:writer');
+kam @st permisiioni vor@ nra hamara heto inchvor mekin access tas 
+Route::get('post/edit/{id}','PostController@edit')->name('post.edit')->middleware('permission:edit post');
+
+kam karas group neri mej gces nayi documentacian
+
+ev verjum bazayum role i anun@ kam permissioni anun@ poxeluc casha pahum 
+php artisan cache:forget spatie.permission.cache     es kanes
+
+					 
+	

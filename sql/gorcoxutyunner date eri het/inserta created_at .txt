@@ -1,0 +1,2 @@
+INSERT INTO workers SET name='fff', age=20, salary=700,author='bbbb',created_at=CURDATE() es depqum bazayum es tesqova gcum  2018-10-08 00:00:00
+INSERT INTO workers SET name='fff', age=20, salary=700,author='bbbb',created_at=now()     es depqum bazayum es tesqova pahum 2018-10-08 12:36:22 

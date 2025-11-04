@@ -1,0 +1,27 @@
+preview route name 
+
+@if(app('router')->getRoutes()->match(app('request')->create(URL::previous()))->getName() == 'frontIndex')
+  <li>
+       <span>{!! !empty($tour->title->$lang) ? $tour->title->$lang : '' !!}</span>
+  </li>
+@else
+--------------------------------------------
+previews url
+{{url()->previous()}}
+------------------------------------------
+
+current route name
+
+   @if(\Request::route()->getName() == 'frontIndex')
+     <p class="seven-springs-footer__txt">{{$trans->footer->$lang}} <a href="">Davit</a> & <a href="">Vahag</a></p>
+  @endif
+------------------
+kam
+
+<a class="nav-link"
+     href="{{ route(\Illuminate\Support\Facades\Route::currentRouteName(), $locale) }}"
+      @if (app()->getLocale() == $locale) style="font-weight: bold; text-decoration: underline" @endif> {{ strtoupper($locale) }}
+</a>
+----------------------
+perv route name
+      $routeName = app('router')->getRoutes()->match(app('request')->create(\URL::previous()))->getName();

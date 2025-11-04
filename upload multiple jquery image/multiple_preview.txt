@@ -1,0 +1,66 @@
+Route::post('store_images_session',[\App\Http\Controllers\Admin\ProductsController::class, 'store_images_session'])->name('store_image_session');
+
+----
+<div class="col-md-12">
+   <div class="form-group">
+        <div class="custom-file">
+ <input type="file" id="uploadFile" name="filenames[]" onchange="multiImagesPreview(this, '#image_preview')" multiple/>
+<label class="custom-file-label" for="uploadFile">Choose file</label>
+</div>
+ </div>
+<div id="image_preview">
+</div>
+</div>
+
+------------------
+$this->validate($request,[
+            'category_id'=>'required',
+            'name_arm'=>'required',
+            'name_ru'=>'required',
+            'name_en'=>'required',
+            'description_arm'=>'required',
+            'description_ru'=>'required',
+            'description_en'=>'required',
+            'price_ru'=>'required',
+            'price_arm'=>'required',
+            'qty'=>'required',
+            'filenames' => 'required',
+            'filenames.*' => 'image'
+        ]);
+
+        $data = $request->all();
+        $slug = Str::slug($request->name_en);
+        $count = Product::where('slug',$slug)->count();
+        if ($count > 0) {
+            $slug = $slug.'-'.time();
+        }
+        $data['slug'] = $slug;
+        $product = Product::create($data);
+
+        if($request->hasfile('filenames'))
+        {
+            foreach($request->file('filenames') as $file)
+            {
+                $product_file = new ProductImage();
+                $product_file->main = 0;
+                $product_file->product_id = $product->id;
+                $product_file->name = Helpers::FileUpload($file, 'products');
+                $product_file->save();
+            }
+        }
+        return redirect()->route('products.index')->withSuccess('Product has been created');
+-----------------------
+function multiImagesPreview(input, placeToInsertImagePreview) {
+    if (input.files) {
+        var filesAmount = input.files.length;
+
+        for (i = 0; i < filesAmount; i++) {
+            var reader = new FileReader();
+
+            reader.onload = function(event) {
+                $($.parseHTML('<img>')).attr('src', event.target.result).appendTo(placeToInsertImagePreview);
+            }
+            reader.readAsDataURL(input.files[i]);
+        }
+    }
+}

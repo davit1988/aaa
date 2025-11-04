@@ -1,0 +1,39 @@
+users                  addresses                             https://www.youtube.com/watch?v=rb2Tf8zByRU&list=PL1TrjkMQ8UbVyIT0cDX-54gN5tunWZvaI&index=2
+id,name,userName...       id,country,us_id
+
+
+Address Model
+
+ public function user()
+    {
+        return $this->belongsTo(User::class,'us_id'); ete address tableum us_id i tex@ grac liner user_id foreingkey el petq cher lini us_id grel
+    }
+
+User model
+   public function address()
+    {
+        return $this->hasOne(Address::class,'us_id'); //es nuyna grenq select * from address where user_id =
+    }
+-----------------------
+controleler
+
+ $user = User::find(1);
+ $address = Address::find(1);
+-----------------------------------
+create
+ $user = factory(\App\User::class)->create();
+ $user->address()->create(['country' => 'Armenia']);
+-----
+kam
+Address::create([
+'uid' => $user->id,
+'country' => 'India'
+]);
+--------------------------
+ $address->user()->associate($user); // update anum user_id address table um
+ $address->save();
+-----
+select
+
+   $user = User::with('address')->get();
+   $address = Address::with('user')->get();

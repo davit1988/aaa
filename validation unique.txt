@@ -1,0 +1,38 @@
+rules i depqum
+ public function rules()
+    {
+        $rules = [
+            'code' => 'required|min:3|max:255|unique:products,code',
+            'name' => 'required|min:3|max:255',
+            'description' => 'required|min:5',
+        ];
+
+        if ($this->route()->named('products.update')) {
+            $rules['code'] .= ',' . $this->route()->parameter('product')->id;
+        }
+
+        return $rules;
+    }
+-----------------------------------------
+sovorakan
+store 
+$request->validate([
+              'code' => 'required|min:3|max:255|unique:products,code',
+            'name' => 'required|min:3|max:255',
+            'description' => 'required|min:5',
+        ]);
+-------------------------
+updatei vaxt
+
+  'code' => 'required|min:3|max:255|unique:products,code,'.$id,
+  'name' => 'required|min:3|max:255',
+  'description' => 'required|min:5',
+  ===========================================
+  
+  
+  
+        if ( ! $projectsManager->showOpportunities()) {
+            throw ValidationException::withMessages([
+                'cover_letter' => ['You are not allowed to apply to opportunities at this time. Please contact your community manager if you think this is a error.']
+            ]);
+        }

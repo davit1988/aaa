@@ -1,0 +1,62 @@
+controllerum
+  $productQuery = Product::with('category');
+
+        if ($request->filled('price_from')) {
+            $productQuery->where('price', '>=', $request->price_from);
+        }
+   $products = $productQuery->paginate(1)->withPath("?".$request->getQueryString());
+---------------
+bladum
+{{$products->links()}}
+kam 
+{{$products->links('paginate)}}  u resources/views/paginate.blade.php um mer uzac dzevovo
+
+@if ($paginator->hasPages())
+    <div class="yca-pagination pagination">
+        <ul>
+            @if ($paginator->onFirstPage())
+                <li class="pagination-control ">
+                    <a href="javascript:void(0)">
+                        <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+                    </a>
+                </li>
+            @else
+                <li class="pagination-control ">
+                    <a href="{{ $paginator->previousPageUrl() }}">
+                        <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+                    </a>
+                </li>
+            @endif
+            @foreach ($elements as $element)
+                @if (is_string($element))
+                    <li class="disabled"><span>{{ $element }}</span></li>
+                @endif
+                @if (is_array($element))
+                    @foreach ($element as $page => $url)
+                        @if ($page == $paginator->currentPage())
+                            <li><a href="" class="is_active">{{ $page }}</a></li>
+                        @else
+                            <li class="page-item"><a class="page-link" href="{{ $url }}">{{ $page }}</a></li>
+                        @endif
+                    @endforeach
+                @endif
+            @endforeach
+
+
+            @if ($paginator->hasMorePages())
+                <li class="pagination-control">
+                    <a href="{{ $paginator->nextPageUrl() }}">
+                        <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                    </a>
+                </li>
+            @else
+                <li class="pagination-control">
+                    <a href="javascript:void(0)">
+                        <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                    </a>
+                </li>
+            @endif
+
+        </ul>
+    </div>
+@endif

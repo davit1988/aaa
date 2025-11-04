@@ -1,0 +1,73 @@
+public function getAllUserHolidays(User $user, array $filter = [])
+    {
+        $from = $filter['from'] ?? now()->subMonth()->format('Y-m-d');
+        $to = $filter['to'] ?? now()->format('Y-m-d');
+
+        return CalendarEvent::query()
+            ->where(function($query) use ($to, $from) {
+                return $query->whereBetween('from', [$from, $to])
+                    ->orWhereBetween('to', [$from, $to])
+                    ->orWhere(function($query) use ($from) {
+                        $query->where('from', '>=', $from)->where('to', '<', $from);
+                    })->orWhere(function($query) use ($to) {
+                        $query->where('from', '<', $to)->where('to', '>=', $to);
+                    });
+            })
+            ->where(function($query) use ($filter, $user) {
+                $query->where(function($query) use ($user) {
+                    $query
+                        ->where('status', CalendarEvent::STATUS_APPROVED)
+                        ->where('type', CalendarEvent::TYPE_VACATION)
+                        ->where('user_id', $user->id);
+                });
+
+                if (!array_key_exists('exclude_public_holidays', $filter)) {
+                    $query->orWhere(function($query) use ($user) {
+                        $query
+                            ->where('type', CalendarEvent::TYPE_HOLIDAY)
+                            ->where('country_code', $user->country_code);
+                    });
+                }
+            })
+            ->get();
+    }
+
+public function getUserWorkingDays($from, $to, User $user)
+    {
+        $startDate = Carbon::parse($from);
+        $endDate = Carbon::parse($to);
+
+        $holidays = $this->getAllUserHolidays($user, [
+            'from'                    => $from,
+            'to'                      => $to,
+            'exclude_public_holidays' => true,
+        ]);
+
+        // Extract holiday dates into an array
+        $holidayDates = $holidays->map(function($holiday) {
+            $period = new CarbonPeriod($holiday->from, $holiday->to);
+
+            return $period->toArray();
+        })->flatten()->map(function($date) {
+            return $date->format('Y-m-d');
+        })->unique()->values();
+
+        $workingDays = 0;
+
+        // Iterate over each day in the interval
+        for ($date = $startDate; $date->lte($endDate); $date->addDay()) {
+            // Check if it's a weekend
+            if ($date->isWeekend()) {
+                continue;
+            }
+
+            // Check if the day is a holiday
+            if ($holidayDates->contains($date->format('Y-m-d'))) {
+                continue;
+            }
+            // If it's not a weekend or a holiday, it's a working day
+            $workingDays++;
+        }
+
+        return $workingDays;
+    }

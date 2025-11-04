@@ -1,0 +1,39 @@
+https://www.tutsmake.com/laravel-get-record-last-week-month-15-days-year/
+
+1. Last Day Records
+User::where('created_at','>=',Carbon::now()->subdays(1))->get(['name','created_at']);
+-----------------
+2.Get Last Week Data
+$previous_week = strtotime("-1 week +1 day");
+ $start_week = strtotime("last sunday midnight",$previous_week);
+ $end_week = strtotime("next saturday",$start_week);
+ $start_week = date("Y-m-d",$start_week);
+ $end_week = date("Y-m-d",$end_week);
+
+ User::whereBetween('created_at', [$start_week, $end_week])->get(['name','created_at']);
+---------------------------
+3.Get Last Month records
+User::whereMonth('created_at', '=', Carbon::now()->subMonth()->month)->get(['name','created_at']);
+----------------
+4. Get Last 15 Days & 30 Days Records
+
+$last_15_days = User::where('created_at','>=',Carbon::now()->subdays(15))->get(['name','created_at']);
+$last_30_days = User::where('created_at','>=',Carbon::now()->subdays(30))->get(['name','created_at']);
+-------------------------------
+5.Get Last Year Record
+User::whereYear('created_at', date('Y', strtotime('-1 year')))->get(['name','created_at']);
+---------------------
+6.Fetch Month Wise Last Year Data
+
+User::select(DB::raw("(COUNT(*)) as count"),DB::raw("MONTHNAME(created_at) as monthname"))
+ ->whereYear('created_at', date('Y', strtotime('-1 year')))
+ ->groupBy('monthname')
+ ->get()
+----------------------------
+How to Get Last N Days Records in Laravel
+\App\Model::whereBetween('date', [
+               \carbon\Carbon::now()->subdays(30)->format('Y-m-d'),
+               \carbon\Carbon::now()->subday()->format('Y-m-d')
+            ])->get();
+-------------------------------
+https://www.tutsmake.com/laravel-get-current-date-week-month-wise-year-data/

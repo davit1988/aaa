@@ -1,0 +1,93 @@
+1. touch ~/Templates/"New Document"  // mkniki aj klik aneluc beri new document
+2. https://losst.ru/ustanovka-php-7-v-ubuntu-20-04 //PHP install
+3. https://baks.dev/article/ubuntu/how-to-install-mysql-on-ubuntu-18-04 //MYSQL shat hesht
+ete mariadb n chka apt-get install mariadb-server
+4. https://www.liquidweb.com/kb/install-phpmyadmin-ubuntu-18-04/
+5. https://www.digitalocean.com/community/tutorials/how-to-reset-your-mysql-or-mariadb-root-password  //change password mysql mariadb
+
+sudo update-alternatives --config php
+ sudo a2dismod php7.4
+ sudo a2enmod php5.6
+ sudo systemctl restart apache2
+
+SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));  //group by i xndir
+
+sudo systemctl status mysql
+sudo systemctl status apache2
+sudo service mysql restart
+sudo systemctl restart apache2
+/php versia
+---------------
+
+https://hackthestuff.com/article/error-solved-some-errors-have-been-detected-on-the-server-please-look-at-the-bottom-of-this-window-in-phpmyadmin //mysql ingnore all error 
+
+
+-------------------------
+
+/etc/php/8.1/apache2/php.ini // phpini configs patch
+----------------------------
+host
+sudo nano /etc/hosts
+
+1.2.3.4 account.jetbrains.com 1.2.3.4
+http://www.jetbrains.com 1.2.3.4
+www-weighted.jetbrains.com
+0.0.0.0 account.jetbrains.com
+-------------
+vhosts
+sudo nano /etc/apache2/sites-available/000-default.conf
+
+<VirtualHost *:80>
+    ServerAdmin admin@example.com
+    ServerName example.com
+    ServerAlias www.example.com
+    DocumentRoot /var/www/example.com/public_html
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+sudo nano /etc/apache2/sites-available/proxify_1.conf
+partadir
+sudo a2ensite proxify_1.conf
+sudo a2enmod rewrite
+sudo a2enconf phpmyadmin
+----------------------------------------
+dekstopi file copy anel 
+sudo cp /home/david/Desktop/website.rar /var/www/html/
+
+cat  /home/david/.ssh/id_rsa.pub
+
+---------------------
+unrar file
+unrar x -r /home/work/software/myfile.rar
+-------------
+uninstall program
+sudo apt-get remove <application_name>
+
+------------------------------------
+install tar.gz program
+
+1. cd Downloads
+
+2. tar -xvf PhpStorm-2020.3.1.tar.gz /unzipa anum
+
+3. cd PhpStorm-203.6682.180/bin/
+
+4. ./phpstorm.sh
+-------------------------------
+
+delete folder
+sudo rm -r /path/to/folderName
+
+-------------------------------
+impost mysql
+mysql -u phpmyadmin -p cannas < ~/Downloads/cannasweb.sql
+
+------------------------------
+
+
+
+BErNvSEd-seo-languages
+
+sudo apt-get install -y php8.0-simplexml php8.0-dom php8.0-curl
+sudo apt-get install -y php8.0-gd php8.0-zip
+

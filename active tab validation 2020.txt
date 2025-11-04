@@ -1,0 +1,91 @@
+https://laraveldaily.com/laravel-form-with-jquery-ui-tabs-validation-error-redirect-to-active-tab/
+
+Route::get('/','TestController@create');
+Route::post('store','TestController@store')->name('store');
+
+-------------------
+view/welcome
+@extends('layouts.app')
+
+@section('content')
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+        $( function() {
+            // $( "#tabs" ).tabs();
+            $( "#tabs" ).tabs({ active: {{ $active_tab ?? '0' }} });
+        } );
+    </script>
+    <div id="tabs">
+        <ul>
+            <li><a href="#tabs-1">Nunc tincidunt</a></li>
+            <li><a href="#tabs-2">Proin dolor</a></li>
+            <li><a href="#tabs-3">Aenean lacinia</a></li>
+        </ul>
+
+        <div id="tabs-1">
+         dasdadasd
+        </div>
+
+        <div id="tabs-2">
+            <form action="{{route('store')}}" method="post">
+                @csrf
+                <input type="text" class="form-control" name="title">
+
+                @error('title')
+                <span style="color: red">
+                    <strong>{{ $message }}</strong>
+                 </span>
+                @enderror
+                <input type="text" class="form-control" name="desc">
+                @error('desc')
+                <span style="color: red">
+                    <strong>{{ $message }}</strong>
+                 </span>
+                @enderror
+                <br>
+                <input type="submit" value="submit">
+            </form>        </div>
+
+        <div id="tabs-3">
+            <p>Mauris eleifend est et turpis. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat, eu congue orci lorem eget lorem. Vestibulum non ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce sodales. Quisque eu urna vel enim commodo pellentesque. Praesent eu risus hendrerit ligula tempus pretium. Curabitur lorem enim, pretium nec, feugiat nec, luctus a, lacus.</p>
+            <p>Duis cursus. Maecenas ligula eros, blandit nec, pharetra at, semper at, magna. Nullam ac lacus. Nulla facilisi. Praesent viverra justo vitae neque. Praesent blandit adipiscing velit. Suspendisse potenti. Donec mattis, pede vel pharetra blandit, magna ligula faucibus eros, id euismod lacus dolor eget odio. Nam scelerisque. Donec non libero sed nulla mattis commodo. Ut sagittis. Donec nisi lectus, feugiat porttitor, tempor ac, tempor vitae, pede. Aenean vehicula velit eu tellus interdum rutrum. Maecenas commodo. Pellentesque nec elit. Fusce in lacus. Vivamus a libero vitae lectus hendrerit hendrerit.</p>
+        </div>
+    </div>
+@endsection
+
+----------------------------------
+ public function create()
+    {
+        $active_tab = 0;
+        $errors = session('errors');
+        if ($errors) {
+            $fields_tabs = [
+                ['tab-1'], // Tab 1
+                ['title', 'desc'], // Tab 2
+                ['avatar', 'bio'], // Tab 3
+            ];
+            foreach ($fields_tabs as $tab => $fields) {
+                foreach ($fields as $field) {
+                    if ($errors->has($field)) {
+                        $active_tab = $tab;
+                        break;
+                    }
+                }
+            }
+           
+        }
+         return view('welcome', compact('active_tab'));
+    }
+    public function store(Request $request)
+    {
+        $request->validate([
+            'title' => 'required',
+            'desc' => 'required'
+        ]);
+
+      dd(234);
+
+    }

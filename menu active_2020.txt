@@ -1,0 +1,44 @@
+app\Providers\AppServiceProvider.php 
+booti mej
+
+Blade::directive('routeactive', function ($route) {
+            return "<?php echo Route::currentRouteNamed($route) ? 'class=\"active\"' : '' ?>";
+        });
+
+-------------------------
+blade um
+   <li @routeactive('index')><a href="{{route('index')}}">All products</a></li>
+   <li @routeactive('categ*')><a href="{{route('categories')}}">Categories</a></li>
+   <li @routeactive('basket')><a href="{{route('basket')}}">Your cart</a></li>
+
+araji angam phpshtormum chi haskana @routeactive u karmir guynov knshi
+dra hamar
+
+shtorm  settings/Language & Framework/PHP/Blade 
+
+use default settings ptichken hanum enq directives i mej avelacnum enq
+routeactive apply ok
+
+----------------------------
+kam
+app\Providers\AppServiceProvider.php 
+booti mej
+Blade::if('admin', function (){
+            return Auth::check() && Auth::user()->isAdmin();
+        });
+-------
+view i mej
+ @admin
+                        <li><a href="{{route('home')}}">Панель администратора</a></li>
+                    @else
+                        <li><a href="{{route('person.orders.index')}}">Мои заказы</a></li>
+                    @endadmin
+-----------
+use default settings ptichken hanum enq directives i mej avelacnum enq
+admin
+endadmin
+
+
+--------------------------
+
+https://www.youtube.com/watch?v=D2eS3QqLSk0&list=PLTucyHptHtTmq4HFKZVmwwzcac2kgfaEZ&index=6  //2023 hesht lav tarberak

@@ -1,0 +1,74 @@
+https://justlaravel.com/paginated-data-search-laravel/
+
+search u pagination
+
+controller um 
+
+ public function searchManager(Request $request)
+    {
+        $query = User::query();
+
+        if($request->company_name){
+            $query->where('company_name','LIKE', '%' . $request->company_name . '%' );
+        }
+        if($request->activity_type){
+            $query->where('activity_type', 'LIKE', '%' .$request->activity_type . '%' );
+        }
+        if($request->address){
+            $query->where('address', 'LIKE', '%' .$request->address . '%');
+        }
+        if($request->phone){
+            $query->where('phone', 'LIKE', '%' .$request->phone . '%');
+        }
+        if($request->director){
+            $query->where('director', 'LIKE', '%' .$request->director . '%');
+        }
+        if($request->email){
+            $query->where('email', 'LIKE', '%' .$request->email . '%');
+        }
+        $managers = $query->where('role','manager')->paginate(1);
+
+        $pagination = $managers->appends( array (
+            'company_name' => $request->company_name,
+            'activity_type' => $request->activity_type,
+            'address' => $request->address,
+            'phone' => $request->phone,
+            'director' => $request->director,
+            'email' => $request->email,
+
+        ));
+          
+        return view('admin.manager.searchresult',compact('managers'));
+    }
+-----------------
+erkrord tarberak
+  $productQuery = Product::query(); kam  $productQuery = Product::with('category');
+
+        if ($request->filled('price_from')) {
+            $productQuery->where('price', '>=', $request->price_from);
+        }
+
+        if ($request->filled('price_to')) {
+            $productQuery->where('price', '<=', $request->price_to);
+        }
+
+        foreach (['hit', 'new', 'recommend'] as $field) {
+            if ($request->has($field)) {
+//                $productQuery->whereHas('product', function ($query) use ($field) {
+//                    $query->$field();
+//                });
+                $productQuery->where($field,1);
+            }
+        }
+
+          $products = $productQuery->paginate(1)->withPath("?".$request->getQueryString());
+-------------------------
+
+view i mej
+{{$managers->links()}}
+
+
+
+<div class="col-item">Showing {{ $estates->firstItem() }} to {{ $estates->lastItem() }}
+                of total {{$estates->total()}} entries
+            </div>

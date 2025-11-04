@@ -1,0 +1,56 @@
+postman i mej
+
+ http://api.cba.am/exchangerates.asmx?op=ExchangeRatesLatest
+
+headers     key                  value
+            Content-Type         application/soap+xml
+
+body -> raw - mej 
+
+ <?xml version="1.0" encoding="utf-8"?>
+<soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">
+  <soap12:Body>
+    <ExchangeRatesLatest xmlns="http://www.cba.am/" />
+  </soap12:Body>
+</soap12:Envelope>  
+
+
+stexic code i mijocov vercnum enq php SAVE-i tak code ka grac curl 
+
+
+$curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "http://api.cba.am/exchangerates.asmx?op=ExchangeRatesLatest",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<soap12:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap12=\"http://www.w3.org/2003/05/soap-envelope\">\r\n  <soap12:Body>\r\n    <ExchangeRatesLatest xmlns=\"http://www.cba.am/\" />\r\n  </soap12:Body>\r\n</soap12:Envelope>",
+            CURLOPT_HTTPHEADER => array(
+                "Cache-Control: no-cache",
+                "Content-Type: application/soap+xml",
+                "Postman-Token: db819648-92d8-43c6-bf0c-beeca8535875"
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+            echo "cURL Error #:" . $err;
+        } else {
+
+            $response = explode('<Rate>',$response);
+            $response_usd = explode('</Rate><Difference>0.1300</Difference></ExchangeRate><ExchangeRate><ISO>GBP</ISO><Amount>1</Amount>',$response[1]);
+            $response_eur = explode('</Rate><Difference>1.9800</Difference></ExchangeRate><ExchangeRate><ISO>XDR</ISO><Amount>1</Amount>',$response[10]);
+            $response_rub = explode('</Rate><Difference>0.0300</Difference></ExchangeRate><ExchangeRate><ISO>UAH</ISO><Amount>1</Amount>',$response[52]);
+
+            $usd = bcdiv($response_usd[0], 1, 2);
+            $eur = bcdiv($response_eur[0], 1, 2);
+            $rub = bcdiv($response_rub[0], 1, 2);
+

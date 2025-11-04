@@ -1,0 +1,39 @@
+vor view eri mej miangamic @st languagi bar@ targmani
+----------------------------------
+app/Models/Traits/Translatable.php sarqum enq trait
+protected $defaultLocale = 'ru';
+
+    public function __($originFieldName)
+    {
+        $locale = App::getLocale() ?? $this->defaultLocale;
+
+        if ($locale === 'en') {
+            $fieldName = $originFieldName . '_en';
+        } else {
+            $fieldName = $originFieldName;
+        }
+
+        $attributes = array_keys($this->attributes);
+
+        if (!in_array($fieldName, $attributes)) {
+            throw new \LogicException('no such attribute for model ' . get_class($this));
+        }
+
+        if ($locale === 'en' && (is_null($this->$fieldName) || empty($this->$fieldName))) {
+            return $this->$originFieldName;
+        }
+
+        return $this->$fieldName;
+    }
+--------------------------------
+heto orinaki hamar product modeli mej
+app\Product.php classi mej use enq anum
+
+class Product extends Model
+{
+    use SoftDeletes, Translatable;
+    protected $fillable = ['name', 'code', 'price', 'category_id', 'description', 'image', 'hit', 'new', 'recommend', 'count', 'name_en', 'description_en'];
+}
+--------------
+heto bladum arden
+<h3>{{$product->__('name')}}</h3>

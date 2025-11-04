@@ -1,0 +1,45 @@
+https://www.codechief.org/article/dont-use-if-else-ladder-in-php-rather-use-this-method
+function get_array_data( string $type = null )
+{
+
+	if( $type == "apple" ) 
+	{
+		return "this is apple";
+	}
+    else if( $type == "cow" )
+    {
+    	return "this is cow";
+    }
+    else if( $type == "milk" )
+    {
+    	return "this is milk";
+    }
+    else 
+    {
+    	return "Not valid type";
+    }
+}
+
+echo get_array_data('cow');
+
+sra tex@
+function get_array_data( string $type = null )
+{
+	$typeArray = [
+
+      'apple' => 'this is apple',
+      'cow' => 'this is cow',
+      'milk' => 'this is milk'
+
+	];
+
+	if (! array_key_exists( $type, $typeArray ) )
+    {
+     	 return "Not valid type";
+    }
+
+	return $typeArray[$type];
+
+}
+
+echo get_array_data('cow');

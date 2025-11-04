@@ -1,0 +1,32 @@
+orinak unenq order_product pivot table         product_id, | order_id, |count
+                                                   1             1         1
+                                                   2             1         3
+
+Product modelum
+public function getPriceForCount()
+{
+  return $this->price * $this->pivot->count;
+}
+
+view i mej
+  <td>{{$product->getPriceForCount()}} ₽
+------------------
+isk ete uzum en hashvenq sax order arac productneri pricenri gumar@
+Order modelum 
+   public function products()
+    {
+        return $this->belongsToMany(Product::class)->withPivot('count')->withTimestamps();;
+    }
+
+    public function getFullPrice()
+    {
+        $sum = 0;
+        foreach ($this->products as $product)
+        {
+            $sum+= $product->getPriceForCount();
+        }
+        return $sum;
+    }
+
+view mej <td>{{$order->getFullPrice()}} ₽</td>
+--------------------------------------------

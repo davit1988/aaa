@@ -1,0 +1,68 @@
+wev routes
+Route::get('singleProduct/{id}','FrontController@single')->name('singleProd');
+---------------------------------------------------------------------------------
+controller
+
+    public function single(Request $request, $id)
+    {
+       
+        $show_products = Product::where('id', $id)->first();
+  
+
+      
+
+        return view('front.singleProduct', compact('show_products'));
+    }
+
+-------------------------------------------------------------------------------
+
+view i mej
+
+  <div id="shareBtn" class="btn btn-success clearfix"
+     data-image="{{asset($show_products->image)}}"
+     data-title="{!! $show_products->title_arm !!}"
+    data-desc="{{$show_products->desc_arm}}"
+    data-redirect="{{env('APP_ENV').'singleProduct/'.$show_products->id}}">
+    Share
+</div>
+
+
+   <script>
+
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId            : '195464937902855',
+                autoLogAppEvents : true,
+                xfbml            : true,
+                version          : 'v2.12'
+            });
+        };
+
+        (function(d, s, id){
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {return;}
+            js = d.createElement(s); js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+
+        document.getElementById('shareBtn').onclick = function() {
+            var url =$(this).data('redirect');
+            var title =$(this).data('title');
+            var description =$(this).data('desc');
+            var image =$(this).data('image');
+            FB.ui({
+                method: 'share_open_graph',
+                action_type: 'og.shares',
+                action_properties: JSON.stringify({
+                    object: {
+                        'og:url': url,
+                        'og:title': title,
+                        'og:description': description,
+                        'og:image': image
+                    }
+                })
+            }, function(response){});
+        }
+
+    </script>

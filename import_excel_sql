@@ -1,0 +1,70 @@
+-- Step 1: sa sarqum enq virtual coumner vorpesi unique keyi het ashxaten, kopit asac null arjeqner unecox columner@ unique key i het chisht chen asxhatum
+
+ALTER TABLE developer_tests
+ADD deleted_at_coalesced BOOLEAN
+GENERATED ALWAYS AS (IF(deleted_at IS NULL, 1, NULL)) VIRTUAL;
+
+ALTER TABLE developer_tests
+ADD karat_recommendation_coalesced BOOLEAN
+GENERATED ALWAYS AS (IF(karat_recommendation IS NULL, 1, NULL)) VIRTUAL;
+
+-- Step 2: sa avelacnum enq unique key vorpesi ON DUPLICATE KEY UPDATE sql@ ashxati
+
+ALTER TABLE developer_tests ADD CONSTRAINT sdtkd_ndx UNIQUE (skill_id,developer_id,type,karat_recommendation_coalesced, deleted_at_coalesced);
+
+-- Step 2: sa sarqum enq virtual table vorpesi csv i meji datan gcenq es table
+CREATE TEMPORARY TABLE temp_developer_tests
+(
+    dev_id INT DEFAULT NULL,
+    dev_name VARCHAR(255) DEFAULT NULL,
+    dev_email VARCHAR(255) DEFAULT NULL,
+    dev_created_at DATETIME DEFAULT NULL,
+    link_to_profile VARCHAR(255) DEFAULT NULL,
+    dev_verified_skill_id VARCHAR(255) DEFAULT NULL,
+    dev_verified_skill_name VARCHAR(255) DEFAULT NULL,
+    codility_test_name VARCHAR(255) DEFAULT NULL,
+    test_skill_name VARCHAR(255) DEFAULT NULL,
+    test_skill_id VARCHAR(255) DEFAULT NULL,
+    score VARCHAR(255) DEFAULT NULL,
+    max_score VARCHAR(255) DEFAULT NULL
+);
+
+-- Step 3:sa karduma csv file@ u meji datan importa anum temp_developer_tests virtual table
+LOAD DATA INFILE '/var/lib/mysql-files/with_codility_scores.csv'
+INTO TABLE temp_developer_tests
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
+
+-- Step 4: sa selecta anum virtual tablic u create/update a anum mer DB um
+INSERT INTO developer_tests (score, percentile, skill_id, developer_id, type, codility_max_result, codility_computed_score, karat_recommendation, is_verification_test, created_at, updated_at, deleted_at)
+SELECT
+    NULLIF(score, '') as score,
+    NULL as percentile,
+    NULLIF(test_skill_id, '') as skill_id,
+    dev_id as developer_id,
+    0 as type,
+    max_score as codility_max_result,
+    score / max_score AS codility_computed_score,
+    NULL as karat_recommendation,
+    0 as is_verification_test,
+    now(),
+    now(),
+    NULL
+FROM temp_developer_tests
+ON DUPLICATE KEY UPDATE
+    developer_tests.score = VALUES(score),
+    developer_tests.codility_computed_score = VALUES(score) / VALUES(codility_max_result);
+
+-- Step 5: create.update aneluc heto jnjum enq virtual table@, unique key@, columner@
+DROP TEMPORARY TABLE IF EXISTS temp_developer_tests;
+
+ALTER TABLE developer_tests
+DROP INDEX sdtkd_ndx;
+
+ALTER TABLE `developer_tests`
+  DROP `deleted_at_coalesced`;
+  
+ALTER TABLE `developer_tests`
+DROP `karat_recommendation_coalesced`;

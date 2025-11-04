@@ -1,0 +1,38 @@
+https://si-dev.com/ru/blog/how-to-format-code-in-phpstorm-using-php-cs-fixer
+https://hackernoon.com/how-to-configure-phpstorm-to-use-php-cs-fixer-1844991e521f
+
+-------------------------------------
+1
+composer global require friendsofphp/php-cs-fixer
+------------------
+2. cmd i mej havaqum enq 
+where.exe php-cs-fixer
+C:\Users\davo\AppData\Roaming\Composer\vendor\bin\php-cs-fixer
+C:\Users\davo\AppData\Roaming\Composer\vendor\bin\php-cs-fixer.bat
+--------------
+3. proekti mej .php_cs.dist enq sarqum
+--------------------
+4.PhpStorm Settings -> Tools -> External Tools
+
+Program imej  C:\xampp\htdocs\triple-consulting-backend\.php_cs.dist
+------------
+Arguments - mej
+ fix
+--verbose
+--config=C:\xampp\htdocs\triple-consulting-backend\.php_cs.dist
+--path-mode=intersection"$FileDir$/$FileName$"
+------------------
+working directory mej
+$FileDir$\$FileName$
+-----------------------------------------------------
+
+5. Settings -> Languages & Frameworks -> PHP -> Quality Tools
+C:\xampp\htdocs\triple-consulting-backend\vendor\bin\php-cs-fixer.bat
+--------------------------------------
+6. Заходим в Settings -> Editor -> Inspections и отмечаем чекбокс PHP -> Quality Tools -> PHP CS Fixer validation
+
+ruleset i mej nshum enq custom
+url talis enq C:\xampp\htdocs\triple-consulting-backend\.php_cs.dist
+-----------------------------
+sax proekti koder@ fixelu hamar 
+consolum havaqum enq php-cs-fixer fix

@@ -1,0 +1,87 @@
+1. mihat renderi mej dd($exception); es anum tenum es inch errora berum amenaverevum u @st dra
+ete menak json formati hamara
+
+es sax grum es 
+
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
+if($request->expectsJson()){
+            if($exception instanceof ModelNotFoundException ){
+
+                return response()->json(['errors' => 'Model not found '],404);
+            }
+
+            if($exception instanceof NotFoundHttpException)
+            {
+                return response()->json(['errors' => 'Route incorect '],404);
+          
+
+-----------------------
+orinak id es sxal grum
+
+
+if($exception instanceof ModelNotFoundException ){
+
+    return response()->json(['errors' => 'Id not found '],404);
+  }
+
+---------------
+
+orinak routi anun@ sxal es grum 
+
+ if($exception instanceof NotFoundHttpException)
+            {
+                return response()->json(['errors' => 'Route incorect '],404);
+            }
+
+----------------------------------------------------------------------------
+
+laravel 5.5  exception handleri mej
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+
+  if($exception instanceof NotFoundHttpException){
+            return back();
+        }
+  if($exception instanceof ModelNotFoundException){
+            return back();
+        }
+
+   if($exception instanceof MethodNotAllowedHttpException){
+            return back();
+        }
+
+u bolor editner@
+$academic_degre = optional(AcademicDegree::find($id));
+kamel $academic_degre = AcademicDegree::findOrFail($id);
+
+-------------------------------------------------------------
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Response;
+
+if ($request->wantsJson() && !($exception instanceof \Illuminate\Validation\ValidationException)) {
+            $code = empty($exception->getCode()) ? Response::HTTP_BAD_REQUEST : $exception->getCode();
+            $message = $exception->getMessage();
+            if ($exception instanceof ModelNotFoundException || $exception instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
+                $code = Response::HTTP_NOT_FOUND;
+                $message = 'Resource not found';
+            }
+            if ($exception instanceof \Symfony\Component\Debug\Exception\FatalThrowableError) {
+                $message = 'Please check requested endpoint and its parameters';
+            }
+            if ($exception->getMessage() == 'Unauthenticated.') {
+                $message = 'Unauthenticated';
+                $code = 401;
+            }
+
+            return response()->json([
+                'error' => [
+                    'message' => $message,
+                ],
+            ], $code);
+        }

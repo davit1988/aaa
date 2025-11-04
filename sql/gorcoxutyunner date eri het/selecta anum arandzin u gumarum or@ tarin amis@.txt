@@ -1,0 +1,44 @@
+$today = date('Y-m-d');
+$monthDays = cal_days_in_month(CAL_GREGORIAN,date('m',strtotime('- 1 month')),date('Y')); //31or naxord amsva oreri qanak
+$lastMonthFirstDay = date('Y-m-01',strtotime('-1 month')); //2020-01-01 naxord amsva skizb or
+$lastMonthLastDay = date('Y-m-t',strtotime('-1 month')); //2020-01-31 naxord amsva verjin or
+
+-----------------------------------
+
+                              ---selecta anum arandzin tarin or@ jam@---
+  $query= "SELECT EXTRACT(DAY FROM created_at) AS day,
+EXTRACT(MONTH FROM created_at) AS month,
+EXTRACT(YEAR FROM created_at) AS year 
+FROM workers where id=10";
+
+    $run_query = mysqli_query($con, $query) or die(mysqli_error($con));
+   
+    if (mysqli_num_rows($run_query) > 0) {
+        while ($row = mysqli_fetch_assoc($run_query)) {
+            $year = $row['year'];
+            echo $year; // 2018 
+                   
+        }
+      
+    }
+    }
+-----------------------------------------------------------------------------------
+selecta anum 1 shabatva arajva tvyalner@
+SELECT * FROM workers WHERE created_at > NOW() - INTERVAL 1 WEEK
+
+--------------------------------------------------------------------------------------
+
+                    ---select aneluc tarin 1 tarov gumaruma nora select anum---
+SELECT DATE_ADD(created_at, INTERVAL 1 YEAR) as date FROM workers
+kam
+SELECT created_at + INTERVAL 1 YEAR as date FROM workers
+------------------------------------------------------------
+
+                   ---select aneluc tarin avelacnuma 3ov amisnel 1ov---
+SELECT created_at + INTERVAL 3 YEAR + INTERVAL 1 MONTH as date FROM workers
+------------------------------------------------------------------------------
+                       --select aneluc orna avelacnum 3ov  jamic hanum 2jam
+SELECT created_at + INTERVAL 3 DAY - INTERVAL 2 HOUR as date FROM workers where id=10
+---------------------------------------------------------------------------------
+                         --select aneluc or@ jam@ ropen gumaruma---
+SELECT created_at + INTERVAL 3 Day + INTERVAL 3 HOUR +INTERVAL 1 MINUTE +INTERVAL 1 SECOND as date FROM workers where id=11

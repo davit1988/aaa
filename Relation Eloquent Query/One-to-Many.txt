@@ -1,0 +1,66 @@
+users                  addresses                            
+id,name,userName...       id,country,us_id
+
+
+Address Model
+
+ public function user()
+    {
+        return $this->belongsTo(User::class,'us_id'); ete address tableum us_id i tex@ grac liner user_id foreingkey
+    }
+
+User model
+   public function address()
+    {
+        return $this->hasMany(Address::class,'us_id'); 
+    }
+----------------------
+create 
+
+ $user = User::find(1);
+    $user->addresses()->create([
+            'country' => 'ffff'
+        ]);
+     $address = Address::find(1);
+     $address->user()->associate($user);
+     $address->save();
+----
+
+select
+
+     $users = User::with('addresses')->get();
+     $address = Address::with('user')->get();
+-------------------
+view i mej
+  @foreach($users as $user)
+        <h2>{{$user->name}}</h2>
+    @foreach($user->addresses as $address)
+        <p>{{$address->country}}</p>
+   @endforeach
+ @endforeach
+-----------------------
+ete inchvor column karoxa null lini orinak
+address modelum 
+ public function user()
+    {
+        return $this->belongsTo(User::class,'us_id')->withDefault([
+            'name' => 'guest'
+        ]);
+    }
+ @foreach($addresses as $address)
+   <h2>{{$address->country}}</h2>
+   <p>{{$address->user->name}}</p>
+@endforeach
+-----------------------------------
+
+1.ete addresses tabli mej kara us_id null lini ev petqa menka en userner@ vercnenq voronq unen addressner
+  $users = User::has('addresses')->with('addresses')->get();
+
+2.en userner@ voronq unen addressner u addresi meji qountryn sksvuma lon
+  $users = User::whereHas('addresses',function ($q){
+            $q->where('country','like','%Lo%');
+        })->get();
+en userner@ voronq unen address ev inchvor paymani en 
+3.$users = User::whereHas('addresses',function ($q){  
+            $q->where('country','like','%Lo%');
+        })->with('addresses')->get();

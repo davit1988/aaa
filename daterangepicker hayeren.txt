@@ -1,0 +1,89 @@
+  var nowDate = new Date();
+    var today = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate(), 0, 0, 0, 0);
+    var locationHref = window.location.pathname;
+    var months = [];
+    var days = [];
+
+    $('#datepickerValidFrom').val(moment().format('DD.MM.Y'));
+    $('#datepickerValidUntil').val(moment().format('DD.MM.Y'));
+    $('#datepickerNotValidFrom').val(moment().format('DD.MM.Y'));
+    $('#datepickerNotValidUntil').val(moment().format('DD.MM.Y'));
+    if (locationHref.indexOf('en') > -1) {
+        days = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+        months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    } else if (locationHref.indexOf('ru') > -1) {
+        days = ["Вос", "Пон", "Вт", "Среда", "Четв", "Пят", "Суб"];
+        months = ["Янв", "Фев", "Мар", "Апр", "Май", "Июнь", "Июль", "Авг", "Сен", "Окт", "Нояб", "Дек"]
+    } else {
+        days = ["Կիր", "Երկ", "Երք", "Չրք", "Հնգ", "Ուրբ", "Շաբ"];
+        months = ["Հունվ", "Փետր", "Մարտ", "Ապր", "Մայ", "Հուն", "Հուլ", "Օգոս", "Սեպտ", "Հոկտ", "Նոյ", "Դեկ"]
+    }
+
+
+    $('#datepickerValidFrom').daterangepicker({
+        opens: 'center',
+        singleDatePicker: true,
+        showDropdowns: true,
+        autoApply: true,
+        minDate: today,
+        startDate: today,
+        locale: {
+            format: 'DD.MM.Y',
+            daysOfWeek: days,
+            monthNames: months,
+        },
+    }, function (start) {
+        console.log(start);
+        $('#valid_from').val(start.format('DD.MM.Y'));
+        $('#datepickerValidUntil').data("daterangepicker").minDate = moment(start).add(1,'days');
+        $('#datepickerNotValidFrom').data("daterangepicker").minDate = moment(start).add(1,'days');
+        $('#datepickerValidUntil').data('daterangepicker').setStartDate(moment(start).add(1,'days'));
+    });
+
+    $('#datepickerValidUntil').daterangepicker({
+        opens: 'center',
+        singleDatePicker: true,
+        showDropdowns: true,
+        autoApply: true,
+        minDate: moment(today).add(1,'days'),
+        startDate:moment(today).add(1,'days'),
+        locale: {
+            format: 'DD.MM.Y',
+            daysOfWeek: days,
+            monthNames: months,
+        },
+    }, function (start) {
+        $('#valid_until').val(start.format('DD.MM.Y'));
+        $('#datepickerNotValidUntil').data("daterangepicker").maxDate = moment(start).add(-1,'days');
+    });
+
+
+    $('#datepickerNotValidFrom').daterangepicker({
+        opens: 'center',
+        singleDatePicker: true,
+        showDropdowns: true,
+        autoApply: true,
+        startDate: today,
+        locale: {
+            format: 'DD.MM.Y',
+            daysOfWeek: days,
+            monthNames: months,
+        },
+    }, function (start) {
+        $('#not_valid_from').val(start.format('DD.MM.Y'));
+    });
+
+    $('#datepickerNotValidUntil').daterangepicker({
+        opens: 'center',
+        singleDatePicker: true,
+        showDropdowns: true,
+        autoApply: true,
+        startDate: today,
+        locale: {
+            format: 'DD.MM.Y',
+            daysOfWeek: days,
+            monthNames: months,
+        },
+    }, function (start) {
+        $('#not_valid_until').val(start.format('DD.MM.Y'));
+    });

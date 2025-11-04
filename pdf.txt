@@ -1,0 +1,63 @@
+https://www.tutsmake.com/laravel-pdf-create-and-download-pdf-file-in-laravel-5-7/
+1.composer require barryvdh/laravel-dompdf
+
+route 
+
+Route::get('upload','UploadController@index');
+Route::get('export','UploadController@export')->name('export');
+
+controllerum 
+   public function index()
+    {
+        $data = ['name' => 'davit'];
+        return view('upload',compact('data'));
+
+
+    }
+
+    public function export()
+    {
+
+        $data = ['name' => 'davit'];
+        $pdf = PDF::loadView('upload', compact('data'));
+        return $pdf->download('invoice.pdf');
+
+    }
+
+
+saraqum enq uplaod view 
+
+hello {{$data['name']}} <a href="{{route('export')}}">Export</a>
+
+
+ete uzum es download chani uxxaki baci pdf file dowloadi tex@ dnum enq stream
+
+ete uzum es qo uzac text@ takic gci textic araj <div class="page-break"></div>
+staylum el
+<style>
+    .page-break {
+        page-break-after: always;
+    }
+</style>
+
+------------------------------------------------------
+aranc package
+<td><a href="{{asset('files/'.$document->file_codename)}}" download="{{$document->file_codename}}"><span style="font-size: 50px;color: darkred"><i class="far fa-file-pdf"></i></span></a></td>
+-------------
+hayeren font 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<style>
+body {
+    font-family: DejaVu Sans;
+}
+</stylre>
+--------------------------------------
+dowload file_path
+ public function download($file)
+    {
+        $file_path = config('app.url').'/pictures/'.$file;
+        $filename = $file;
+        $tempImage = tempnam(sys_get_temp_dir(), $filename);
+        copy($file_path, $tempImage);
+        return response()->download($tempImage, $filename);
+    }

@@ -1,0 +1,205 @@
+ $.fn.fileUploader = function (filesToUpload, sectionIdentifier) {
+        var fileIdCounter = 0;
+
+        $(".files").change(function (evt) {
+            var output = [];
+            for (var i = 0; i < evt.target.files.length; i++) {
+                fileIdCounter++;
+                var fileId = sectionIdentifier + fileIdCounter;
+                var file = evt.target.files[i];
+                filesToUpload.push({
+                    id: fileId,
+                    file: file
+                });
+                imageUpload(fileId, file)
+
+            }
+
+            evt.target.value = null;
+        });
+
+        function imageUpload(target, file) {
+            var fileReader = new FileReader();
+            fileReader.onload = (function (evt) {
+                $('.fileList').append('<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center" id="food_appends_images">\n' +
+                    '<div class="show-uploads">\n' +
+                    '<div class="upload-box-hovered">\n' +
+                    '<img src="' + evt.target.result + '"\n' +
+                    'class="img-responsive">\n' +
+                    '<div class="hovered-background"></div>\n' +
+                    '<div class="delete-upload" ><i aria-hidden="true"\n' +
+                    'class="fa fa-trash-o" id="removeFile" data-fileid=' + target + '></i>\n' +
+                    '</div>\n' +
+                    '</div>\n' +
+                    '</div>\n' +
+                    '</div>');
+            });
+            fileReader.readAsDataURL(file);
+        }
+
+        $(document).on("click", ".delete-upload", function (e) {
+            e.preventDefault();
+            var fileSecondId = $(this).find("i").attr("data-fileid");
+            for (var i = 0; i < filesToUpload.length; ++i) {
+                if (filesToUpload[i].id === fileSecondId)
+                    filesToUpload.splice(i, 1);
+            }
+            $(this).parent().parent().parent().remove();
+        });
+
+        /*this.clear = function () {
+            for (var i = 0; i < filesToUpload.length; ++i) {
+                if (filesToUpload[i].id.indexOf(sectionIdentifier) >= 0)
+                    filesToUpload.splice(i, 1);
+            }
+
+            $(this).children(".fileList").empty();
+        }
+
+        return this;*/
+    };
+
+    (function () {
+        var filesToUpload = [];
+        var files1Uploader = $("#files1").fileUploader(filesToUpload, "files1");        
+
+
+        $("#save-food").click(function (e) {
+            e.preventDefault();
+            $(this).attr('disabled', 'disabled');
+            var button = $(this);
+
+            var a = [];
+            var namefood = $("#namefood").val();
+            var pricefood = $("#pricefood").val();
+            var aboutfood = $("#aboutfood").val();
+
+            for (var i = 0, len = filesToUpload.length; i < len; i++) {
+
+                var fileReader = new FileReader();
+                fileReader.onload = (function (evt) {
+                    a.push(evt.target.result)
+                });
+                fileReader.readAsDataURL(filesToUpload[i].file);
+            }
+
+            setTimeout(function () {
+                $.ajax({
+                    url: '/food_store',
+                    data: {
+                        _token: _token,
+                        'file': a,
+                        namefood: namefood,
+                        pricefood: pricefood,
+                        aboutfood: aboutfood,
+                    },
+                    method: 'post',
+                    success: function (data) {
+                        $('.error-msg').empty();
+
+                        if (data.errors) {
+
+                            $('.errorMessageFood').empty();
+
+                            if (data.errors.aboutfood) {
+                                $('.errorMessageFood').append('<ul><li>' + data.errors.aboutfood[0] + '</li></ul>');
+                            }
+                            if (data.errors.pricefood) {
+                                $('.errorMessageFood').append('<ul><li>' + data.errors.pricefood[0] + '</li></ul>');
+                            }
+                            if (data.errors.namefood) {
+                                $('.errorMessageFood').append('<ul><li>' + data.errors.namefood[0] + '</li></ul>');
+                            }
+                            if (data.errors.files1) {
+                                $('.errorMessageFood').append('<ul><li>The image field is required.</li></ul>');
+                            }
+                            $(button).removeAttr('disabled');
+
+                        }
+                        if (data.success) {
+                            $(button).removeAttr('disabled');
+                            location.reload();
+                        }
+
+                    }
+                })
+            }, 300);
+
+
+        });
+
+
+        $('#update-food').on('click', function (e) {
+            e.preventDefault();
+            var id = $(this).data('id');
+            var arr = [];
+            var namefood = $("#namefood").val();
+            var pricefood = $("#pricefood").val();
+            var aboutfood = $("#aboutfood").val();
+            //formData = $('.foodForm').serializeArray();
+            for (var i = 0, len = filesToUpload.length; i < len; i++) {
+                var fileReader = new FileReader();
+                fileReader.onload = (function (evt) {
+                    arr.push(evt.target.result)
+                });
+                fileReader.readAsDataURL(filesToUpload[i].file);
+            }
+
+            setTimeout(function () {
+                $.ajax({
+                    url: '/update-food/' + id,
+                    data: {
+                        _token: _token,
+                        'file': arr,
+                        namefood: namefood,
+                        pricefood: pricefood,
+                        aboutfood: aboutfood,
+                    },
+                    method: 'post',
+                    success: function (data) {
+                        $('.error-msg').empty();
+
+                        if (data.errors) {
+                            console.log(data.errors);
+                            $('.errorMessageFood').empty();
+
+                            if (data.errors.aboutfood) {
+                                $('.errorMessageFood').append('<ul><li>' + data.errors.aboutfood[0] + '</li></ul>');
+                            }
+                            if (data.errors.pricefood) {
+                                $('.errorMessageFood').append('<ul><li>' + data.errors.pricefood[0] + '</li></ul>');
+                            }
+                            if (data.errors.namefood) {
+                                $('.errorMessageFood').append('<ul><li>' + data.errors.namefood[0] + '</li></ul>');
+                            }
+                            $(button).removeAttr('disabled');
+
+                        }
+                        if (data.success) {
+
+                            location.reload();
+                        }
+                    }
+                })
+            }, 300);
+
+        });
+
+    })()
+
+
+    $(document).on("click", "#removeFileInUpdate", function (e) {
+        e.preventDefault();
+        var id = $(this).data('id');
+        var food_id = $(this).data('food');
+        $.ajax({
+            url: '/deleteImageFood/' + id + '/' + food_id,
+            data: {_token: _token},
+            method: 'post',
+            success: function (data) {
+                if (data == 'onlydelete') {
+                    location.reload();
+                }
+            }
+        })
+    })

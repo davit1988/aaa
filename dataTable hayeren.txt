@@ -1,0 +1,11 @@
+ $(document).ready(function () {
+            $('.datatable-editable').dataTable({
+                // "order": [[ 1, "desc" ]]
+
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Armenian.json"
+                }
+
+
+            });
+        });

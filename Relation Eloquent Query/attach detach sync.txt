@@ -1,0 +1,72 @@
+parts     tools      toolparts
+name      name    part_id,tool_id,status
+
+Part model
+public function tools()
+    {
+        return $this->belongsToMany(Tool::class, 'toolparts','part_id','tool_id')->withPivot('status')->withTimestamps();
+    }
+Tool
+public function parts()
+    {
+        return $this->belongsToMany(Part::class, 'toolparts','tool_id','part_id')->withPivot('status')->withTimestamps();
+    }
+------------------------------
+create
+
+1. ete toolparts pivot tabli mej status default null a 
+
+    $part = Part::find(1);
+    $part->tools()->attach($part); // null gcuma heto avelacnum enq
+
+    $pivotRow = $part->tools()->where('part_id',$part->id)->first()->pivot;
+    $pivotRow->status++;
+    $pivotRow->update();
+view i mej $pivotRow >pivot->status}}
+-----------
+2. ete status@ null chi kara lini
+
+  $part = Part::find(1);
+  $part->tools()->attach([
+            $part->id => [
+                'status'=> 4
+            ]
+        ]);
+--------------------------
+3. minchev attach@ inchvor ban enq uzum anel
+
+sarqum en pivot tabli model@ PartTool model u extend model@ poxum pivot ov
+
+use Illuminate\Database\Eloquent\Relations\Pivot; 
+
+class PartTool extends Pivot
+{
+
+    protected $table = 'toolparts';
+   public static function boot()
+    {
+        parent::boot();
+        static::created(function ($model) {
+            dd('event'.$model);
+        });
+
+    }
+}
+
+Part modeli mej sarqum enq using method
+
+ public function tools()
+    {
+        return $this->belongsToMany(Tool::class, 'toolparts','part_id','tool_id')
+            ->using(PartTool::class)
+            ->withPivot('status')
+            ->withTimestamps();
+    }
+--------
+controllerum
+   $part->tools()->attach([
+            $part->id => [
+                'status'=> 4
+            ]
+        ]);
+-----

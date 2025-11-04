@@ -1,0 +1,7 @@
+sa vercnuma customers tabli firstname,lastname u orders tabli orderNuber
+u sarquma mihat table firstname lastname orderNuber vortex customers.id=orders.customer_id
+
+SELECT customers.firstname,customers.lastname,orders.orderNuber FROM customers
+INNER JOIN orders
+on customers.id = orders.customer_id
+-------------------------------------------------------------------------------

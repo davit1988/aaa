@@ -1,0 +1,56 @@
+                                 **BETWEN**
+
+SELECT * FROM customers WHERE Age BETWEEN 30 and 40 (aysinqn selecta anum voronc age-@   @ngac e 30 ic 40mijakayqum)
+-------------------------------------------------------------------------------------------------
+                                   ** LIKE **
+1.SELECT * FROM `customers` WHERE firstName LIKE '%r' (aysinqn select ani  firstName-i verji tar@ verjanum e ((r)) )
+2.SELECT * FROM `customers` WHERE firstName LIKE 'v%a' (aysinqn firstName arajin tar@ sksvuma v verjanuma ((a)) ov)
+3.SELECT * FROM `customers` WHERE firstName LIKE '%um%' (aysinqn firstName um lini ((um)) bar)
+----------------------------------------------------------------------------------------------------
+
+                                        ** IN**
+
+SELECT * FROM `customers` WHERE firstName IN('mar','lll')  (aysinqn firstname -um kan mar lll barerov toxer?? ete menak mar ka marov toxna berum);
+
+----------------------------------------------------------------------------------------------
+                                           ** FOREIGN KEY**
+sa sarquma order table vor@ uni orderName customer_id student_id   vortex customer_id customers tabli id n e myusnel ....
+
+
+CREATE TABLE orders(
+id INT not NULL AUTO_INCREMENT,
+    orderName VARCHAR(255),
+    customer_id INT,
+    student_id INT,
+    orderDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY(id),
+    FOREIGN KEY(customer_id) REFERENCES customers(id),
+    FOREIGN KEY(student_id) REFERENCES student(id)  
+);   
+---------------                 
+CREATE TABLE `tb_itempropsnew` (
+                              `id` int(11) NOT NULL AUTO_INCREMENT,
+                              `parent_id` int(11) NOT NULL DEFAULT '0',
+                              `name_lg1` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+                              `name_lg2` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+                              `name_lg3` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+                              `created` datetime NOT NULL,                           
+                              `status` enum('1','0') COLLATE utf8_unicode_ci NOT NULL DEFAULT '1' COMMENT '1:Active, 0:Inactive',
+                              PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;      
+=================================================================
+Из следующей таблицы напишите SQL-запрос, чтобы найти клуб, который предоставил наибольшее количество игроков на кубок ЕВРО-2016. Вернуть название клуба, количество игроков.                                
+------------------------------------------------------------------------------------------------------------------------
+ player_id | team_id | jersey_no |       player_name       | posi_to_play | dt_of_bir  | age |    playing_club
+-----------+---------+-----------+-------------------------+--------------+------------+-----+---------------------
+    160001 |    1201 |         1 | Etrit Berisha           | GK           | 1989-03-10 |  27 | Lazio
+    160008 |    1201 |         2 | Andi Lila               | DF           | 1986-02-12 |  30 | Giannina
+    160016 |    1201 |         3 | Ermir Lenjani           | MF           | 1989-08-05 |  26 | Nantes
+    160007 |    1201 |         4 | Elseid Hysaj            | DF           | 1994-02-20 |  22 | Napoli
+    160013 |    1201 |         5 | Lorik Cana              | MF           | 1983-07-27 |  32 | Lazio
+    160010 |    1201 |         6 | Frederic Veseli         | DF           | 1992-11-20 |  23 | Lugano
+    160004 |    1201 |         7 | Ansi Agolli             | DF           | 1982-10-11 |  33 | Qarabag
+    160012 |    1201 |         8 | Migjen Basha            | MF           | 1987-01-05 |  29 | Lazio
+    160017 |    1201 |         9 | Ledian Memushaj         | MF           | 1986-12-17 |  29 | Pescara
+
+SELECT playing_club, COUNT(playing_club) as count FROM `player_mast` GROUP BY playing_club HAVING count = (SELECT  COUNT(playing_club) as count FROM `player_mast` GROUP BY playing_club ORDER BY COUNT(playing_club) DESC LIMIT 1)

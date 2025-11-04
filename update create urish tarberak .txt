@@ -1,0 +1,19 @@
+---------create------- 
+
+$data = [
+            'title' => $request->title,
+            'description' => $request->description,
+            'image' => $images
+        ];
+        Category::create($data);
+
+-------------------------------------------------
+
+---update-----------
+
+$data = [
+            'title' => $request->title,
+            'description' => $request->description,
+            'image' => $images
+        ];
+        Category::find($id)->update($data);

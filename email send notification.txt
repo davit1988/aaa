@@ -1,0 +1,182 @@
+1.php artisan make:notification Contact
+---------------------------------------
+2. app\Notification\Contact um
+
+<?php
+
+namespace App\Notifications;
+
+use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Notification;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\MailMessage;
+
+class Contact extends Notification
+{
+    use Queueable;
+
+    public $a;
+    public $b;
+    public $c;
+
+
+    public function __construct($a,$b,$c)
+    {
+        $this->a = $a;
+        $this->b = $b;
+        $this->c = $c;
+
+    }
+
+    public function via($notifiable)
+    {
+        return ['mail'];
+    }
+
+   
+    public function toMail($notifiable)
+    {
+
+        return (new MailMessage)
+            ->subject('sad')
+            ->view('email',['email'=>$this->a,'name' => $this->b,'desc'=>$this->c]);
+    }
+
+    
+    public function toArray($notifiable)
+    {
+        return [
+            //
+        ];
+    }
+}
+---------------------------------------------------------
+3.
+route um
+Route::get('contact','ContactController@index');
+Route::post('send_email','ContactController@sendEmail')->name('send.email');
+--------------------------------------------------------------
+4.
+ContactController um
+
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\Contact;
+
+class ContactController extends Controller
+{
+    public function index()
+    {
+        return view('contact');
+    }
+
+    public function sendEmail(Request $request)
+    {
+
+        $name = $request->name;
+        $email = $request->email;
+        $desc = $request->desc;
+        $to = 'davit.marutyan@mail.ru';
+
+
+        Notification::route('mail', $to)
+            ->notify(new Contact($email,$name,$desc));
+        return back();
+    }
+}
+-------------------------------------------------
+5.
+resource/email.blade
+
+<html>
+<html>
+<head>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        table, td, th {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+
+<table>
+    <tr>
+        <th>Email</th>
+        <th> Name</th>
+        <th>descr</th>
+    </tr>
+    <tr>
+        <td>{{$email}}</td>
+        <td>{{$name}}</td>
+        <td><textarea  cols="45" rows="10">{{$desc}}</textarea></td>
+    </tr>
+</table>
+
+
+</body>
+</html>
+
+----------------------------------------------------------
+6.contact.blade
+
+    <div class="about-text mt-4">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-8">
+                <div class="text-center">
+                    <h1 class="d-inline-block text-white text-center about-heading mt-1"></h1>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-10 col-lg-6">
+            <form class="row justify-content-center forms-for_PP" method="post" action="{{route('send.email')}}">
+                {{csrf_field()}}
+                <div class="form-group col-12 col-lg-4 contact-form">
+                    <input type="text" class="form-control" name="name" placeholder="name"
+                           value="{{ old('name') }}">
+                    @if($errors->has('name'))
+                        <p style="color: red">{{$errors->first('name')}}</p>
+                    @endif
+                </div>
+                <div class="form-group col-lg-4 contact-form">
+                    <input type="email" class="form-control" name="email"
+                           placeholder="email" value="{{ old('email') }}">
+                    @if($errors->has('email'))
+                        <p style="color: red">{{$errors->first('email')}}</p>
+                    @endif
+                </div>
+
+                <div class="form-group col-12 contact-form ">
+                            <textarea rows="5" class="form-control" name="desc"
+                                      placeholder="desc">{{ old('desc') }}</textarea>
+                    @if($errors->has('desc'))
+                        <p style="color: red" class="contact-form">{{$errors->first('desc')}}</p>
+                    @endif
+                </div>
+                <div class="form-group col-12 text-center">
+                    <button class="btn pp-btn text-white" type="submit">Send</button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+---------------------------------------------------------------------
+7.env um 
+
+MAIL_DRIVER=smtp
+MAIL_HOST=smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=3e47ac0e6f16fa
+MAIL_PASSWORD=13899a1074b81c
+MAIL_ENCRYPTION=tls

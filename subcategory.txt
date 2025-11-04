@@ -1,0 +1,74 @@
+
+https://stackoverflow.com/questions/36388326/add-sub-category-laravel-5-2
+
+https://stackoverflow.com/questions/35103698/list-out-subcategories-under-parentcategory-based-on-product
+
+
+https://stackoverflow.com/questions/32215035/create-a-nested-lists-of-categories-in-laravel-5 (stanuma categoryaner)****
+
+https://codedump.io/share/r7f4bOZICO6k/1/add-sub-category---laravel-52
+
+
+
+
+https://www.youtube.com/watch?v=l1NQZIJ2r94&list=PLD5U-C5KK50Vq_CyoCzgrOX6BdEoPwUtK&index=1 (lavna)
+
+https://laraveldaily.com/eloquent-recursive-hasmany-relationship-with-unlimited-subcategories/ (pordzac)
+
+Schema::create('categories', function (Blueprint $table) {
+    $table->bigIncrements('id');
+    $table->string('name');
+    $table->unsignedBigInteger('category_id')->nullable();
+    $table->foreign('category_id')->references('id')->on('categories');
+    $table->timestamps();
+});
+------------------
+class Category extends Model
+{
+
+    public function categories()
+    {
+        return $this->hasMany(Category::class);
+    }
+     
+   public function childrenCategories()
+   {
+    return $this->hasMany(Category::class)->with('categories');
+    }
+
+
+}
+---------------------------
+Route::get('categories', 'CategoryController@index');
+--------------------
+app/Http/CategoryController.php
+public function index()
+{
+    $categories = Category::whereNull('category_id')
+        ->with('childrenCategories')
+        ->get();
+    return view('categories', compact('categories'));
+}
+------------------
+resources/views/categories.blade.php
+
+<ul>
+    @foreach ($categories as $category)
+        <li>{{ $category->name }}</li>
+        <ul>
+        @foreach ($category->childrenCategories as $childCategory)
+            @include('child_category', ['child_category' => $childCategory])
+        @endforeach
+        </ul>
+    @endforeach
+</ul>
+---------
+resources/views/admin/child_category.blade.php
+<li>{{ $child_category->name }}</li>
+@if ($child_category->categories)
+    <ul>
+        @foreach ($child_category->categories as $childCategory)
+            @include('child_category', ['child_category' => $childCategory])
+        @endforeach
+    </ul>
+@endif

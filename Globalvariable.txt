@@ -1,0 +1,28 @@
+app/providers/appServiceProvider i mej
+\View::share('globlalVariable', [
+'deliveryMainfoto'=>$mainfoto = DeliverMainFoto::first()->url,
+
+                                           'phones'=>Phone::all(),
+  
+                                  'servicMainFoto' => $serviceMainfoto = Service::first()->mainfoto,
+     
+   ]);
+-------------------------------------------------------------------------------------
+
+view i mej
+<img class="img-responsive" src="{{asset($globlalVariable['servicMainFoto'])}}"
+
+------------------------------------------------------------------
+ete uzum enq konkret view eri mej dostup tanq popoxakanner@
+app/providers/appServiceProvider i mej
+
+public function boot(){
+
+   View::composer(['post.create',post.index],function($view){
+     $view->with('products',Product::orderBy('name')->get());
+   })
+kam sra tex@
+  View::composer(['post.*],function($view){
+     $view->with('products',Product::orderBy('name')->get());
+     })
+}

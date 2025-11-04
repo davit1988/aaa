@@ -1,0 +1,60 @@
+https://www.larashout.com/update-model-status-using-toggles-in-laravel
+
+@extends('layouts.app')
+
+@section('content')
+    @if (Session::has('message'))
+        <div class="alert alert-info">{{ Session::get('message') }}</div>
+    @endif
+    <table class="table">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Product Name</th>
+            <th scope="col">Product Description</th>
+            <th scope="col">Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach($products as $product)
+            <tr>
+                <th scope="row">{{$product->id}}</th>
+                <td><a href="">{{$product->name}}</a></td>
+                <td>{{$product->description}}</td>
+                <td><input data-id="{{$product->id}}" class="toggle-class" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $product->status ? 'checked' : '' }}></td>
+            </tr>
+        @endforeach
+        </tbody>
+    </table>
+    <script>
+        $(function() {
+            $('.toggle-class').change(function() {
+                var status = $(this).prop('checked') == true ? 1 : 0;
+                var product_id = $(this).data('id');
+
+                $.ajax({
+                    type: "get",
+                    dataType: "json",
+                    url: '/changeStatus',
+                    data: {'status': status, 'product_id': product_id},
+                    success: function(data){
+                        console.log(data.success)
+                    }
+                });
+            })
+        })
+    </script>
+@endsection
+
+------------------------------
+public function changeStatus(Request $request)
+    {
+        $user = Register::findOrFail($request->product_id);
+        $user->status = $request->status;
+        $user->save();
+
+        return response()->json(['success'=>'User status change successfully.']);
+    }
+----------------------------
+route
+Route::get('changeStatus', 'RegisterController@changeStatus');

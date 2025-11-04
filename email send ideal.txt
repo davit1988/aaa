@@ -1,0 +1,209 @@
+1.env um
+MAIL_DRIVER=smtp
+MAIL_HOST=smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=62a07c3328b01b
+MAIL_PASSWORD=74de5f904df8b4
+MAIL_ENCRYPTION=null 
+  es mailtrap in gnum
+
+
+
+ete uzum es qo mailin gna 
+
+MAIL_DRIVER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=davit.marutyan2@gmail.com
+MAIL_PASSWORD=davit6262
+MAIL_ENCRYPTION=tls
+
+yandex ru
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.yandex.ru
+MAIL_PORT=587
+MAIL_USERNAME=info@yourchildinarmenia.com
+MAIL_PASSWORD=Test*123
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=info@yourchildinarmenia.com
+MAIL_FROM_NAME=yourchildinarmenia
+------------
+
+
+kam
+es chishta
+MAIL_DRIVER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=465
+MAIL_USERNAME=davit.marutyan2@gmail.com
+MAIL_PASSWORD=davit626262
+MAIL_ENCRYPTION=ssl
+
+
+ete domainov maila 
+MAIL_DRIVER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=465
+MAIL_USERNAME=davit.marutyan2@gmail.com
+MAIL_PASSWORD=davit626262
+MAIL_ENCRYPTION=ssl
+--------------------------
+2.php artisan make:mail DemoMail
+
+App\Mail\DemoMail um
+
+    protected $email;
+    protected $name;
+    protected $desc;
+
+    public function __construct($email,$name,$desc)
+    {
+        $this->email = $email;
+        $this->name = $name;
+        $this->desc = $desc;
+    }
+
+   public function build()
+    {
+        return $this->view('email',['email'=>$this->email,'name' => $this->name,'desc'=>$this->desc]);
+    }
+
+------------------------------------------------
+
+
+Route -um
+
+Route::get('contact','ContactController@index');
+Route::post('send_email','ContactController@sendEmail')->name('send.email');
+-----------------------------------------------------------------------
+3.php artisan make:controller ContactController
+u mej@
+
+
+use App\Mail\DemoMail;
+use Illuminate\Http\Request;
+use App\Mail\WelcomeAgain;
+use Illuminate\Support\Facades\Mail;
+
+public function index()
+    {
+        return view('contact');
+    }
+
+    public function sendEmail(Request $request)
+    {
+
+        $name = $request->name;
+        $email = $request->email;
+        $desc = $request->desc;
+        $to = 'davit.marutyan@mail.ru';
+
+        Mail::to($to)->send(new DemoMail($name,$email,$desc));
+
+
+
+        return back();
+    }
+--------------------------------------------------------------
+
+4. resource/contact.blade -um
+
+@extends('layouts.app')
+
+@section('content')
+    <div class="about-text mt-4">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-8">
+                <div class="text-center">
+                    <h1 class="d-inline-block text-white text-center about-heading mt-1"></h1>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-10 col-lg-6">
+            <form class="row justify-content-center forms-for_PP" method="post" action="{{route('send.email')}}">
+                {{csrf_field()}}
+                <div class="form-group col-12 col-lg-4 contact-form">
+                    <input type="text" class="form-control" name="name" placeholder="name"
+                           value="{{ old('name') }}">
+                    @if($errors->has('name'))
+                        <p style="color: red">{{$errors->first('name')}}</p>
+                    @endif
+                </div>
+                <div class="form-group col-lg-4 contact-form">
+                    <input type="email" class="form-control" name="email"
+                           placeholder="email" value="{{ old('email') }}">
+                    @if($errors->has('email'))
+                        <p style="color: red">{{$errors->first('email')}}</p>
+                    @endif
+                </div>
+
+                <div class="form-group col-12 contact-form ">
+                            <textarea rows="5" class="form-control" name="desc"
+                                      placeholder="desc">{{ old('desc') }}</textarea>
+                    @if($errors->has('desc'))
+                        <p style="color: red" class="contact-form">{{$errors->first('desc')}}</p>
+                    @endif
+                </div>
+                <div class="form-group col-12 text-center">
+                    <button class="btn pp-btn text-white" type="submit">Send</button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+    @stop
+---------------------------------------------------
+.5 resource/views/email um
+
+<html>
+<html>
+<head>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        table, td, th {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+
+<table>
+    <tr>
+        <th>Email</th>
+        <th> Name</th>
+        <th>descr</th>
+    </tr>
+    <tr>
+        <td>{{$email}}</td>
+        <td>{{$name}}</td>
+        <td><textarea  cols="45" rows="10">{{$desc}}</textarea></td>
+    </tr>
+</table>
+
+
+</body>
+</html>
+-------------------------------
+
+config email i mej partadir chi
+
+'stream' => [
+        'ssl' => [
+            'allow_self_signed' => true,
+            'verify_peer' => false,
+            'verify_peer_name' => false,
+        ],
+    ],
+-------------------------------------
+
+https://stackoverflow.com/questions/32693528/expected-response-code-220-but-got-code-with-message-in-laravel
+https://myaccount.google.com/u/0/security?hl=ru
+https://myaccount.google.com/security#connectedapps
+https://accounts.google.com/UnlockCaptcha

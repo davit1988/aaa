@@ -1,0 +1,3 @@
+https://stackoverflow.com/questions/30401460/postgres-psql-not-recognized-as-an-internal-or-external-command
+
+computer => properties => advanced system settings=> Environment Variables => System Variables

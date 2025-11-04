@@ -1,0 +1,40 @@
+post                    users            video           comments
+user_id,name            name,....        name             user_id,body,commentable_type,commentable_id
+-----------------------
+
+comment - migratian
+
+Schema::create('comments', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->text('body');
+            $table->morphs('commentable');
+            $table->timestamps();
+        });
+--------------------------------------------------
+
+Post model
+  public function comments()
+    {
+        return $this->morphMany(Comment::class,'commentable');
+    }
+-----
+Video model
+  public function comments()
+    {
+        return $this->morphMany(Comment::class,'commentable');
+    }
+-------
+Comment model
+    public function commentable()
+    {
+        return $this->morphTo();
+    }
+----------------------
+        $post = Post::find(1);
+        $video = Video::find(1);
+        $result = $post->comments;
+//        $video->comments()->create([
+//            'user_id' => 1,
+//            'body' => 'comment post',
+//        ]);

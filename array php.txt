@@ -1,0 +1,27 @@
+last first element array
+ $array = ['dav','dasd','vvvvv','ssd'];
+
+        foreach($array as $key => $element) {
+            reset($array);
+            if ($key === key($array))
+                echo 'FIRST ELEMENT!'.$element;  //FIRST ELEMENT! dav
+
+            end($array);
+            if ($key === key($array))
+                echo 'LAST ELEMENT!'.$element; //LAST ELEMENT! ssd
+        }
+
+// php7.3 ic sksac
+foreach($array as $key => $element) {
+    if ($key === array_key_first($array))
+        echo 'FIRST ELEMENT!';
+
+    if ($key === array_key_last($array))
+        echo 'LAST ELEMENT!';
+}
+-----------------------------------------
+ete masivum ka strawberry senc element jnjuma
+$array = array('apple', 'orange', 'strawberry', 'blueberry', 'kiwi');
+if (($key = array_search('strawberry', $array)) !== false) {
+    unset($array[$key]);
+}

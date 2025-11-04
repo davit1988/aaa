@@ -1,0 +1,29 @@
+1. https://3.jetbra.in/ es linkeric mekov mtnum es
+
+2.jetbra.zip ka es download es anum
+
+3. ubuntu ->sudo nano /home/pc/.config/JetBrains/PhpStorm2024.1/phpstorm64.vmoptions
+   windowsi-> C:\Program Files\JetBrains\PhpStorm 2022.3.3\bin\phpstorm64.exe.vmoptions
+   
+es 3 tox@ avelacnum es verum sudo nno raci mej
+-javaagent:/home/pc/Downloads/phpshtorm/jetbra/ja-netfilter.jar=jetbrains // for windows C:\Users\PC-HP\Desktop\jetbra\ja-netfilter.jar=jetbrains
+--add-opens=java.base/jdk.internal.org.objectweb.asm=ALL-UNNAMED
+--add-opens=java.base/jdk.internal.org.objectweb.asm.tree=ALL-UNNAMED
+
+
+
+
+
+
+3. download arac folderi mej ka scripts papka
+for ubunut 
+cd /Downloads/phpshtorm/jetbra # -> stex sudo ./scripts/install.sh
+
+
+anpayamn C:\Users\PC-HP\Desktop\jetbra\scripts 
+scripts\install-current-user.vbs
+scripts\install-all-users.vbs
+sranc vra click es anum
+
+
+4.activate code https://3.jetbra.in/ es linki vra click aneluc @nde beruma

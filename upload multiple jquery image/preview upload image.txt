@@ -1,0 +1,5 @@
+/*https://hdtuto.com/article/laravel-5-ajax-multiple-image-upload-with-preview-example
+http://talkerscode.com/webtricks/demo/demo_upload-multiple-images-with-image-preview-using-jquery-ajax-php.php
+
+https://itsolutionstuff.com/post/display-preview-selected-image-in-input-type-file-using-jqueryexample.html
+https://itsolutionstuff.com/post/laravel-56-multiple-image-upload-using-bootstrap-fileinputexample.html*/

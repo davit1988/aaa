@@ -1,0 +1,1 @@
+  <input type="radio" name="gender" value="male" {!! ((old('gender') == 'male') ? ' checked' : (empty(old('gender')) ? ' checked="checked"' : '')) !!} data-display-value="@lang('content.male')" >

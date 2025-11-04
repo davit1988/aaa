@@ -1,0 +1,51 @@
+https://github.com/Crinsane/LaravelShoppingcart
+
+1. composer require gloudemans/shoppingcart
+
+2.route
+Route::get('addToCart/{id}','CartController@addToCart')->name('addToCart');
+$cartItems = Cart::content();
+
+controllerum  public function addToCart($id)
+    {
+        $product = Product::find($id);
+        $cart = Cart::add($id,$product->title,1,$product->price,['size' => 's','image' =>$product->image]);
+
+        return back()->withInfo('Added product to cart');
+    }
+
+ public function cartIndex()
+    {
+        $cartItems  = Cart::content();
+        $categories = Category::all();
+        return view('cart.index',compact('categories','cartItems'));
+
+    }
+view
+<a href="{{route('addToCart',$product->id)}}" class="btn btn-primary pull-right btn-sm">Add to Cart</a>
+
+   @foreach($cartItems as $cartItem)
+                                <li>
+                          <span class="item">
+                          <span class="item-left">
+                           <div class="row">
+                            <div class="col-md-3" style="padding-right: 0;">
+                                <img src="{{asset('/images/product_image.jpg')}}" alt="" style="width: 100%"/>
+                            </div>
+                           <div class="col-md-7" style="padding-left: 0;">
+                            <span class="item-info">
+                            <p style="line-height: 1.2; margin-bottom: 0;">Gammie Plain Cold Shoulder Blouse</p>
+                            <p><b>$100000</b></p>
+                          </span>
+                          </div>
+                          <div class="col-md-2">
+                             <form action="#" method="post">
+                                {{ csrf_field() }}
+                                 {{ method_field('DELETE') }}
+                                 <button type="submit" class="btn btn-xs btn-danger pull-right">x</button>
+                            </form>
+                        </div>
+                        </div>
+                              @endforeach
+
+------------

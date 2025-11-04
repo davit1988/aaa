@@ -1,0 +1,33 @@
+https://www.codexworld.com/delete-all-files-from-folder-using-php/ 
+
+$success = \File::cleanDirectory('C:\xampp\htdocs\ecomerse\public\video');
+--------------------------------------------------------------------------------
+
+
+   $files = glob('video/*');
+        foreach ($files as $file){
+            if(is_file($file)){
+                unlink($file);
+           }
+        }
+        if($request->hasFile('video')){
+
+            $filename = $request->video->getClientOriginalName();
+            $filesize = $request->video->getClientSize();
+            $vd='video/'.$filename;
+            $videopath = public_path().'/video';
+            $request->video->move($videopath,$filename);
+        }
+
+        $data = [
+            'name' => $request->name,
+            'videopath' => $vd
+
+        ];
+        $videos = Video::create($data);
+        $del_all = Video::where('id', '!=' , $videos->id)->delete();  
+-------------------------------------
+ete papka chka sarqel
+if (!file_exists('path/to/directory')) {
+    mkdir('path/to/directory', 0777, true);
+}

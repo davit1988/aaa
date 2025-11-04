@@ -1,0 +1,75 @@
+@section('link')
+    <script src="https://vk.com/js/api/xd_connection.js?2"  type="text/javascript"></script>
+    <meta property="og:url" content=""/>
+    <meta property="og:title" content="" />
+    <meta property="og:description" content=""/>
+    <meta property="og:image" content="{{$share_iamge->name}}" />
+@endsection  
+
+
+<a href="javascript:;" id ="shareBtn"
+                                 data-image="{{asset('pictures/'.$share_iamge->name)}}"
+                                 data-title="{{$tour->title->$lang}}"
+                                 data-desc=" {!! $tour->desc_long->$lang !!}"
+                                 data-redirect="http://blog.loc//tour_info/.{{$tour->id}}"
+                                 data-mobile-iframe="true">
+                              <img src="{{asset('front/img/facebook-icon.png')}}" class="facebook2" alt="">
+</a>
+
+
+
+<script>
+
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId            : '528301824311640',
+                autoLogAppEvents : true,
+                xfbml            : true,
+                version          : 'v2.12'
+            });
+        };
+
+        (function(d, s, id){
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {return;}
+            js = d.createElement(s); js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+
+
+
+        $(document).on('click', '#shareBtn', function () {
+
+            var url =$(this).data('redirect');
+            var title =$(this).data('title');
+            var description = $(this).data('desc');
+            var image =$(this).data('image');
+
+            var html = "<p>Some HTML</p>";
+            var div = document.createElement("div");
+            div.innerHTML = description;
+            var titleText = div.textContent || div.innerText || "";
+
+            FB.ui({
+                method: 'share_open_graph',
+                action_type: 'og.shares',
+                action_properties: JSON.stringify({
+                    object: {
+                        'og:url': url,
+                        'og:title': title,
+                        'og:description': titleText,
+                        'og:image:width': '200',
+                        'og:image:height': '400',
+                        'og:image': image
+                    }
+                })
+            }, function(response){});
+
+
+        });
+
+
+
+
+    </script>

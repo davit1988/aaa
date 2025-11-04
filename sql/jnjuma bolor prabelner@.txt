@@ -1,0 +1,2 @@
+jnjuma bolor prabelner@ 
+UPDATE `table` SET `col_name` = REPLACE(`col_name`, ' ', '')

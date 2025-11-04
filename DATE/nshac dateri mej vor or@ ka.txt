@@ -1,0 +1,14 @@
+$start = new DateTime('2020-09-15'); //check_in
+$end = new DateTime('2020-09-21');//check_out
+$end = $end->modify('+1 day'); // vor verji orne hashvi
+$interval = new DateInterval('P1D');
+$period = new DatePeriod($start, $interval, $end);
+$mydays = array('6', '5'); // offer dont work week days
+foreach($period as $date) { // karanq arrayi mej gcenq u stugenq te $mydays u check_in check_out mej exac orer@ ete hamnknum en break anenq
+    var_dump($date->format('N'));;
+    if(in_array($date->format('N'), $mydays)) {
+        echo $date->format('Y-m-d').' chi ashxatum! <br>';
+    }else{
+        echo $date->format('Y-m-d').' OK! <br>';
+    }
+}

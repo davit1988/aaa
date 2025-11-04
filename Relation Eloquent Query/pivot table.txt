@@ -1,0 +1,53 @@
+ete unenq pivot table u havelyal column
+
+orinak order_product table uni
+ order_id|product_id|count|
+         |          |     | 
+
+
+ogtagorcum enq pivoti gaxabar@
+------------------------
+app/Order.php
+ public function products()
+    {
+        return $this->belongsToMany(Product::class)->withPivot('count')->withTimestamps();
+    }
+---------
+app/Product.php
+
+ public function orders()
+    {
+        return $this->belongsToMany(Order::class);
+    }
+-----------------------
+controllerum
+$order = Order::find($orderId);
+
+ete ka count@ mihatov avelacnum enq ete chka nornenq avelacnum
+ if($order->products->contains($productId)) {
+            $pivotRow = $order->products()->where('product_id',$productId)->first()->pivot;
+            $pivotRow->count++;
+            $pivotRow->update();
+        } else {
+            $order->products()->attach($productId);
+        }
+------------------------
+view i mej
+{{$product->pivot->count}} cuyca tali count@
+==================================================================
+miangamic mi qani hat 
+$user_id = Auth::user()->id;
+
+$suggestions = User::whereHas('followers', function ($query) use ($user_id) {
+        $query->where('follower_id', $user_id);
+    })
+    ->whereHas('blockings', function ($query) use ($user_id) {
+        $query->where('block_id', $user_id);
+    })
+    ->whereHas('blockers', function ($query) use ($user_id) {
+        $query->where('leader_id', $user_id);
+    })
+    ->get();
+
+-----------------------------
+https://medium.com/@kaism/3-way-pivot-table-in-laravel-d42d60462b06

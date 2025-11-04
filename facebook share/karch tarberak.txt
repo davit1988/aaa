@@ -1,0 +1,1 @@
+<div class="fb-share-button btn btn-primary clearfix" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent('{{env('APP_ENV').'singleProduct/'.$show_products->id}}'),'facebook-share-dialog','width=626,height=436'); return false;"><i class="fa fa-facebook"></i> Share</i></div>

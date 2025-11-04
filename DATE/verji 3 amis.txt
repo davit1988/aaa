@@ -1,0 +1,3 @@
+$query = "select * from tickets where type_ID = 1 AND  created_time >= last_day(now()) + interval 1 day - interval 3 month";
+
+$query = "select * from tickets where type_ID = 1 AND created_time >= date_sub(now(),interval 3 month)";

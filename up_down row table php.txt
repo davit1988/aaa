@@ -1,0 +1,33 @@
+  $changePos = 1;
+       
+            $DB = DatabaseProvider::provide();
+            $poses = $DB->Fetch('SELECT max(pos) as maxpos,min(pos) as minpos FROM #__adprods WHERE parent_id='.intval($item_id));
+
+            if ($poses==false){
+                throw new EPageError(EPageError::CUSTOM_ERROR,'failed find positions in collection');
+            }
+
+            $curPos = $DB->Fetch('SELECT pos FROM #__adprods WHERE parent_id='.intval($item_id).' AND id='.intval($parent_id));
+            $curPos = _VARINT($curPos['pos']);
+
+            if ($direction==='toup') {
+
+                $minPos = _VARINT($poses['minpos']);
+
+                if ($curPos>$minPos) {
+                    $ok = $DB->Query('UPDATE #__adprods SET pos=pos+'.$changePos.' WHERE pos='.($curPos-$changePos).(empty($where)?'':' AND '.$where));
+                    if ($ok) {
+                        $res = $DB->Query('UPDATE #__adprods SET pos=pos-'.$changePos.' WHERE id='.$parent_id);
+                    }
+                }
+
+
+            } elseif ($direction==='todown') {
+                $maxPos = _VARINT($poses['maxpos']);
+                if ($curPos<$maxPos) {
+                    $ok = $DB->Query('UPDATE #__adprods SET pos=pos-'.$changePos.' WHERE pos='.($curPos+$changePos).(empty($where)?'':' AND '.$where));
+                    if ($ok) {
+                        $res = $DB->Query('UPDATE #__adprods SET pos=pos+'.$changePos.' WHERE id='.$parent_id);
+                    }
+                }
+            }

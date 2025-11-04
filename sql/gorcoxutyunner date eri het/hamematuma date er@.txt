@@ -1,0 +1,20 @@
+                     -----uzum enq select anenq en toxer@ vornc date er@ mec en es pahi date ic----
+SELECT * FROM workers where created_at > CURRENT_DATE()
+
+                         --select anel voronc date-neri tariner@ havasar en 2016
+SELECT * FROM workers WHERE YEAR(created_at) = 2016
+                           --select anel voronc date-neri amisner@ havasar en marti
+SELECT * FROM workers WHERE MONTH(created_at) = 3
+                       --select anel voronc date-neri havasr en aprili 5-----
+SELECT * FROM workers WHERE MONTH(date) = 4 AND DAY(date) = 5
+
+                       --select anel vornc date havasar en erkushabti---
+SELECT * FROM workers WHERE DAYOFWEEK(date)= 3 
+
+                         ---selecta anum date @ 2018.10.21 es formatov---
+SELECT DATE_FORMAT(date, '%d.%m.%Y') FROM workers
+
+---------------------------------select anum minchev 1 shabat arajava tvyalner@-------
+SELECT * FROM workers WHERE created_at > NOW() - INTERVAL 1 WEEK
+kam 
+SELECT * FROM workers WHERE created_at > DATE_ADD(NOW(), INTERVAL -7 DAY)

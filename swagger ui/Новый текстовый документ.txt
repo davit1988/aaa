@@ -1,0 +1,3 @@
+https://packagist.org/packages/darkaonline/l5-swagger
+
+https://www.hiren.dev/2016/04/laravel-swagger-integration-for-api-and.html

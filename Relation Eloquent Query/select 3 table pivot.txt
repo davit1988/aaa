@@ -1,0 +1,61 @@
+https://question-it.com/questions/230007/mnogo-mnogo-ljudej-s-tsepochkoj-gde-punkt
+tools     toolparts      parts     part_details
+-----     ---------      -----     ------------
+id*       id*            id*       id*
+name      tool_id        name      part_id
+          part_id                  total (int) 
+-----     ---------      -----     ------------
+//tool model
+public function parts()
+{
+    return $this->belongsToMany('App\Part', 'tool_part');
+}
+
+//part model
+public function tools()
+{
+   return $this->belongsToMany('App\Tool', 'tool_part')
+}
+
+public function details(){
+    return $this->hasMany('App\Part_detail');
+}
+
+//partDetail model
+public function part(){
+    return $this->belongsTo('App\Part');
+}
+
+controller
+        $tools = Tool::with('parts', 'parts.details')->has('parts')->get();
+    
+--------------------
+view i mej
+  @foreach($tools as $tool)
+                     {{$tool->name}}<br>
+                    @foreach($tool->parts as $part)
+                        {{$part->name}}<br>
+                        @foreach($part->details as $detail)
+                            {{$detail->total}}<br>
+                        @endforeach
+                    @endforeach
+
+
+                @endforeach
+---------------------------
+
+ayl queryner nuyn tableic
+
+    $total = 101;
+
+//        $client = Part::with(['details' => function($q) use($total) {
+//            $q->when('totals', function ($q) use ($total) {
+//                return $q->where('total', '>=', $total);
+//            });
+//        }])->get();  // bolor@ part er@ kberi ira relationnerov 
+
+        $client = Part::whereHas('details', function($query) use($total) {
+            $query->when('totals', function ($q) use ($total) {
+                return $q->where('total', '>=', $total);
+            });
+        })->get();  // menak en parter@ voronc detaili meji total@  >= $total 

@@ -1,0 +1,19 @@
+https://forum.opencart.com/viewtopic.php?t=155089
+https://github.com/summernote/summernote/issues/1330 !!!!!!!
+  $('.summernote').summernote({
+        height: 350,
+        minHeight: 200,
+        maxHeight: 200,
+        focus: false
+
+    });
+    $('.summernote').each(function(){
+        var summernote = $(this);
+        $('form').on('submit',function(){
+            if (summernote.summernote('isEmpty')) {
+                summernote.val('');
+            }else if(summernote.val()=='<p><br></p>'){
+                summernote.val('');
+            }
+        });
+    });

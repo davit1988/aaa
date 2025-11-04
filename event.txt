@@ -1,0 +1,55 @@
+1.php artisan make:mail WelcomeNewuserMail --markdown emails.new-welcome
+2.php artisan make:event NewCustomerHasRegisteredEvent
+3.php artisan make:listener WelcomeNewCustomerListener
+-------------
+app/Providers/EventServiceProvider.php
+
+use App\Events\NewCustomerHasRegisteredEvent;
+use App\Listeners\WelcomeNewCustomerListener;
+
+ protected $listen = [
+        NewCustomerHasRegisteredEvent::class => [
+            WelcomeNewCustomerListener::class,
+        ]
+    ];
+-----------------------------------------
+app/Http/Controllers/ProductController.php um
+
+$product = Product::create($request->all());
+
+ event(new NewCustomerHasRegisteredEvent($product));
+-------------------------
+app/Events/NewCustomerHasRegisteredEvent.php
+
+ public $product;
+   
+    public function __construct($product)
+    {
+        $this->product = $product;
+    }
+-----------------
+app/Listeners/WelcomeNewCustomerListener.php um
+use App\Mail\WelcomeNewuserMail;
+use Illuminate\Support\Facades\Mail;
+ public function handle($event)
+    {
+        Mail::to(\auth()->user()->email)->send(new WelcomeNewuserMail($event->product));
+    }
+-----------------------
+app/Mail/WelcomeNewuserMail.php um 
+ public $product;
+
+    public function __construct($product)
+    {
+        $this->product = $product;
+    }
+
+    public function build()
+    {
+        return $this->markdown('emails.new-welcome',['product' => $this->product]);
+    }
+--------------------------
+resources/views/emails/new-welcome.blade.php um 
+@component('mail::message')
+# welcome new user {{$product->name}}
+@endcomponent

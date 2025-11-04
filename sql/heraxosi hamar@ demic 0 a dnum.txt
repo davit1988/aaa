@@ -1,0 +1,5 @@
+numer columi mej demic avelacnuma 0 voronq 0ov chen sksum
+
+UPDATE cards
+SET number = CONCAT('0', number)
+WHERE number NOT LIKE '0%'

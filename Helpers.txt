@@ -1,0 +1,31 @@
+1.app\Helpers i mej sarqum enq app\Helpers\Helper.php
+
+namespace App\Helpers;
+
+class Helper
+{
+    staticfunction diffForHumans($data)
+    {
+        return \Carbon\Carbon::parse($data)->diffForHumans();
+    }
+
+}
+---------------
+2.config\app.php - mej aliasum avelacnum enq mer helpers@
+
+ 'Helper' => App\Helpers\Helper::class,
+------------
+3. composer dump-autoload
+------------
+4.bladi mej
+{{Helper::diffForHumans('2018-02-10')}} //1year ago
+-----------
+5. controlleri mej
+use Helper
+
+Helper::diffForhumans('2018-2-12'); //1year ago
+
+-------------------------------
+aveli aktual nor dzev
+
+https://www.itsolutionstuff.com/post/laravel-9-create-custom-helper-functions-exampleexample.html

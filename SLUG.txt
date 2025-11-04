@@ -1,0 +1,33 @@
+<h4><a href="{{route('forum.show',$forum->slug)}}">{{ str_limit($forum->title,3)}}</a></h4>
+
+---------------
+resource controller 
+  public function show($slug)
+    {
+        $forums = Forum::where('id',$slug)
+                       ->orWhere('slug',$slug)
+                       ->first();
+
+        return view('forum.show',compact('forums'));
+    }
+-----------------------
+route
+Route::resource('/forum','ForumController');
+
+-----------------------------2rd tarbera----------------------------
+kamel erkrord tarberak custom
+route i mej
+Route::get('/forum/read/{slug}','ForumController@show')->name('Forumslug');
+---------------
+controller
+  public function show($slug)
+    {
+        $forums = Forum::where('id',$slug)
+                       ->orWhere('slug',$slug)
+                       ->firstOrFail();
+
+        return view('forum.show',compact('forums'));
+    }
+-----------------
+view i mej
+ <h4><a href="{{route('Forumslug',$forum->slug)}}">{{ str_limit($forum->title,3)}}</a></h4>

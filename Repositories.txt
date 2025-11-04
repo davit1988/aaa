@@ -1,0 +1,115 @@
+https://www.youtube.com/watch?v=93ZhGkFIwbA&list=PLpzy7FIRqpGD5pN3-Y66YDtxJCYuGumFO&index=7
+1.app -mej sarqum enq Repositories folder u mej@ ProductRepository class
+
+<?php
+namespace App\Repositories;
+use App\Product;
+class ProductRepository
+{
+     public function all()
+    {
+        return Product::orderBy('title')
+            ->where('status',1)
+            ->with('category')
+            ->get()
+            ->map(function ($prod){
+               return $this->format($prod);
+            });
+    }
+
+    public function findById($id)
+    {
+        $product = Product::where('id',$id)
+            ->where('status',1)
+            ->with('category')
+            ->firstOrFail();
+       return $this->format($product);
+
+    }
+
+    public function update($id)
+    {
+        $product = Product::where('id',$id)->firstOrFail();
+        $product->update(['title'=>'aaa']);
+
+    }
+
+  public function delete($id)
+    {
+        $product = Product::where('id',$id)->delete();
+
+    }
+
+    protected function format($prod)
+    {
+        return [
+            'product_id' => $prod->id,
+            'title' => $prod->title,
+            'desc' => $prod->desc,
+            'status' => $prod->status == 1 ? 'active' : 'not active',
+            'category' => $prod->category->name,
+        ];
+    }
+}
+-----------------------
+2.ProductControllerum avelacnum enq
+
+use App\Repositories\ProductRepository;
+
+private $productRepository;
+
+    public function __construct(ProductRepository $productRepository)
+    {
+        $this->productRepository = $productRepository;
+    }
+     
+    public function index()
+    {
+        $products = $this->productRepository->all();
+        return view('products.index',compact('products'));
+    }
+
+    public function show($id)
+    {
+        $product = $this->productRepository->findById($id);
+        return view('products.show',compact('product'));
+    }
+
+     public function update($id)
+    {
+        $this->productRepository->update($id);
+        return redirect('/product/'.$id);
+    }
+
+-------------------
+3.ProductControllerum construct imej ProductRepository i vra aj klik en anum phpshtormum refactor extract interface en anum
+sarquma ProductRepositoryInterface
+
+------------------------
+4.terminalum
+php artisan make:provider RepositoriesServiceProvider
+app/providersum sarquma RepositoriesServiceProvider
+dra mej booti mej
+use App\Repositories\ProductRepository;
+use App\Repositories\ProductRepositoryInterface;
+use Illuminate\Support\ServiceProvider;
+public function boot()
+    {
+       $this->app->bind(ProductRepositoryInterface::class,ProductRepository::class);
+    }
+-------------------
+5.config app providersi mej
+ App\Providers\RepositoriesServiceProvider::class,
+----------
+
+4.Product Model i mej
+
+public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+-------------------
+5.Route
+Route::get('/products','ProductsController@index');
+Route::get('/product/{id}','ProductsController@show');

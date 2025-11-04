@@ -1,0 +1,149 @@
+https://www.youtube.com/watch?v=zw62vPn-OIc
+--------------------------------------------------
+1 mmedicalWorker/index view i mej
+
+  <div id="dashboard_events">
+      @include('medicalWorker.tables.eventTable',['seminars' => $seminars])
+  </div>
+-----------------------------------------------------------------------
+2.medicalWorker/tables/eventTable view i mej
+<table class="table table-bordered" id="laravel_crud">
+           <thead>
+              <tr>
+                 <th>Id</th>
+                 <th>Name</th>
+                 <th>Email</th>
+                 <td colspan="2">Action</td>
+              </tr>
+           </thead>
+           <tbody id="users-crud">
+              @foreach($users as $u_info)
+              <tr id="user_id">
+                 <td>{{ $u_info->id  }}</td>
+                 <td>{{ $u_info->name }}</td>
+                 <td>{{ $u_info->email }}</td>             
+              </tr>
+              @endforeach
+           </tbody>
+</table>
+{{ $users->links() }} 
+-----------------------------------------
+3.controllerum
+
+  const limit_item = 1;
+
+    public function index()
+    {
+        $seminars = Seminar::orderBy('id','DESC')->paginate(self::limit_item);
+
+        if(request()->ajax()){
+            $eventView = view('medicalWorker.tables.eventTable',['seminars'=>$seminars]);
+            return response()->json([
+                'status' => 'ok',
+                'listing' => $eventView->render(),
+            ]);
+        }
+        return view('medicalWorker.index',compact('seminars'));
+    }
+----------------------------------------------------------------
+4.js i mej
+   $(document).on('click', '#dashboard_events .pagination a', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        var url = $(this).attr('href');
+        $.ajax({
+            url : url,
+            method : 'GET',
+            data: {},
+            dataType : 'json',
+            success : function (result) {
+               if(result.status == 'ok')
+               {
+                   $('#dashboard_events').html(result.listing);
+               }
+            }
+        })
+    })
+==========================================================================================
+2rd tarberak
+https://www.codechief.org/article/laravel-6-pagination-with-next-and-previous-button-using-ajax
+--------
+routes/web.php
+Route::get('/pagination', 'PaginationController@index');
+Route::post('pagination/fetch', 'PaginationController@fetch')->name('pagination.fetch');
+---------------
+app/Http/Controllers/PaginationController.php
+ function index()
+    {
+     $data = DB::table('shops')->simplePaginate(5);
+        return view('pagination_parent', compact('data'));
+    }
+
+    function fetch(Request $request)
+    {
+     if($request->ajax())
+     {
+      $data = DB::table('shops')->simplePaginate(5);
+         return view('pagination_child', compact('data'))->render();
+     }
+    }
+---------------------------------------
+resources/views/pagination_parent.blade.php
+<html>
+ <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Laravel 6 Pagination with Next Previous Button Link using Ajax</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+ </head>
+ <body>
+  <div class="container">    
+     <br />
+     <h3 align="center">Laravel Pagination With Previous Next Button Link Using Ajax - Codechief</h3>
+     <br />
+     @csrf
+     <div class="table-responsive" id="table_data">
+    @include('pagination_child')
+   </div>
+        </div>
+ </body>
+</html>
+
+
+<script>
+$(document).ready(function(){
+
+ $(document).on('click', '.page-link', function(event){
+    event.preventDefault(); 
+    var page = $(this).attr('href').split('page=')[1];
+    fetch_data(page);
+ });
+
+ function fetch_data(page)
+ {
+  var _token = $("input[name=_token]").val();
+  $.ajax({
+      url:"{{ route('pagination.fetch') }}",
+      method:"POST",
+      data:{_token:_token, page:page},
+      success:function(data)
+      {
+       $('#table_data').html(data);
+      }
+    });
+ }
+
+});
+</script>
+--------------------------
+resources/views/pagination_child.blade.php
+
+@foreach($data as $row)
+
+   {{ $row->category_name }}
+        
+@endforeach
+  
+{!! $data->links() !!}

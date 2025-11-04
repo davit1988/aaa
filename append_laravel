@@ -1,0 +1,13 @@
+ete orinak "users" tablum unenq first_name coloumn ev uzumenq responzum uxarkenq first_namei tex@ name
+
+users modeli  i mej
+
+ protected $appends = [
+        'name',
+    ];  
+
+
+ public function getNameAttribute() {
+
+        return $this->first_name
+    }

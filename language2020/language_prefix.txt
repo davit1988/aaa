@@ -1,0 +1,75 @@
+https://laraveldaily.com/multi-language-routes-and-locales-with-auth/
+route
+Route::get('/', function () {
+    return redirect(app()->getLocale());
+});
+
+Route::group(['prefix' => '{locale}', 'where' => ['locale' => '[a-zA-Z]{2}'], 'middleware' => 'setlocale'], function() {
+
+Route::get('/','TestController@index')->name('index');
+
+});
+
+----------------------
+php artisan make:middleware SetLocale
+
+app/Http/Middleware/SetLocale.php
+  public function handle($request, Closure $next)
+    {
+         App::setLocale(session('locale'));
+        return $next($request);
+    }
+-----------------------
+app/Http/Kernel.php
+
+protected $routeMiddleware = [
+    'auth' => \App\Http\Middleware\Authenticate::class,
+    // ...
+    'setlocale' => \App\Http\Middleware\SetLocale::class,
+];
+------------------------
+config/app.php
+
+'locale' => 'en',
+'available_locales' => ['en', 'ru', 'fr'],
+---------------------------
+layouts.app i mej 
+     @foreach (config('app.available_locales') as $locale)
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                   href="{{ route(\Illuminate\Support\Facades\Route::currentRouteName(), $locale) }}"
+                                   @if (app()->getLocale() == $locale) style="font-weight: bold; text-decoration: underline" @endif>{{ strtoupper($locale) }}
+                                </a>
+                            </li>
+ @endforeach
+--------------------
+welcome imej
+    <form action="{{route('store',$locale)}}" method="post">
+                @csrf
+                <input type="text" class="form-control" name="title">
+
+                @error('title')
+                <span style="color: red">
+                    <strong>{{ $message }}</strong>
+                 </span>
+                @enderror
+                <input type="text" class="form-control" name="desc">
+                @error('desc')
+                <span style="color: red">
+                    <strong>{{ $message }}</strong>
+                 </span>
+                @enderror
+                <br>
+                <input type="submit" value="submit">
+            </form>
+-----------------------------------------
+ public function index($locale)
+    {
+        $availableLocale = ['en','ru','fr'];
+        if(!in_array($locale,$availableLocale)) {
+            $locale = config('app.locale');
+        }
+        session(['locale' => $locale]);
+        App::setLocale($locale);
+        return view('welcome',compact('locale'));
+    }

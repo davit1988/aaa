@@ -1,0 +1,41 @@
+http://3apps.ru/faq/
+
+
+@section('link')
+    <script src="https://vk.com/js/api/xd_connection.js?2"  type="text/javascript"></script>
+    <meta property="og:url" content=""/>
+    <meta property="og:title" content="" />
+    <meta property="og:description" content=""/>
+    <meta property="og:image" content="{{$share_iamge->name}}" />
+@endsection
+
+   <a href="javascript:;" id ="vkontakte"
+                                   data-img="{{asset('pictures/'.$share_iamge->name)}}"
+                                   data-ttl="{{$tour->title->$lang}}"
+                                   data-dsc=" {!! $tour->desc_long->$lang !!}"
+                                   data-red="http://blog.loc//tour_info/.{{$tour->id}}"
+                                   data-mobile-iframe="true">
+                                    <img src="{{asset('front/img/vk.png')}}" class="twitter">
+                                </a>
+
+
+    $(document).on('click', '#vkontakte', function () {
+
+            var url =$(this).data('red');
+            var title =$(this).data('ttl');
+            var description = $(this).data('dsc');
+            var image =$(this).data('img');
+
+            var html = "<p>Some HTML</p>";
+            var div = document.createElement("div");
+            div.innerHTML = description;
+            var titleText = div.textContent || div.innerText || "";
+
+         //  console.log(url,title,titleText,image);
+
+            var url = 'http://vk.com/share.php?url='+url+'&title='+title+'&description='+titleText+'&image='+image+'&noparse=true';
+
+            window.location.href=url;
+
+
+        });

@@ -1,0 +1,14 @@
+
+
+1.cmd administrator   "C:\Program Files\Docker\Docker\DockerCli.exe" -SwitchDaemon
+
+2. powershel admin Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux
+
+3.https://docs.microsoft.com/en-us/windows/wsl/install-manual#step-4---download-the-linux-kernel-update-package
+
+https://hub.docker.com/editions/community/docker-ce-desktop-windows
+
+https://elbruno.com/2021/02/16/windows10-how-to-solve-docker-daemon-is-not-running-extreme-solutions-like-restart-windows-wont-work-%F0%9F%99%80%F0%9F%99%80%F0%9F%99%80/
+
+https://chromatichq.com/insights/managing-your-lando-database-phpstorm-sequel-pro-and-command-line lando mysql connect to phpshtorm
+

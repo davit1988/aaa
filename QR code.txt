@@ -1,0 +1,22 @@
+http://www.rolandalla.com/laravel-login-qr-code/
+https://www.youtube.com/watch?v=KlgAZUtSTsc
+
+https://www.kerneldev.com/2018/09/07/qr-codes-in-laravel-complete-guide/
+
+https://www.kodementor.com/laravel-5-qr-code-generator/
+https://github.com/SimpleSoftwareIO/simple-qrcode/issues/21
+
+===========================================================
+sovorakan mail es uxarkum
+ emailview i mej
+
+<td><img src="data:image/png;base64, {{ base64_encode($code) }} "></td>
+
+-----------
+controller um
+ if($manager){
+            $to = 'davit.marutyan@mail.ru';
+            $code =  \QrCode::format('png')->size(500)->generate('user id: '.$manager->id.' user email: '.$manager->email);
+            Mail::to($to)->send(new QrcodeMail($code));
+            auth()->login($manager);
+        }

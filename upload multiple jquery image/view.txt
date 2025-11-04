@@ -1,0 +1,12 @@
+ <div class="input-group files" id="files1">
+   <div class="diet-upload-box">
+   <label for="image-upload">
+   <span>Upload image</span>
+   <i aria-hidden="true" class="fa fa-plus custom-plus"></i>
+   <input type="file" name="files1" multiple style="opacity: 0.001"/>
+   </span>
+   </label>
+   </div>
+   <br>
+   <ul class="fileList"></ul>
+ </div>

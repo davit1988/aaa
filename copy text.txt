@@ -1,0 +1,10 @@
+ <div onclick="copyToClipboard('#p1')" class="company-code" style="text-align: center; padding-bottom: 5px; color: #cccccc"> <span id="p1"> {$companyData['referral_code']}</span></div>
+
+function copyToClipboard(element) {
+    $( "#copy_icon" ).text('copied');
+    var $temp = $("<input>");
+    $("body").append($temp);
+    $temp.val($(element).text()).select();
+    document.execCommand("copy");
+    $temp.remove();
+}

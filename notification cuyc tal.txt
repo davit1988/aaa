@@ -1,0 +1,94 @@
+https://www.youtube.com/watch?v=r-2Pxbd8jzs&list=PLe30vg_FG4OR3b24WlxeTWsj7Z2wOtYrH&index=24
+https://www.codechief.org/article/laravel-6-notification-tutorial-create-notification-with-laravel-6  pordzac
+
+php artisan notifications:table
+
+php artisan migrate
+
+sa saquma notification table 
+
+1.php artisan make:notification TestComleted
+---------------------------------------
+2. app\Notification\TestComleted  um
+---------------------------------------
+<?php
+
+namespace App\Notifications;
+
+use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Notification;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\MailMessage;
+
+class TestComleted extends Notification
+{
+    use Queueable;  
+    public function __construct()
+    {
+
+    }
+
+    public function via($notifiable)
+    {
+        return ['database'];
+    }
+
+    public function toMail($notifiable)
+    {
+        return (new MailMessage)->view('welcome');
+    }
+
+    public function toArray($notifiable)
+    {
+        return [
+           'data' => 'es im arajin notificationn e'
+        ];
+    }
+}
+
+------------------------------------
+3.Route um 
+
+Route::get('/', function () {
+
+\App\User::find(1)->notify(new \App\Notifications\TestComleted);
+
+    return view('welcome');
+});
+
+Route::get('maskAsRead',function (){
+
+    auth()->user()->unreadNotifications->markAsRead();
+    return redirect()->back();
+})->name('markRead');
+
+ej@ refresh aneluc 
+------------------------------------
+4.resource/layouts/app - mej
+avelacnum enq notificationi icon  
+@guest
+                            <li><a href="{{ route('login') }}">Login</a></li>
+                            <li><a href="{{ route('register') }}">Register</a></li>
+                        @else
+
+                            <li><a href=""></a></li>
+                            <li class="dropdown">
+
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>
+                                    <i class="fa fa-bell">
+                                        @if(auth()->user()->unreadNotifications->count())
+                                        <span class="badge badge-light">{{auth()->user()->unreadNotifications->count()}}</span>
+                                        @endif
+                                    </i>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a style="color: green" href="{{route('markRead')}}">Mark All read</a></li>
+                                    @foreach(auth()->user()->unreadNotifications as $notification)
+                                    <li style="background-color: lightgray"><a href="#">{{$notification->data['data']}}</a></li>
+                                    @endforeach
+
+                                     @foreach(auth()->user()->readNotifications as $notification)
+                                            <li><a href="#">{{$notification->data['data']}}</a></li>
+                                     @endforeach
+                                </ul>
+                            </li>

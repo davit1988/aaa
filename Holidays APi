@@ -1,0 +1,41 @@
+ $client = new Client([
+          'base_uri' => 'https://calendarific.com/api/v2/'
+        ]);
+
+        $users = User::query()->pluck('country_code')->unique()->filter();
+
+        $dates = [now()->format('Y'), now()->addYear()->format('Y')];
+
+        foreach ($users as $code) {
+
+            foreach ($dates as $date) {
+                $response = $client->request('GET', 'holidays', [
+                  'query' => [
+                    'api_key' => config('services.calendarific.key'),
+                    'year' => $date,
+                    'country' => $code
+                  ]
+                ]);
+
+                $result = $response->getBody()->getContents();
+                $result = json_decode($result);
+
+                foreach (data_get($result, 'response.holidays', []) as $item) {
+                    $data = Carbon::parse($item->date->iso);
+                    $types = $item->type;
+
+                    if ( in_array('National holiday', $types) ){
+                        CalendarEvent::updateOrCreate([
+                            'from' => $data->format('Y-m-d'),
+                            'to' => $data->format('Y-m-d'),
+                            'title' => $item->name,
+                            'country_code' => $code,
+                            'type' => CalendarEvent::TYPE_HOLIDAY
+                        ], [
+                            'notes' => $item->description
+                        ]);
+                    }
+                }
+            }
+
+        }

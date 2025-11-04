@@ -1,0 +1,35 @@
+orinak erb unenq apranq pahestum vor@ verjacela u henc apranq enq stanum et jamanak ogtagorcum en observer
+https://www.larashout.com/how-to-use-laravel-model-observers
+php artisan make:observer ProductObserver
+----------------------------------
+sarqum enq method updateing
+
+  public function updating(Product $product)
+    {
+        $oldCount = $product->getOriginal('count');  //es hin valuna bazayi minchev update anel@
+        if($oldCount == 0 && $product->count > 0) {
+            Mail::to('aaa@mail.ru)->send(new OrderCreate());
+        }
+    }
+----------------------
+\app\Providers\AppServiceProvider.php i mej
+
+use App\Observers\ProductObserver;
+use App\Product;
+
+  Product::observe(ProductObserver::class);
+---------------------------------------------
+===========================================================
+
+shat karch karas modeli mej
+
+ public static function boot()
+    {
+        parent::boot();
+        static::updating(function ($model) {
+           dd($model->getOriginal('name'));
+        });
+
+    }
+
+ 

@@ -1,0 +1,14 @@
+https://appdividend.com/2018/04/13/laravel-image-intervention-tutorial-with-example/
+http://image.intervention.io/getting_started/installation
+$file = $request->file;
+
+    $filename = time() . $key . '.' . $file->getClientOriginalExtension();
+     $originalPath = public_path('/pictures/');
+     $thumbnailImage = Image::make($file);
+     $thumbnailImage->resize(150,150);
+     $thumbnailImage->save($originalPath.$filename);
+
+     $estateImage = new EstateImage();
+     $estateImage->estate_id = $estate_id;
+     $estateImage->image = $filename;
+     $estateImage->save();
