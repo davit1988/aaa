@@ -19,3 +19,4 @@ view mejel
 Yerevan
 <img src="//cdn.apixu.com/weather/64x64/night/389.png"/>
 {{$result}}
+
