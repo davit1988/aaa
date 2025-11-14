@@ -51,3 +51,7 @@ Host github.com
     IdentitiesOnly yes
 
 3.cat local2.pub  u esi dir githum//pub ov@ copy kanes bayc configum knshes aranc .pub
+
+4. push aneluc github remot@ urish deva tali add anel
+
+git remote set-url origin git@github-david3:Davit-Marutyan/Laravel-vue.git //senc petqa anel
