@@ -10,3 +10,44 @@ Create additional SSH keys
 1.ssh-keygen -f ~/.ssh/<username>
 2.ssh-add ~/.ssh/<username>
 3.cat ~/.ssh/<public_key_file>.pub
+
+
+
+
+
+
+// push anel 2 tarber account nuyn project@
+
+1.
+ssh-keygen -t rsa -b 4096 -C "ubuntu2@gmail.com"
+ssh-keygen -t rsa -b 4096 -C "ubuntu3@gmail.com"
+
+
+ls -l ~/.ssh/
+2. config  id_rsa  id_rsa.pub  known_hosts  local2  local2.pub  local3  local3.pub
+
+config filum
+
+
+# Для local2
+Host github-david2
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/local2
+    IdentitiesOnly yes
+
+# Для local3 
+Host github-david3
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/local3
+    IdentitiesOnly yes
+
+# По умолчанию - david1988
+Host github.com
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/local2
+    IdentitiesOnly yes
+
+3.cat local2.pub  u esi dir githum//pub ov@ copy kanes bayc configum knshes aranc .pub
