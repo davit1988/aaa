@@ -56,10 +56,81 @@ https://techrocks.ru/2020/02/16/recursion-and-the-call-stack-explained/
 
 <p>7. Какие знаете принципы ООП?</p>
 
-инкапсуляция (vor private svoistvaner@ karanas dinamik poxes orinak getter setter i mijocov)
-наследование(https://metanit.com/php/tutorial/6.2.php)
+###инкапсуляция (vor private svoistvaner@ karanas dinamik poxes orinak getter setter i mijocov)###
+class User {
+    private $name;
+
+    public function setName($name) {
+        $this->name = $name;
+    }
+
+    public function getName() {
+        return $this->name;
+    }
+}
+
+###наследование(https://metanit.com/php/tutorial/6.2.php)###
+class Person
+{ 
+    public $name;
+    function __construct($name)
+    {
+        $this->name = $name;
+    }
+    function displayInfo()
+    {
+        echo "Имя: $this->name<br>";
+    }
+}
+class Employee extends Person 
+{}
+ 
+$tom = new Employee("Tom");
+$tom -> displayInfo();
+
+
 абстракция (это класс, содержащий хотя бы один абстрактный метод)
-полиморфизм
+abstract class Shape {
+    abstract public function area();
+}
+
+class Circle extends Shape {
+    public function area() {
+        return 3.14 * 2 * 2;
+    }
+}
+##oop###
+###полиморфизм##
+
+Есть один интерфейс Payment
+
+Разные классы реализуют его по-разному
+
+Функция makePayment() работает с любым типом оплаты
+
+interface Payment {
+    public function pay($amount);
+}
+
+class CardPayment implements Payment {
+    public function pay($amount) {
+        echo "Paid $amount by card";
+    }
+}
+
+class CashPayment implements Payment {
+    public function pay($amount) {
+        echo "Paid $amount by cash";
+    }
+}
+
+function makePayment(Payment $payment) {
+    $payment->pay(100);
+}
+
+makePayment(new CardPayment()); // Paid 100 by card
+makePayment(new CashPayment()); // Paid 100 by cash
+#####end opp#####
 
 
 <p>8. Какая система типов используется в PHP? Опишите плюсы и минусы.</p>?????mi nayi
@@ -67,64 +138,60 @@ https://techrocks.ru/2020/02/16/recursion-and-the-call-stack-explained/
 
 
 <p>9. Чем отличаются ключевые слова: include и require, mysql_connect и mysql_pconnect?</p>
-Разница между require() и require_once(): require() включает в страницу заданный файл, в то время как require_once() делает так только тогда, когда этот файл не был включен раньше (на одной и той же странице).
-Таким образом, require_once() лучше использовать, если нужно включить файл с большим количеством функций например. Тогда можно быть уверенным, что файл не будет включен многократно и не возникнет ошибка "объявление функции дублируется".
-Отличия между require() и include() таковы, что require() возвращает FATAL ERROR, если файл не найден, include() же возвращает только WARNING.
-Функция include_once() работает почти так же, как и include(), а отличия те же, что и между require() и require_once().
+
+include и require отличаются тем, что require останавливает выполнение при ошибке, а include — нет.
+mysql_connect создаёт обычное соединение, а mysql_pconnect — постоянное.
 
 
-<p>10. Что такое интерфейсы? Используете ли вы их? Если да &#8212; расскажите об этом.</p>
-https://metanit.com/php/tutorial/6.7.php
-https://genius.courses/php-%D0%BE%D0%BE%D0%BF/
-Внутри блока интерфейса в фигурных скобках определяются наазвания функций. Причем все эти методы могут быть только публичными
-interface iMessenger
-{
-    function send();
-    function sayHello(); 
+<p>10. Что такое интерфейсы? Используете ли вы их? Если да расскажите об этом.</p>
+PHP-ում ինտերֆեյսները (interfaces) սահմանում են մեթոդների ցուցակ, որոնք class@ պարտադիր պետք է իրականացնի
+
+interface Animal {
+    public function makeSound();
 }
+
+class Dog implements Animal {
+    public function makeSound() {
+        echo "Bark";
+    }
+}
+
+
+function test(Animal $animal) {
+    $animal->makeSound();
+}
+
+test(new Dog()); // Bark
 
 <p>11. Что такое абстрактный класс и чем он отличается от интерфейса?</p>
-Используйте интерфейс, когда вы хотите заставить разработчиков, работающих в вашей системе (включая вас), реализовать набор методов для классов, которые они будут создавать.
-Используйте абстрактный класс, когда вы хотите заставить разработчиков, работающих в вашей системе (включая вас самих), реализовать набор методов, и вы хотите предоставить
-несколько базовых методов, которые помогут им в разработке их дочерних классов.
+abstract class Animal {
+    public function eat() {
+        echo "Eating...";
+    }
 
-Можно заметить, что абстрактные классы похожи на интерфейсы - и те, и другие могут определять методы без реализации, которые реализуются
- в других классах. Однако, абстрактные классы, как и обычные классы, могут иметь переменные, неабстрактные методы, конструкторы, а интерфейсы нет. Кроме того,
- в PHP один класс может наследоваться только от одного класса, тогда как один класс может применять сразу несколько интерфейсов.
- 
-Абстрактный(Abstract) класс - класс, который имеет хотя б 1 абстрактный (не определенный) метод; обозначается как abstract.
-Интерфейс - такой же абстрактный класс,только в нем не может быть свойств и не определены тела у методов.
-Так же стоит заметить, что абстрактный класс наследуется(etxends), а интерфейс реализуется (implements). Вот и возникает разница между ними, что наследовать мы можем только 1 класс, а реализовать сколько угодно.
-ВАЖНО! При реализации интерфейса, необходимо реализовать все его методы, иначе будет Fatal error, так же это можно избежать, присвоив слово abstract.
- 
-Интерфейс                                                                                        Абстрактный класс
-Поддерживаем множественное наследование                                                             Не поддерживаем множественное наследование
-Не содержит data members                                                          					Может содержать data members	
-Не содержит конструктор 																			Может содержать конструктор		                                                                           
-Содержит только объявление методов (сигнатуры методов)												Может содержать как сигнатуры методов так и их реализации
-Не может иметь модификаторов доступа - все методы по умолчанию публичные                            Может иметь модификаторы доступа	
-Методы не могут быть статическими																	Только методы, содержащие реализацию, могут быть объявлены статическими		
-
-Пример:
-interface I { 
-    public function F(); 
-    public function say(); 
-} 
- 
-abstract class A implements I { 
-    function say() { 
-        echo 'Hello'; 
-    } 
-    // function F() - не реализована 
+    abstract public function makeSound();
 }
+
+class Dog extends Animal {
+    public function makeSound() {
+        echo "Bark";
+    }
+}
+$dog = new Dog();
+$dog->eat();        // Eating...
+$dog->makeSound();  // Bark
 
 abstract class ogtagorcvum en erb iranic jarangox klas@ anpayman petqa unena nuyn metodner@ inchvor abstract class@ ev ayd metodneri mej karas popoxutyunner anes,
 isk interfaci jamanak asum enq anpayman interface classi methodner@ uneci bayc funkcionalutyun@ ov inch uzi kara avelacni 
 
+Abstract Class	                                 Interface
+Կարող է ունենալ implementation	        Չունի implementation (մինչև PHP 8՝ հիմնականում)
+Օգտագործվում է extends	                Օգտագործվում է implements
+Կարող է ունենալ properties	                Չի կարող ունենալ սովորական properties
+Միայն 1 abstract class կարելի է ժառանգել	Կարելի է մի քանի interface implement անել
 
 <p>12. Может ли абстрактный класс содержать частный метод?</p>
-Абстрактные методы не могут быть частными, потому что по определению они должны быть реализованы производным классом. Если вы не хотите, чтобы он был общедоступным,
-он должен быть защищен, что означает, что его могут видеть производные классы, но никто другой
+В PHP абстрактный класс կարող է ունենալ private մեթոդներ, բայց դրանք հասանելի են միայն հենց այդ classi ներսում։
 
 
 <p>13. Какие модификаторы видимости есть в РНР?</p>
@@ -139,30 +206,37 @@ __construct(), __destruct(), __call(), __callStatic(), __get(), __set(), __isset
 
 
 <p>15. Что такое генераторы и как их использовать?</p>
-https://myrusakov.ru/php-generators-tutorial.html
+Գեներատորը ֆունկցիա է, որը վերադարձնում է արժեքներ հերթականությամբ yield-ի միջոցով, պահպանում իր ընթացքը և խնայում հիշողությունը մեծ տվյալների հետ աշխատելիս
+function tivner($max) {
+    for ($i = 1; $i <= $max; $i++) {
+        yield $i; // մեկ արժեք արտադրում
+    }
+}
 
+foreach (tivner(5) as $tiv) {
+    echo $tiv . " "; // Արդյունք → 1 2 3 4 5
+}
 
 <p>16. Что делает оператор yield?</p>
 yield использует foreach 
-для итерации по набору данных без необходимости 
-создания массива в памяти, что может привести к превышению лимита памяти или значительному времени обработки для генерации.
+Այն վերադարձնում է մեկ արժեք հերթականությամբ առանց ամբողջ զանգվածը պահելու հիշողության մեջ:
 
 
 <p>17. Что такое traits? Альтернативное решение? Приведите пример.</p>
-trait Printer
-{
-    public function printSimpleText($text) { echo "$text<br>"; }
-    public function printHeaderText($text) { echo "<h2>$text<h2>"; }
+Trait — դա փոքր “կոմպոնենտ” (code snippet), որը թույլ է տալիս վերօգտագործել մեթոդներ տարբեր classnerum, առանց ժառանգության:
+trait Logger {
+    public function log($msg) {
+        echo "[LOG]: $msg\n";
+    }
 }
- 
-class Message
-{
-    use Printer;
-}
-$myMessage = new Message();
-$myMessage->printSimpleText("Hello World!");
-$myMessage->printHeaderText("Hello PHP 8");
 
+class User {
+    use Logger;
+}
+
+class Product {
+    use Logger;
+}
 
 <p>18. Опишите поведение при использовании traits с одинаковыми именами полей и / или методов.</p>
 insteadof i mijocov es harc@ lucvuma
@@ -193,6 +267,28 @@ trait Trait2
 
 <p>21. Расскажите об обработке ошибок и исключения (try catch, finaly и throw).</p>
 
+function divide($a, $b) {
+    if ($b == 0) {
+        throw new Exception("Բաժանել 0 չի կարելի"); // ձգում ենք բացառություն
+    }
+    return $a / $b;
+}
+
+try {
+    echo divide(10, 0);
+} catch (Exception $e) {
+    echo "Սխալ բռնվել է: " . $e->getMessage();
+} finally {
+    echo "\nՄիշտ կատարվում է այս հատվածը";
+}
+Արդյունք:
+Սխալ բռնվել է: Բաժանել 0 չի կարելի
+Միշտ կատարվում է այս հատվածը
+
+
+
+
+
 
 
 <p>22. Что такое type hinting, как работает, зачем нужен?</p>
@@ -205,7 +301,7 @@ function sayHelloTo(int $name)
 
 
 <p>23. Что такое namespace-ы и зачем они нужны?</p>
-
+Namespace-ը թույլ է տալիս կոդը կազմակերպել, խուսափել անունների կոնֆլիկտներից և հստակ տարբերակել նույնանուն class-ները տարբեր մասերից:
 
 
 <p>24. Сравнение значений переменных в РНР и подводные камни? Приведение типов. Что изменилось в PHP 8 в этом контексте?</p>
@@ -213,42 +309,287 @@ https://www.php.net/releases/8.0/ru.php
 
 
 <p>25. Как работает session в РНР, где хранится, как инициализируется?</p>
-https://metanit.com/php/tutorial/4.3.php
+Session — դա մեխանիզմ է, որը թույլ է տալիս պահպանել տվյալներ օգտվողի վերաբերյալ բազմաթիվ էջերի միջև (user state), օրինակ՝ login status, shopping cart, նախընտրություններ:
+Յուրաքանչյուր session-ին տրվում է հատուկ session ID, որը հաճախ պահվում է cookie-ով օգտագործողի կողմից:
+PHP-ում session data սովորաբար պահվում է ֆայլերում սերվերի /tmp կամ հատուկ գրացուցակում:
+Linux (default): /var/lib/php/sessions
+Windows (default): C:\Windows\Temp
+
+Ինչպես է ինիցիալիզացվում
+
+Սկզբում պետք է կանչել session_start()՝ սկիզբ դնելու համար:
+
+Կարող եք ձևավորել session variables՝ $_SESSION superglobal-ից.
+
+session_start(); // session-ը սկսվում է կամ արդեն գոյություն ունեցողը վերսկսվում է
+
+// Session variables
+$_SESSION['username'] = 'Edgar';
+$_SESSION['role'] = 'admin';
+
+// Հասանել session variables այլ էջերում
+echo $_SESSION['username']; // Edgar
+
+Եթե session ID չկա, PHP-ն ստեղծում է նոր session և ուղարկում PHPSESSID cookie:
+
+Եթե session ID արդեն կա, PHP-ն վերսկսում է գոյություն ունեցող session-ը:
 
 
 <p>26. Суперглобальные массивы. Какие знаете? Как использовали?</p>
-
+$_GET, $_POST, $_SERVER, $_SESSION, $_ENV ..etc
 
 
 <p>27. Сравните include vs required, include_once vs required_once.</p>
 
 
 
-<p>28. Что означает <a href="https://techrocks.ru/2021/04/02/big-o-notation-examples/" target="_blank" rel="noreferrer noopener">сложность алгоритма</a>?</p>
+<p>28. Что означает <a href="https://techrocks.ru/2021/04/02/big-o-notation-examples/" target="_blank" rel="noreferrer noopener">сложность алгоритма</a>?</p> mi karda
 
 
 
 <p>29. Что такое замыкание в PHP? Приведите пример.</p>
-https://metanit.com/php/tutorial/2.20.php
+Closure-ը PHP-ում անանուն ֆունկցիա է, որը կարող է օգտագործել փոփոխիչներ արտաքին scope-ից (use) և հաճախ օգտագործվում է callback-ների և լոգիկայի enkapsulyatsiya-ի համար:
+Օրինակ Array filtering-ի հետ
+$numbers = [1, 2, 3, 4, 5];
+$threshold = 3;
 
+$filtered = array_filter($numbers, function($num) use ($threshold) {
+    return $num > $threshold;
+});
+
+print_r($filtered); // [4, 5]
 
 <p>30. В чем разница между замыканием в PHP и JavaScript?</p>
+PHP-ում замыкումը ստեղծվում է function-ով ev petq e ogtagorcenq use 
 
+$greeting = "Բարև";
 
+$sayHello = function($name) use ($greeting) {
+    return "$greeting, $name!";
+};
+
+echo $sayHello("Արամ"); // Արտածում՝ Բարև, Արամ!
+
+2. JavaScript-ում замыкание
+
+JavaScript-ում closure-ն ֆունկցիա է, որը ավտոմատորեն պահպանում է իր ստեղծման ժամանակի շրջակայքը՝ առանց հատուկ syntax-ի։
+let greeting = "Բարև";
+
+function sayHello(name) {
+    return `${greeting}, ${name}!`;
+}
+
+console.log(sayHello("Արամ")); // Արտածում՝ Բարև, Արամ!
 
 <p>31. Что такое позднее связывание? Расскажите о поведении и применения static.</p>
 https://ithazard.com/позднее-статическое-связывание/   aysinqn selfi tex@ static es grum tvyal classi  modifikatorna haskanum
 
 
 <p>32. Как переопределить хранение сессий?</p>
-
+PHP-ում սեսիաների պահման մեխանիզմը կարելի է կարգավորել և փոխարինել (override) ըստ պահանջի՝ օգտագործելով session_set_save_handler(). Սա թույլ է տալիս սեսիաները պահել ոչ միայն ֆայլերում (default), այլև, օրինակ, դատաբազայում, Redis, Memcached կամ նույնիսկ user-defined storage:
 
 
 <p>33. Расскажите о SPL-библиотеке (Reflection, autoload, структуры данных).</p>
 
 
-
+#######SOLID############
 <p>34. Расскажите о <a href="https://techrocks.ru/2020/08/26/solid-principles-in-plain-russian/" target="_blank" rel="noreferrer noopener">принципах SOLID</a>.</p>
+
+S — Single Responsibility Principle (SRP)
+
+Մեկ պատասխանատվության սկզբունք
+
+Սկզբունք: Յուրաքանչյուր կլաս պետք է ունենա մեկ միայն պատասխանատվություն, և այդ պատասխանատվությունը պետք է ամբողջությամբ ընդգրկված լինի այդ կլասում։
+
+PHP Օրինակ՝ սխալ մոտեցում
+
+class UserManager {
+    public function createUser($name) { /* ստեղծում է օգտագործող */ }
+    public function sendEmail($user, $message) { /* ուղարկում է էլ․փոստ */ }
+}
+
+Խնդիրը: մեկ կլասում կա երկու պատասխանատվություն՝ ստեղծում + հաղորդակցություն։
+
+Լավ մոտեցում՝ SRP պահպանելով
+
+class User {
+    private $name;
+    public function __construct($name) {
+        $this->name = $name;
+    }
+}
+
+class UserRepository {
+    public function save(User $user) { /* պահում է տվյալների բազայում */ }
+}
+
+class EmailService {
+    public function send(User $user, $message) { /* ուղարկում է էլ․փոստ */ }
+}
+
+O — Open/Closed Principle (OCP)
+
+Բաց/փակ սկզբունք
+
+Սկզբունք: Կլասերը պետք է լինեն բաց ընդարձակման համար, բայց փակ փոփոխության համար։
+Այսինքն՝ նոր ֆունկցիոնալությունը ավելացնելու համար չպետք է փոխենք արդեն գոյություն ունեցող կոդը, այլ ընդլայնենք այն նոր դասերով կամ ինտերֆեյսներով։
+
+Տերմիններ:
+
+Բաց (Open) – կարելի է ընդարձակել նոր հնարավորություններով
+
+Փակ (Closed) – գոյություն ունեցող կոդը չպետք է փոփոխվի
+
+PHP Օրինակ
+
+interface PaymentMethod {
+    public function pay($amount);
+}
+
+class CreditCardPayment implements PaymentMethod {
+    public function pay($amount) {
+        echo "Վճարում քարտով: $amount";
+    }
+}
+
+class PayPalPayment implements PaymentMethod {
+    public function pay($amount) {
+        echo "Վճարում PayPal-ով: $amount";
+    }
+}
+
+// Ծրագիրը չի փոփոխվում, պարզապես ավելացնում ենք նոր վճարման մեթոդ
+class BitcoinPayment implements PaymentMethod {
+    public function pay($amount) {
+        echo "Վճարում Bitcoin-ով: $amount";
+    }
+}
+
+Մտքեր: նոր ֆունկցիոնալություն ավելացնելու համար չենք փոխում նախկին կոդը, ապահովում ենք կայունություն։
+
+L — Liskov Substitution Principle (LSP)
+
+Լիսկովի փոխարինելիության սկզբունք
+
+Սկզբունք: Յուրաքանչյուր ենթադաս պետք է կարողանա փոխարինել իր սուպեր կլասը առանց ծրագրի սխալների ստեղծման։
+Դա նշանակում է, որ երեխաները (subclasses) չեն խախտում ծնողի պայմանները։
+
+PHP Օրինակ
+
+class Bird {
+    public function fly() { echo "Թռչում է"; }
+}
+
+class Sparrow extends Bird {}
+class Penguin extends Bird {
+    public function fly() {
+        throw new Exception("Չի կարող թռչել");
+    }
+}
+
+Խնդիրը: Penguin չի համապատասխանում LSP-ին, որովհետև չի կարող փոխարինել Bird-ը առանց սխալի։
+
+Լավ լուծում
+
+interface Flyable {
+    public function fly();
+}
+
+class Sparrow implements Flyable {
+    public function fly() { echo "Թռչում է"; }
+}
+
+class Penguin {
+    public function swim() { echo "Սուզվում է"; }
+}
+
+Մտքեր: նախատեսված է, որ subclasses միշտ կարողանան փոխարինել parent class-ը առանց ծրագրի խափանման։
+
+I — Interface Segregation Principle (ISP)
+
+Ինտերֆեյսների առանձնացման սկզբունք
+
+Սկզբունք: Լավ է ունենալ մի քանի փոքր ինտերֆեյս, քան մեկ մեծ ինտերֆեյս։
+Կլասը չպետք է ստիպված լինի իրականացնել այն մեթոդները, որոնք նրան պետք չեն։
+
+PHP Օրինակ
+
+interface Worker {
+    public function work();
+    public function eat();
+}
+
+class Robot implements Worker {
+    public function work() { echo "Աշխատում է"; }
+    public function eat() { /* ռոբոտը չի ուտում */ }
+}
+
+Խնդիրը: Robot ստիպված է իրականացնել eat(), չնայած դա չի օգտագործում։
+
+Լավ լուծում
+
+interface Workable {
+    public function work();
+}
+
+interface Eatable {
+    public function eat();
+}
+
+class Human implements Workable, Eatable {
+    public function work() { echo "Աշխատում է"; }
+    public function eat() { echo "Ուտում է"; }
+}
+
+class Robot implements Workable {
+    public function work() { echo "Աշխատում է"; }
+}
+
+Մտքեր: դասերը ստանում են միայն այն ինտերֆեյսները, որոնք իրականում օգտագործում են։
+
+D — Dependency Inversion Principle (DIP)
+
+Մեծ կլասերը չպետք է կախված լինեն փոքրերից։
+
+Երկուսն էլ պետք է կախված լինեն ինտերֆեյսներից (abstractions).
+
+Մանր կլասերը չպետք է կախված լինեն կոնկրետ իրացուցումից, այլ ընդհակառակը։
+
+PHP Օրինակ
+
+// Խախտում՝ կոնկրետ կախվածություն
+class MySQLDatabase {
+    public function save($data) { /* ... */ }
+}
+
+class UserRepository {
+    private $db;
+    public function __construct() {
+        $this->db = new MySQLDatabase();
+    }
+}
+
+Լավ մոտեցում՝ DIP պահպանելով
+
+interface DatabaseInterface {
+    public function save($data);
+}
+
+class MySQLDatabase implements DatabaseInterface {
+    public function save($data) { /* ... */ }
+}
+
+class UserRepository {
+    private $db;
+    public function __construct(DatabaseInterface $db) {
+        $this->db = $db;
+    }
+}
+
+Մտքեր: UserRepository-ը կախված է abstraction-ից, ոչ կոնկրետ MySQL-ից, հեշտ է փոխարինել այլ DB-ով։
+
+
+#######End SOLID############
 
 
 
@@ -256,7 +597,7 @@ https://ithazard.com/позднее-статическое-связывание/
 
 
 
-<p>36. Расскажите о <a href="https://techrocks.ru/2021/02/15/dependencies-inversion-and-injection/" target="_blank" rel="noreferrer noopener">Dependency Injection</a>: что такое DI-контейнеры? Какие есть варианты реализаций?</p>
+<p>36. Расскажите о <a href="https://techrocks.ru/2021/02/15/dependencies-inversion-and-injection/" target="_blank" rel="noreferrer noopener">Dependency Injection</a>: что такое DI(Dependency Injection) Container-контейнеры? Какие есть варианты реализаций?</p>
 
 
 
@@ -264,7 +605,7 @@ https://ithazard.com/позднее-статическое-связывание/
 
 
 
-<p>38. Что вам известно о шаблонах GoF?</p>
+<p>38. Что вам известно о шаблонах GoF?</p> ??anci
 
 
 
