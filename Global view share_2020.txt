@@ -35,4 +35,5 @@ kam hasarak
  View::share('app_locale', app()->getLocale()); 
 
      }
+     
     
