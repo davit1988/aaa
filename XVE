@@ -1,0 +1,245 @@
+from Armenian ( with english latters ) to English
+
+Cloudi mej install anel https://github.com/skylence-be/claude-code-marketplace
+proektum
+composer require laravel/boost
+composer require skylence/laravel-telescope-mcp
+global
+npx -y @playwright/mcp@latest
+
+claude --debug
+php artisan telescope:mcp
+php artisan boost:mcp
+
+git add . ':!composer.json' ':!composer.lock'
+git add . ':!bootstrap/'
+
+git add . \
+':!composer.json' \
+':!composer.lock' \
+':!.mcp.json'
+
+
+
+/coderabbit:review
+/coderabbit:autofix
+
+
+vendor/bin/phpstan analyze app/Console/Commands/BunkeringInterimSave.php
+vendor/bin/phpcbf app/Services/Exact/SalesOrderService.php
+vendor/bin/phpunit --coverage-html reports/ tests/Unit/Services/StockServiceTest.php
+vendor/bin/rector --ansi --dry-run 
+-----------------------------
+https://vault.bitwarden.com/#/login
+##MY##
+edgar@xve.be
+K&655164979155uy
+----------------------
+Bram
+ict@dewit-bunkering.com
+CdWWh1947*#2030
+----------------------------
+Mail aoutlook/ combell
+edgar@xve.be
+K&655164979155uy
+----------------------------
+
+#GitHub##
+mb/<R,N3C0f0
+
+
+##Tracking##
+https://clockit.xve-web.eu/
+K&655164979155uy
+
+##helpdesk##
+https://helpdesk.xve.be/
+edgar@xve.be
+K&655164979155uy
+
+
+##Jira##
+https://home.atlassian.com/
+edgar@xve.be
+K&655164979155uy
+
+##Teams microsoft##
+edgar@xve.be
+https://teams.microsoft.com/v2/
+K&655164979155uy
+ 
+https://backpackforlaravel.com/ 
+admin@example.com
+admin
+
+////////////////////////
+mysql -u admin -p core-nassau < ~/Desktop/aa.sql
+UPDATE users SET PASSWORD='$2y$10$J8Go6PrkCfmgQmg7TsXuGuBVP7QCNHiXO5Egql8d1dXXT1IsV6Ava' 
+
+
+extension 
+
+edgar763333333
+Edgar102030!
+.TRlXGoB;0WbawMI
+
+PGA
+X-Api-Client-Id: 361b0f14-b7b0-4526-bf38-7df67fdd9bdf
+Bearer Ilas2RQugkA5s9WTEny1IkdJbntzCVwi5SjZTizy
+
+DB Connection
+###DWB####
+WEB-LIVE-DWB / local admin account (plesk) //senc man ari DB ira bidwardenum
+https://web-live-dwb.gdwt.be/phpMyAdmin/index.php  //phpmyadmin
+
+###BTB####
+https://web-live-btb.gdwt.be/smb/web/view
+-------------------------------------------------------------------------------------------------
+
+PR baceluc heto
+
+
+1.Jirayum "Pull Request Link " ->stex PR i link@ dnel
+2. Assignee => Bram
+3. Time tracking lracenl
+4. https://clockit.xve-web.eu/en/calendar/ stex lracnel
+ 
+ete call
+XVE.DEV
+Intem- XVE -dev
+
+
+https://dwb-app-core.web-dev-xenops.gdwt.be/ ->edgar@xve.be edgar123456789
+https://app.dewit-bunkering.com
+DWB ->
+DE WIT BUNKERING NV
+-------------------------
+
+NASSAU SCHEEPSBENODIGDHEDEN BVBA
+Regiewerk - NASSAU SCHEEPSBENODIGDHEDEN BVBA
+____
+BTB ->https://my.btb-bunkering.com/admin/login
+BELGIAN TRADING AND BUNKERING BVBA
+____
+https://github.com/XVE-BV/auws-core/
+auws
+UNDERWATER SOLUTIONS GROUP
+Regiewerk - UNDERWATER SOLUTIONS GROUP
+
+###import###
+mysql -u admin -p testing3 < ~/Desktop/testing3.sql
+
+problrm->sed -i 's/varchar(255)/varchar(191)/g' ~/Downloads/dwb.app.core-dwbnew_2026-02-27_13h40_default.sql
+
+UPDATE users SET PASSWORD='$2y$10$J8Go6PrkCfmgQmg7TsXuGuBVP7QCNHiXO5Egql8d1dXXT1IsV6Ava' 
+
+
+https://xve.atlassian.net/browse/GDW-807
+ab -n 1000 -c 50 http://nassau.loc/products //test es anum sayti konkret eji aragustyun@
+
+
+
+=============================
+https://github.com/XVE-BV/peppol-gateway-api
+https://docs.peppol.eu/poacc/billing/3.0/
+#####Peppol#####
+PEPPOL_GATEWAY_URL=https://dev-pga.ms-xve.be
+PEPPOL_GATEWAY_CLIENT_ID=57539d61-85d6-4116-b396-2dcd9a6fb724
+PEPPOL_GATEWAY_CLIENT_SECRET=VV7mAevyKvGUN7IOAtLfbpwidxgsS5afOJwLi3Fc
+PEPPOL_GATEWAY_TIMEOUT=30
+
+
+https://dev-pga.ms-xve.be/clients
+contact_id = 50
+'vat_number'=> BE0416137027
+'peppol_id' => 9925:BE0416137027
+'vat_combination' => "excemption|700100|0|1;3;5",
+
+https://www.apivoid.com/tools/base64-to-pdf/ //base64 to pdf
+
+http://dwb.loc/invoice/13834/preview-mail
+
+mmsi -> 205577790
+
+
+passkeys
+https://spatie.be/docs/laravel-passkeys/v1/installation-setup
+
+cloudflared tunnel --url http://localhost:8000
+
+
+
+
+
+php artisan exact:reset-mappings
+
+#####VPN######
+sudo openvpn --config "/home/pc/Desktop/CDWH_VPN.ovpn"
+edgar.melkonyan
+Cy4H8!&xU
+
+
+
+
+K&655164979155uy
+
+
+
+https://github.com/dewitholding/dwb.app.core/pull/572
+
+
+
+
+
+
+  \App\Schip::where('schip', 'LIKE', '%Pagadder%')->first()?->update(['imo_number' => '9876543']);                                                                                                          
+                                                                                                                                                                                                            
+  3. Browser-ov test ara:
+                                                                                                                                                                                                            
+  Gna bunkering create page, orinak:                                                                                                                                                                        
+  - /bunkering/nieuw/bunkering
+  - /bunkering/nieuw/lading                                                                                                                                                                                 
+                           
+  "Schip" field-ը hima autocomplete a. Pordzi:
+  - Gri ship anun (orinak Pagad) — petq a ashkhati inchpes araj                                                                                                                                             
+  - Gri ENI hamar (orinak 06003900) — petq a gtni ship-ը                                                                                                                                                    
+  - Gri 9876543 — petq a gtni IMO-ov                                                                                                                                                                        
+  - Gri IMO9876543 — petq a gtni (prefix-ը hanvum a)                                                                                                                                                        
+  - Gri IMO 9876543 — petq a gtni (prefix + space hanvum a)
+  - Gri imo9876543 — petq a gtni (case insensitive)                                                                                                                                                         
+                                                   
+  4. Label format-ը stugir:                                                                                                                                                                                 
+                                                                                                                                                                                                            
+  Rezultatneri mej petq a erevi:                                                                                                                                                                            
+  - Erku el unenalu depqum: Pagadder (ENI: 06003900, IMO: 9876543)                                                                                                                                          
+  - Miain ENI: Scaldis (ENI: 12345678)                                                                                                                                                                      
+  - Vooch mek chka: parz ShipName     
+                                                                                                                                                                                                            
+  5. Avtomatacvac testere vaze:                                                                                                                                                                             
+                                                                                                                                                                                                            
+  php artisan test tests/Feature/SchipSearchTest.php                                                                                                                                                        
+                                                                                                                                                                                                            
+  6. Regression chka — stugir:                                                                                                                                                                              
+   
+  Ship yntrir → form-ը submit ara → bunkering-ը petq a normal save-vi. Hidden input-um chisht id-n a, shipSelected event-ը dispatch a anum shipId u vesselType.                                             
+                  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

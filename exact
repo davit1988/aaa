@@ -1,0 +1,45 @@
+https://veconsulting.sharepoint.com/sites/XVE/_layouts/15/stream.aspx?id=/sites/XVE/Gedeelde%20documenten/XVE.DEV/Videos/2026-03-16%2015-36-35.mp4
+
+https://start.exactonline.be/docs/MenuPortal.aspx
+
+
+//bitwarden
+https://vault.bitwarden.com/#/login
+edgar@xve.be
+K&655164979155uy
+
+Bramin@
+ict@dewit-bunkering.com
+CdWWh1947*#2030
+----------------------------------------
+
+cloudflared tunnel --url http://localhost:8000
+
+app/Providers/AppServiceProvider.php // boot um
+
+if ($this->app->environment('local')) {
+\URL::forceScheme('https');
+}
+
+
+//code staca
+
+1)exactum redirect url ->https://elimination-commander-prospect-rocks.trycloudflare.com/exact/oauth/callback
+2) get -> /exact/oauth/authorize
+
+redis-cli FLUSHALL
+php artisan queue:work
+
+
+K&655164979155uy
+
+
+/admin/external-api-log
+
+
+//ete invoice number null a
+confic_exactum verji valuen=0
+php artisan tinker --execute="App\Jobs\SyncExactInvoices::dispatchSync();"
+
+
+
