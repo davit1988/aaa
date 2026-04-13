@@ -1198,59 +1198,226 @@ php artisan cache:clear
 
 <p>2. Какие процессы происходят, когда пользователь вводит в браузере URL?</p>
 
+1. URL-ի վերլուծում (Parsing)
 
+Բրաուզերը հասկանում է՝
+
+protocol (http / https)
+domain (օր. google.com)
+path (/search)
+
+2. DNS հարցում (Domain → IP)
+
+Բրաուզերը պետք է իմանա՝ սերվերի IP հասցեն
+
+👉 Կատարվում է DNS հարցում
+
+Ստուգում է cache (browser / OS / router)
+Եթե չկա → հարցում է ուղարկում DNS server-ին
+Վերադարձվում է IP (օր. 142.250.xxx.xxx)
+
+3. Կապ սերվերի հետ
+
+Բրաուզերը ստեղծում է կապ սերվերի հետ
+
+👉 Օգտագործվում է TCP
+
+կատարվում է “3-way handshake”
+
+👉 Եթե https է → նաև **TLS handshake
+
+ապահով կապ (encryption)
+
+4. HTTP հարցում (Request)
+
+Բրաուզերը ուղարկում է request
+
+👉 Օգտագործվում է HTTP կամ HTTPS
+
+Ввод URL
+   ↓
+Парсинг → Кэш?  ──── Да ──→ Рендеринг
+   ↓ Нет
+DNS-запрос
+   ↓
+TCP Handshake
+   ↓
+TLS Handshake (HTTPS)
+   ↓
+HTTP GET запрос
+   ↓
+Сервер обрабатывает
+   ↓
+HTTP-ответ (HTML)
+   ↓
+Рендеринг (DOM → Layout → Paint)
+   ↓
+Страница отображается
 
 <p>3. Что такое вариативная функция или splat-оператор?</p>
+
+function sum($a, $b, $c)
+{
+    return $a + $b + $c;
+}
+
+$numbers = [1, 2, 3];
+sum(...$numbers); //6
+
+kam hakarak@
+function test(...$nums)
+{
+    return $nums;
+}
+
+test(1, 2, 3); // [1, 2, 3]
 
 
 
 <p>4. Что такое OWASP?</p>
+OWASP — դա միջազգային կազմակերպություն է, որը զբաղվում է web application security-ով։ 
+❌ Վտանգավոր
+
+Order::find($id);
+
+Եթե user-ը փոխի $id, կարող է տեսնել ուրիշի order-ը
+
+✅ Պաշտպանություն
+
+Order::where('id', $id)
+    ->where('user_id', auth()->id())
+    ->firstOrFail();
+
+👉 Կամ Policy օգտագործել
+
+$this->authorize('view', $order);
+
+👉 Sensitive data սխալ պահում
+
+❌
+
+password = $request->password;
+
+✅
+
+password = Hash::make($request->password);
 
 
+Route::post('/login', [AuthController::class, 'login'])
+    ->middleware('throttle:5,1');
 
 <p>5. Какие типы уязвимостей знаете? Как от них защищаться?</p>
 
 
 
 <p>6. Что такое идемпотентные методы? Какие HTTP-методы являются идемпотентными для REST?</p>
+Իդեմպոտենտ մեթոդը այն HTTP մեթոդն է, որի դեպքում նույն request-ը մի քանի անգամ ուղարկելու դեպքում համակարգի վերջնական վիճակը չի փոխվում։
 
+👉 Պարզ ասած՝
 
+1 անգամ ուղարկես թե 10 անգամ՝ արդյունքը նույնն է։
+
+GET /users/1 👉 100 запросов = тот же результат
+PUT /users/1 👉 Если отправить одинаковые данные 1 или 10 раз → результат одинаковый
+DELETE /users/1  👉 Первый раз удалит, последующие — ничего не изменят (ресурс уже удалён)
+НЕ идемпотентные методы
+ POST /users
+👉 1 запрос = 1 пользователь
+👉 10 запросов = 10 пользователей ❌
 
 <p>7. Что такое stateless?</p>
+Stateless (առանց վիճակի) նշանակում է, որ սերվերը չի պահում տեղեկություն օգտատիրոջ նախորդ հարցումների մասին։
+Stateless:
+JWT / Bearer token
+Authorization: Bearer TOKEN
 
+👉 սերվերը չի հիշում user-ին
 
+Stateful:
+Session + cookies
+auth()->user();
+
+👉 սերվերը պահում է session
 
 <p>8. SOAP vs REST. В чем разница?</p>
+👉 SOAP-ը protocol է
+Օգտագործում է միայն XML
 
-
-
+👉 REST-ը architecture style է, ոչ protocol
+Օգտագործում է HTTP methods (GET, POST, PUT, DELETE)
+Թեթև (lightweight)
+Կարող է օգտագործել JSON, XML, HTML
+Ավելի հեշտ ու արագ
 <p>9. Какие методы авторизации используют для построения API?</p>
-
+Bearer Token (JWT)
+passport
 
 
 <p>10. Что может содержать интерфейс?</p>
 
+interface PaymentInterface {
+    public function pay(float $amount): bool;
+}
 
+✔️ Միայն հայտարարում ես մեթոդը
+❗ Չկա body (իրականացում)
 
 <p>11. Класс содержит свойство, которое, в свою очередь, является объектом. Что будет содержать это свойство в клонированном объекте: ссылку на тот же дочерний объект или копию дочернего объекта? Что нужно сделать, чтобы это изменить?</p>
+class Address {
+    public string $city;
+    public function __construct(string $city) {
+        $this->city = $city;
+    }
+}
 
+class User {
+    public string $name;
+    public Address $address;
+
+    public function __construct(string $name, Address $address) {
+        $this->name = $name;
+        $this->address = $address;
+    }
+}
+
+$original = new User("Alice", new Address("Москва"));
+$clone = clone $original;
+
+$clone->address->city = "Питер"; // меняет и $original!
+echo $original->address->city; // "Питер" — неожиданно!
 
 
 <p>12. Что такое Mock? Где используют и зачем?</p>
+Mock (մոք) — կեղծ (իմիտացիոն) օբյեկտ է, որը օգտագործվում է թեստավորման ժամանակ՝ իրական օբյեկտի փոխարեն։
 
+📌 Պարզ ձևով
+
+Mock օբյեկտը՝
+
+իմիտացնում է իրական օբյեկտի վարքը
+թույլ է տալիս նշել, թե որ մեթոդները պետք է կանչվեն
+կարող է վերադարձնել նախապես սահմանված տվյալներ
 
 
 <p>13. Что такое PSR?</p>
-
-
-
+PSR-ը կանոններ են, որոնք օգնում են, որ՝
+👉 բոլոր PHP ծրագրավորողները գրեն «նույն ձևի» կոդ
+PSR-1 — դասերի և մեթոդների անվանումներ
+PSR-4 — ավտոլոադինգ (autoload)
+PSR-12 — կոդի ոճ (coding style)
+PSR-3 — Logger ստանդարտ
 <p>14. Опишите реализацию одного из шаблонов проектирования.</p>
-
+verevum solid nkaragraca mek@ asa orinak singleton
 
 
 <p>15. Что такое Redis?</p>
-
-
+Redis-ը պահում է տվյալները ոչ թե սկավառակի վրա, այլ RAM-ում, դրա համար էլ շատ արագ է աշխատում։
+🎯 Որտե՞ղ է օգտագործվում
+cache (քեշավորում)
+session-ների պահպանում
+queue (հերթեր)
+rate limiting (request-ների սահմանափակում)
+real-time տվյալներ (չաթ, counter-ներ)
 
 <p>16. Как хранятся данные в Redis / Memcached?</p>
 
